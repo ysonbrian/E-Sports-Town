@@ -1,7 +1,6 @@
-console.log('hello');
+const express = require('express');
+const app = express();
 
-console.log('hello2');
-
-console.log('hello3');
-
-console.log('hello4');
+app.listen(8080, () => {
+    console.log('running on port 8080!!');
+})
