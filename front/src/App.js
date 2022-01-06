@@ -1,24 +1,55 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './Header';
+import Home from './Home';
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import Artist from './Artist';
+import Nomal from './Nomal';
+import Showme from './Showme';
+import LogIn from './LogIn';
+import Mypage from './Mypage';
+import Minting from './Minting';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Switch>
+
+          <Route eaxct path="/">
+            <Header/>
+            <Home/>
+          </Route>
+
+          <Route path="/artist">
+            <Header/>
+            <Artist/>
+          </Route>
+
+          <Route path="/nomal">
+            <Header/>
+            <Nomal/>
+          </Route>
+
+          <Route path="/showme">
+            <Header/>
+            <Showme/>
+          </Route>
+
+          <Route path="/minting">
+            <Minting/>
+          </Route>
+
+          <Route path="/login">
+            <LogIn/>
+          </Route>
+
+          <Route path="/mypage">
+            <Mypage/>
+          </Route>
+
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
