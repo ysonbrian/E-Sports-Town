@@ -4,7 +4,7 @@ import './Nomal.css';
 function Nomal() {
     return (
         <div>
-            일반거래소입니다
+            Nomal Page
         </div>
     );
 }

@@ -4,7 +4,7 @@ import './Minting';
 function Minting() {
     return (
         <div>
-            
+            Minting Page
         </div>
     );
 }
