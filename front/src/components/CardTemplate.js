@@ -1,16 +1,22 @@
 import React from 'react'
 import "./CardTemplate.css"
+import { useNavigate } from 'react-router-dom';
 
-function CardTemplate({imgURI, user, description, price, created_at}) {
+function CardTemplate({id, imgURI, user, description, price, created_at}) {
 
-    console.log(imgURI.imgURI);
-    console.log(JSON.stringify(user));
+    let navigate = useNavigate();
+
+    const goToAuction = () => {
+        navigate('/auction');
+        // zustand id 저장, auction page에서 id에 대한 입찰 페이지
+    }
 
     return (
         <div>
-            <div className='cardContainer'>
+            <div className='cardContainer' onClick={() => {
+                goToAuction(id);
+            }}>
                 <div className='cardImage'>
-                    {/*<img src="https://react.semantic-ui.com/images/avatar/large/elliot.jpg" />*/}
                     <img src={imgURI} />
                 </div>
                 <div className='cardContents'>

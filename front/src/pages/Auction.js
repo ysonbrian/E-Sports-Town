@@ -5,7 +5,7 @@ function Auction() {
     return (
         <div className='page'>
             <h1 className='pageTitle'>
-                ShowMeTheNFT
+                Auction
             </h1>
         </div>
     );

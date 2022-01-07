@@ -10,12 +10,13 @@ import Header from './MenuBar/Header';
 import Home from './pages/Home';
 import ProNFT from './pages/ProNFT';
 import NormalNFT from './pages/NormalNFT';
-import Auction from './pages/Auction';
+import ShowMeTheNFT from './pages/ShowMeTheNFT';
 import Minting from './pages/Minting';
 import Mypage from './pages/Mypage';
 
 import { useStore } from './utils/store';
 import { getCurrentUser, logout, parseJwt } from './utils/auth';
+import Auction from './pages/Auction';
 
 function App() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
@@ -51,9 +52,10 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route path="/pro" element={<ProNFT />} />
           <Route path="/normal" element={<NormalNFT />} />
-          <Route path="/showme" element={<Auction />} />
+          <Route path="/showme" element={<ShowMeTheNFT />} />
           <Route path="/minting" element={<Minting />} />
           <Route path="/mypage" element={<Mypage />} />
+          <Route path="/auction" element={<Auction />} />
         </Routes>
       </HistoryRouter>
     </div>
