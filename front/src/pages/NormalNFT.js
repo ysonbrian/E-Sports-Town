@@ -17,6 +17,7 @@ function NormalNFT() {
                     return (
                         <div className='listItem'>
                             <CardTemplate
+                                id={el.id}
                                 imgURI={el.imgURI}
                                 user={el.user}
                                 description={el.description}
