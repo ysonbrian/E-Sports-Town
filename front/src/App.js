@@ -1,13 +1,12 @@
 import './App.css';
-import Header from './MenuBar/Header';
-import Home from './components/Home';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import ProNFT from './components/ProNFT';
-import NomalNFT from './components/NomalNFT';
-import Auction from './components/Auction';
-import LogIn from './components/LogIn';
-import Mypage from './components/Mypage';
-import Minting from './components/Minting';
+import Header from './MenuBar/Header';
+import Home from './pages/Home';
+import ProNFT from './pages/ProNFT';
+import NormalNFT from './pages/NormalNFT';
+import Auction from './pages/Auction';
+import Minting from './pages/Minting';
+import Mypage from './pages/Mypage';
 
 function App() {
   return (
@@ -15,31 +14,22 @@ function App() {
       <Router>
         <Header />
         <Switch>
-
-          <Route exact path="/">
-            <Home/>
-          </Route>
-
-          <Route path="/pronp">
-            <Header/>
-            <ProNFT />
-            </Route>
           <Route exact path="/">
             <Home />
           </Route>
-          <Route path="/pronft">
+          <Route path="/Pro">
             <ProNFT />
           </Route>
-          <Route path="/nomalnft">
-            <NomalNFT />
+          <Route path="/NormalNFT">
+            <NormalNFT />
           </Route>
-          <Route path="/auction">
+          <Route path="/Auction">
             <Auction />
           </Route>
-          <Route path="/minting">
+          <Route path="/Minting">
             <Minting />
           </Route>
-          <Route path="/mypage">
+          <Route path="/Mypage">
             <Mypage />
           </Route>
         </Switch>
