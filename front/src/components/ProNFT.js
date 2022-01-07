@@ -1,10 +1,13 @@
 import React from 'react';
-import './Artist.css';
+import './ProNFT.css';
 
 function Artist() {
     return (
-        <div className="artist">
+        <div className="proNFT">
             
+        <div>
+            Artist Page
+        </div>
         </div>
     );
 }
