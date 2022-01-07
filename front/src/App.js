@@ -23,7 +23,6 @@ function App() {
   let history = createBrowserHistory();
   history.listen((location, action) => {
     const user = JSON.parse(localStorage.getItem('user'));
-    // console.log("토큰 만료 검사");
 
     if (user) {
       const decodedJwt = parseJwt(user.accessToken);
