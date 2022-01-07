@@ -47,7 +47,7 @@ function App() {
       <HistoryRouter history={history}>
         <Header />
         <Routes>
-          <Route exact path="/" element={<Home />} />} />
+          <Route exact path="/" element={<Home />} />
           <Route path="/pro" element={<ProNFT />} />
           <Route path="/normal" element={<NormalNFT />} />
           <Route path="/showme" element={<Auction />} />
