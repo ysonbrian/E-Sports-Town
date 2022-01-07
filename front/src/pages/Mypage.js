@@ -3,7 +3,7 @@ import './Mypage.css';
 
 function Mypage() {
     return (
-        <div>
+        <div className="page">
             Mypage Page
         </div>
     );

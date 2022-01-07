@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './Header.css'
 import { Link } from "react-router-dom";
 import Web3 from 'web3';
@@ -8,7 +8,7 @@ function Header() {
     const [account, setAccount] = useState('');
 
     useEffect(() => {
-        if(typeof(window.ethereum) !== "undefined") {
+        if (typeof (window.ethereum) !== "undefined") {
             try {
                 const web = new Web3(window.ethereum);
                 setWeb3(web);
@@ -18,7 +18,7 @@ function Header() {
         }
     }, []);
 
-    const connectWallet = async() => {
+    const connectWallet = async () => {
         var accounts = await window.ethereum.request({
             method: 'eth_requestAccounts'
         });
@@ -32,35 +32,37 @@ function Header() {
                 <img className="header_logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMA5HMTU1qw2nqKPOJvYGVku-Y2LeSOfNLfA&usqp=CAU" />
             </Link>
             <div className="header_nav">
-                <Link to='/artist'>
+                <Link to='/Pro'>
                     <div className="header_option">
-                        작가NFT
+                        ProNFT-Market
                     </div>
                 </Link>
-                <Link to='/nomal'>
+                <Link to='/NormalNFT'>
                     <div className="header_option">
-                        일반NFT거래소
+                        NormalNFT-Market
                     </div>
                 </Link>
-                <Link to='/showme'>
+                <Link to='/Auction'>
                     <div className="header_option">
-                        Show Me The NFT
+                        ShowMeTheNFT
                     </div>
                 </Link>
-                <Link to='/minting'>
+                <Link to='/Minting'>
                     <div className="header_option">
-                        NFT Minting
+                        NFT-Minting
                     </div>
                 </Link>
                 <div className="header_option">
-
                     <div className="header_login" onClick={() => {
                         connectWallet();
                     }}>Login</div>
+
                     <div className="Logout">Logout</div>
-                    <Link to='/mypage'>
+
+                    <Link to='/MyPage'>
                         <div className="header_Mypage">MyPage</div>
                     </Link>
+
                     <div className="header_PublicKey">PublicKey : {account}</div>
                 </div>
             </div>
