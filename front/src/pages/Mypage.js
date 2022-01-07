@@ -4,7 +4,9 @@ import './Mypage.css';
 function Mypage() {
     return (
         <div className="page">
-            Mypage Page
+            <h1 className='pageTitle'>
+                Mypage
+            </h1>
         </div>
     );
 }
