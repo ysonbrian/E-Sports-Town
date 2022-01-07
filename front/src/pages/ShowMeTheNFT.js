@@ -1,13 +1,13 @@
 import React from 'react';
-import './ProNFT.css';
+import './ShowMeTheNFT.css';
 import { dummydata } from '../utils/dummyData';
 import CardTemplate from '../components/CardTemplate';
 
-function ProNFT() {
+function ShowMeTheNFT() {
     return (
-        <div className="page">
+        <div className='page'>
             <h1 className='pageTitle'>
-                ProNFT-Market
+                ShowMeTheNFT
             </h1>
             <div className='listContainer'>
                 {console.log(dummydata.nft)}
@@ -32,4 +32,4 @@ function ProNFT() {
     );
 }
 
-export default ProNFT;
+export default ShowMeTheNFT;
