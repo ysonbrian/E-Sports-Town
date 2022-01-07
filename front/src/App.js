@@ -15,11 +15,23 @@ function App() {
       <Router>
         <Header />
         <Switch>
+<<<<<<< HEAD
           <Route exact path="/">
             <Home />
           </Route>
           <Route path="/artist">
             <Artist />
+=======
+
+          <Route exact path="/">
+            <Header/>
+            <Home/>
+          </Route>
+
+          <Route path="/pronp">
+            <Header/>
+            <Artist/>
+>>>>>>> f0b39e4d39042eb1acee63c00ea22470ed43244f
           </Route>
           <Route path="/nomal">
             <Nomal />
