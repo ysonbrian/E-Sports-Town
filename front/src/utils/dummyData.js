@@ -1,9 +1,9 @@
-export const initialState =
+export const dummydata =
 {
   "nft": [
     {
       "id": 1,
-      "userId" : 'Alice',
+      "user" : 'Alice',
       "userAddress": "0x11111",
       "imgURI": "https://drive.google.com/file/d/1Bfqd4Z7v2WafECjtkX5vtVNVn6h2uhDM/view?usp=sharing",
       "price": 10,
@@ -12,7 +12,7 @@ export const initialState =
     },
     {
         "id": 2,
-        "userId" : 'Bab',
+        "user" : 'Bab',
         "userAddress": "0x22222",
         "imgURI": "https://drive.google.com/file/d/1FOjmWn6EZUE5fNyig_0XzZiEhRgn0BCI/view?usp=sharing",
         "price": 28,
@@ -21,7 +21,7 @@ export const initialState =
       },
       {
         "id": 3,
-        "userId" : 'Cathy',
+        "user" : 'Cathy',
         "userAddress": "0x33333",
         "imgURI": "https://drive.google.com/file/d/1vrJkGg-ibndAPcI7kvESKIT_saI4Idhq/view?usp=sharing",
         "price": 321,
@@ -30,7 +30,7 @@ export const initialState =
       },
       {
         "id": 4,
-        "userId" : 'Druid',
+        "user" : 'Druid',
         "userAddress": "0x4444",
         "imgURI": "https://drive.google.com/file/d/1-2AuiA6e7U9m_1ZCREoUWBe1G0IiOk7F/view?usp=sharing",
         "price": 62,
@@ -39,7 +39,7 @@ export const initialState =
       },
       {
         "id": 5,
-        "userId" : 'Ella',
+        "user" : 'Ella',
         "userAddress": "0x55555",
         "imgURI": "https://drive.google.com/file/d/1omGxo4bQAoge7oYg9rWdXAEwrdjl84Zk/view?usp=sharing",
         "price": 2,
@@ -48,7 +48,7 @@ export const initialState =
       },
       {
         "id": 6,
-        "userId" : 'franco',
+        "user" : 'franco',
         "userAddress": "0x66666",
         "imgURI": "https://drive.google.com/file/d/1F3OdmjUOzpD-7cBa3kPxxmrB8Pu6e7BU/view?usp=sharing",
         "price": 92,
