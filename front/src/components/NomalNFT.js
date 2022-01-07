@@ -1,5 +1,5 @@
 import React from 'react';
-import './Nomal.css';
+import './NomalNFT.css';
 
 function Nomal() {
     return (
