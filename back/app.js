@@ -13,7 +13,6 @@ const createNftRouter = require('./routes/createNftRouter');
 const accountRouter = require('./routes/accountRouter');
 require('dotenv').config();
 const PORT = process.env.PORT || 1234;
-// const db = require('./models');
 
 mongoose
   .connect(

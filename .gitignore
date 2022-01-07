@@ -4,4 +4,5 @@ init-models.js
 /node_modules
 **/secrets.json
 **/truffle-config.js
-.env
+daemon/test.js
+.DS_Store

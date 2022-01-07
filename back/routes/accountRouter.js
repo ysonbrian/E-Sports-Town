@@ -13,18 +13,21 @@ router.post('/login', async (req, res, next) => {
   const account = req.body.account[0];
 
   try {
-    const isValid = await Users.find({ userAddress: account });
+    const isValid = await Users.findOne({ userAddress: account });
     let id, master, userAddress;
+    console.log('isValid', isValid);
     if (!isValid) {
       const user = await new Users(data);
       await user.save();
-      id = user._id;
+      console.log('user', user);
+      id = user._id.toString();
       master = user.master;
       userAddress = user.userAddress;
     } else {
-      id = isValid[0]._id.toString();
-      master = isValid[0].master;
-      userAddress = isValid[0].userAddress;
+      console.log(isValid);
+      id = isValid._id.toString();
+      master = isValid.master;
+      userAddress = isValid.userAddress;
     }
 
     const token = jwt.sign(
