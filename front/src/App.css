@@ -38,3 +38,17 @@ div#root {
   margin-top: 1rem;
   color: darksalmon;
 }
+
+.listContainer {
+  padding: 3rem;
+  overflow: scroll;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.listItem {
+  margin: 1rem;
+  padding: 1rem;
+}
