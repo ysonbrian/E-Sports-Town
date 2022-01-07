@@ -15,16 +15,6 @@ function App() {
       <Router>
         <Header />
         <Switch>
-<<<<<<< HEAD
-<<<<<<< HEAD
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/artist">
-            <Artist />
-=======
-=======
->>>>>>> 31722255186fdf38c21be6a61faa0ac10af9f3dc
 
           <Route exact path="/">
             <Home/>
@@ -32,10 +22,6 @@ function App() {
 
           <Route path="/pronp">
             <Header/>
-<<<<<<< HEAD
-            <Artist/>
->>>>>>> f0b39e4d39042eb1acee63c00ea22470ed43244f
-=======
             <ProNFT />
             </Route>
           <Route exact path="/">
@@ -43,7 +29,6 @@ function App() {
           </Route>
           <Route path="/pronft">
             <ProNFT />
->>>>>>> 31722255186fdf38c21be6a61faa0ac10af9f3dc
           </Route>
           <Route path="/nomalnft">
             <NomalNFT />
