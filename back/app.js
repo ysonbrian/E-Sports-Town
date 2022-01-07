@@ -31,7 +31,7 @@ app.use(morgan('dev'));
 app.use('/master', masterRouter);
 app.use('/normal', normalRouter);
 app.use('/auction', auctionRouter);
-app.use('/create', createNftRouter);
+app.use('/mint', createNftRouter);
 app.use('/account', accountRouter);
 
 app.get('/', (req, res) => {

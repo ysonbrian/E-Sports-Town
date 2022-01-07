@@ -23,7 +23,6 @@ function App() {
   let history = createBrowserHistory();
   history.listen((location, action) => {
     const user = JSON.parse(localStorage.getItem('user'));
-    // console.log("토큰 만료 검사");
 
     if (user) {
       const decodedJwt = parseJwt(user.accessToken);
@@ -48,7 +47,7 @@ function App() {
       <HistoryRouter history={history}>
         <Header />
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route exact path="/" element={<Home />} />} />
           <Route path="/pro" element={<ProNFT />} />
           <Route path="/normal" element={<NormalNFT />} />
           <Route path="/auction" element={<Auction />} />

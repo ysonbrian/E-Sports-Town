@@ -1,13 +1,10 @@
 const express = require('express');
 const router = express.Router();
-// const metadata = require('../models/Metadata');
-const metadata = require('../controllers/MetadataController');
-// router.post('/', (req, res, next) => {
-//   // console.log('This is CreateNFT Page!');
+const Metadata = require('../models/MetaData');
 
-//   // metadata.save().then((res) => console.log(res));
-// });
-router.post('/', metadata.save);
-router.get('/getdata', metadata.findAll);
+router.post('/', (req, res) => {
+  const { userAddress, type, name, description, price, path, imgURI } =
+    req.body.metadata;
+});
 
 module.exports = router;
