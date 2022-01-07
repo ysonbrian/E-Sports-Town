@@ -4,10 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import Web3 from 'web3';
 import { useStore } from '../utils/store';
 import { login, logout } from '../utils/auth';
+
 function Header() {
   const [web3, setWeb3] = useState();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   let navigate = useNavigate();
+
   useEffect(() => {
     if (typeof window.ethereum !== 'undefined') {
       try {
@@ -42,17 +44,17 @@ function Header() {
         />
       </Link>
       <div className="header_nav">
-        <Link to="/artist">
-          <div className="header_option">작가NFT</div>
+        <Link to="/pro">
+          <div className="header_option">ProNFT-Market</div>
         </Link>
         <Link to="/nomal">
-          <div className="header_option">일반NFT거래소</div>
+          <div className="header_option">NormalNFT-Market</div>
         </Link>
         <Link to="/showme">
-          <div className="header_option">Show Me The NFT</div>
+          <div className="header_option">ShowMeTheNFT</div>
         </Link>
         <Link to="/minting">
-          <div className="header_option">NFT Minting</div>
+          <div className="header_option">NFT-Minting</div>
         </Link>
         <div className="header_option">
           {user?.userAddress ? (

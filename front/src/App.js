@@ -1,19 +1,18 @@
 import { useEffect } from 'react';
 import './App.css';
-import Header from './MenuBar/Header';
-import Home from './components/Home';
 import {
   unstable_HistoryRouter as HistoryRouter,
   Routes,
   Route,
 } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import Artist from './components/Artist';
-import Normal from './components/Nomal';
-import Showme from './components/Showme';
-import LogIn from './components/LogIn';
-import Mypage from './components/Mypage';
-import Minting from './components/Minting';
+import Header from './MenuBar/Header';
+import Home from './pages/Home';
+import ProNFT from './pages/ProNFT';
+import NormalNFT from './pages/NormalNFT';
+import Auction from './pages/Auction';
+import Minting from './pages/Minting';
+import Mypage from './pages/Mypage';
 
 import { useStore } from './utils/store';
 import { getCurrentUser, logout, parseJwt } from './utils/auth';
@@ -50,9 +49,9 @@ function App() {
         <Header />
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route path="/artist" element={<Artist />} />
-          <Route path="/nomal" element={<Normal />} />
-          <Route path="/showme" element={<Showme />} />
+          <Route path="/pro" element={<ProNFT />} />
+          <Route path="/normal" element={<NormalNFT />} />
+          <Route path="/auction" element={<Auction />} />
           <Route path="/minting" element={<Minting />} />
           <Route path="/mypage" element={<Mypage />} />
         </Routes>
