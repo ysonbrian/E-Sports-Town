@@ -47,7 +47,7 @@ function Header() {
         <Link to="/pro">
           <div className="header_option">ProNFT-Market</div>
         </Link>
-        <Link to="/nomal">
+        <Link to="/normal">
           <div className="header_option">NormalNFT-Market</div>
         </Link>
         <Link to="/showme">

@@ -50,7 +50,7 @@ function App() {
           <Route exact path="/" element={<Home />} />} />
           <Route path="/pro" element={<ProNFT />} />
           <Route path="/normal" element={<NormalNFT />} />
-          <Route path="/auction" element={<Auction />} />
+          <Route path="/showme" element={<Auction />} />
           <Route path="/minting" element={<Minting />} />
           <Route path="/mypage" element={<Mypage />} />
         </Routes>
