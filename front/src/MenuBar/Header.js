@@ -70,13 +70,7 @@ function Header() {
             </Link>
           ) : (
             <>
-              <Link
-                to="/"
-                className="header_login"
-                onClick={() => {
-                  connectWallet();
-                }}
-              >
+              <Link to="/" className="header_login" onClick={connectWallet}>
                 Login
               </Link>
               <Link

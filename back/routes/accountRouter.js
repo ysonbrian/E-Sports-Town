@@ -9,6 +9,7 @@ const SECRET = 'BEB-01-PROJECT-03';
 const saltRounds = 10;
 
 router.post('/login', async (req, res, next) => {
+  console.log(req);
   // const { userAddress: account, master } = req.body.data;
   const data = { userAddress: req.body.account[0], master: 'false' };
   const account = req.body.account[0];

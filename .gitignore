@@ -4,5 +4,4 @@ init-models.js
 /node_modules
 **/secrets.json
 **/truffle-config.js
-
-
+.env
