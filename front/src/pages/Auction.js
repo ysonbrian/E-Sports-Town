@@ -4,7 +4,9 @@ import './Auction.css';
 function Auction() {
     return (
         <div className='page'>
-            Auction Page
+            <h1 className='pageTitle'>
+                ShowMeTheNFT
+            </h1>
         </div>
     );
 }

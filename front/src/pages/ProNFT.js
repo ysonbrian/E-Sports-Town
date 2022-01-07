@@ -4,9 +4,9 @@ import './ProNFT.css';
 function ProNFT() {
     return (
         <div className="page">
-            <div>
-                ProNFT Page
-            </div>
+            <h1 className='pageTitle'>
+                ProNFT-Market
+            </h1>
         </div>
     );
 }

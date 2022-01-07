@@ -33,3 +33,8 @@ div#root {
   text-align: center;
   vertical-align: middle;
 }
+
+.pageTitle {
+  margin-top: 1rem;
+  color: darksalmon;
+}
