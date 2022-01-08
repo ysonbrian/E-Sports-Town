@@ -1,0 +1,45 @@
+.auctionNFT {
+    flex: 2 0 0;
+    background-color: cyan;
+    display: flex;
+    flex-direction: row;
+}
+
+.imgNFT {
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    border: solid 2px antiquewhite;
+}
+
+.profileNFT {
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    border: solid 2px rosybrown;
+}
+
+.dateNFT { 
+    flex: 1 0 0;
+    margin: 1rem;
+    border: solid 2px darkorange;
+}
+
+.final-bid-container {
+    flex: 2 0 0;
+    margin: 1rem;
+    border: solid 2px violet;
+}
+
+.bid-list-container {
+    flex: 2 0 0;
+    margin: 1rem;
+    border: solid 2px khaki;
+}
+
+.otherNFT {
+    flex: 1 0 0;
+    background-color: darkcyan;
+}
