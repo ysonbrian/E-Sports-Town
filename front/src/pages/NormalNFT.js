@@ -10,10 +10,7 @@ function NormalNFT() {
                 NormalNFT-Market
             </h1>
             <div className='listContainer'>
-                {console.log(dummydata.nft)}
                 {dummydata && dummydata.nft.slice(0).reverse().map((el) => {
-                    console.log(el.imgURI);
-                    console.log(el.user);
                     return (
                         <div className='listItem'>
                             <CardTemplate

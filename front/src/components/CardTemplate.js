@@ -1,12 +1,20 @@
 import React from 'react'
 import "./CardTemplate.css"
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '../utils/store';
 
 function CardTemplate({id, imgURI, user, description, price, created_at}) {
 
     let navigate = useNavigate();
+    const selId = useStore( (state) => state.id );
+    const setId = useStore( (state) => state.setId );
 
-    const goToAuction = () => {
+
+    const goToAuction = (id) => {
+        console.log("selId : " + selId)
+        console.log("CT id : " + id)
+        setId(id)
+        console.log("selId : " + selId)
         navigate('/auction');
         // zustand id 저장, auction page에서 id에 대한 입찰 페이지
     }
