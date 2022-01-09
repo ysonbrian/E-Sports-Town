@@ -40,7 +40,7 @@ function Header() {
         <img
           alt=""
           className="header_logo"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMA5HMTU1qw2nqKPOJvYGVku-Y2LeSOfNLfA&usqp=CAU"
+          src="https://drive.google.com/uc?export=view&id=1cIHsqCjp-bxD-YGMKXgcxap8YiI1v2sg"
         />
       </Link>
       <div className="header_nav">
