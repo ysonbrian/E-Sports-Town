@@ -1,34 +1,73 @@
 import React from 'react';
-import './Mypage.css';
 import { dummydata } from '../utils/dummyData';
 import CardTemplate from '../components/CardTemplate';
+import styled from 'styled-components';
+
+const PageTitle = styled.h1`
+    margin-top: 1rem;
+    color: darksalmon;
+`
+
+const Profile_container = styled.div`
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
+`
+
+const Profile = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
+const ListContainer = styled.div`
+  padding: 3rem;
+  overflow: scroll;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+`
+
+const ListItem = styled.div`
+  margin: 1rem;
+  padding: 1rem;
+`
+
+const UserName = styled.div`
+`
+
+const PublicKey = styled.div`
+`
+
+const CollectionNumber = styled.div`
+`
 
 function Mypage() {
     return (
-        <div className="page">
-            <div className='profile_container'>
-                <h1 className='pageTitle'>
+        <>
+            <Profile_container>
+                <PageTitle>
                     Mypage
-                </h1>
-                <div className='profile'>
+                </PageTitle>
+                <Profile>
                     <i className="far fa-user"></i>
-                    <div className='username'>
+                    <UserName>
                         {dummydata.nft[0].user}
-                    </div>
-                    <div className='pk'>
+                    </UserName>
+                    <PublicKey>
                         PublicKey
-                    </div>
-                    <div className='cltnumber'>
+                    </PublicKey>
+                    <CollectionNumber>
                         Collection#
-                    </div>
-                </div>
-                <h3 className='pageTitle'>
+                    </CollectionNumber>
+                </Profile>
+                <PageTitle>
                     NFT List
-                </h3>
-                <div className='listContainer'>
+                </PageTitle>
+                <ListContainer>
                     {dummydata && dummydata.nft.slice(0).reverse().map((el) => {
                         return (
-                            <div className='listItem'>
+                            <ListItem>
                                 <CardTemplate
                                     id={el.id}
                                     imgURI={el.imgURI}
@@ -37,12 +76,12 @@ function Mypage() {
                                     price={el.price}
                                     created_at={el.created_at}
                                 />
-                            </div>
+                            </ListItem>
                         )
                     })}
-                </div>
-            </div>
-        </div>
+                </ListContainer>
+            </Profile_container>
+        </>
     );
 }
 

@@ -19,6 +19,7 @@ import { getCurrentUser, logout, parseJwt } from './utils/auth';
 import Auction from './pages/Auction';
 import styled from 'styled-components';
 
+<<<<<<< HEAD
 const AppMainContainer = styled.div`
   display: grid;
   height: 100%;
@@ -32,6 +33,15 @@ const AppMainMiddle = styled.div`
   align-items: center;
 `;
 
+=======
+const RouterPages = styled.div`
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  vertical-align: middle;
+`
+>>>>>>> b2396f0560c5751d5e7d9d38baafc0c7e4229d17
 
 function App() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
@@ -63,15 +73,17 @@ function App() {
       <HistoryRouter history={history}>
         <AppMainContainer />
         <Header />
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route path="/pro" element={<ProNFT />} />
-          <Route path="/normal" element={<NormalNFT />} />
-          <Route path="/showme" element={<ShowMeTheNFT />} />
-          <Route path="/minting" element={<Minting />} />
-          <Route path="/mypage" element={<Mypage />} />
-          <Route path="/auction" element={<Auction />} />
-        </Routes>
+        <RouterPages>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/pro" element={<ProNFT />} />
+            <Route path="/normal" element={<NormalNFT />} />
+            <Route path="/showme" element={<ShowMeTheNFT />} />
+            <Route path="/minting" element={<Minting />} />
+            <Route path="/mypage" element={<Mypage />} />
+            <Route path="/auction" element={<Auction />} />
+          </Routes>
+        </RouterPages>
       </HistoryRouter>
     </div>
   );
