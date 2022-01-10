@@ -1,9 +1,40 @@
 import React, { useState } from 'react';
-import './Minting.css';
 import { useNavigate } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import { useStore } from '../utils/store';
 import { submitNFT } from '../utils/data';
+import styled from 'styled-components';
+
+const PageTitle = styled.h1`
+    margin-top: 1rem;
+    color: darksalmon;
+`
+
+const NftEnrollContainer = styled.div`
+  border: solid 4px brown;
+  margin: 3rem 10rem 3rem 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const NftUploader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const NftPreviewImg = styled.div`
+  border: cadetblue dotted 2px;
+  width: 300px;
+  height: 300px;
+
+  img {
+    width: 295px;
+    height: 295px;
+  }
+`
+
 function Minting() {
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
@@ -56,57 +87,61 @@ function Minting() {
   };
 
   return (
-    <main className="container">
-      <h2>상품등록</h2>
-      <input
-        type="file"
-        onChange={(e) => {
-          encodeFileToBase64(e.target.files[0]);
-        }}
-      />
-      <div className="preview">
-        {imageSrc && <img src={imageSrc} alt="preview-img" />}
-      </div>
+    <>
+      <PageTitle>상품등록</PageTitle>
+      <NftEnrollContainer>
+        <NftUploader>
+          이미지 파일 위치
+          <NftPreviewImg>
+            {imageSrc && <img src={imageSrc} alt="preview-img" />}
+          </NftPreviewImg>
+          <input
+            type="file"
+            onChange={(e) => {
+              encodeFileToBase64(e.target.files[0]);
+            }}
+          />
+        </NftUploader>
 
-      <form onSubmit={(e) => onSubmit(e)}>
-        <label className="textInfo" htmlFor="inputName">
-          이름
-        </label>
-        <input type="text" name="name" id="inputName" required />
+        <form onSubmit={(e) => onSubmit(e)}>
+          <label className="textInfo" htmlFor="inputName">
+            이름
+          </label>
+          <input type="text" name="name" id="inputName" required />
 
-        <label className="textInfo" htmlFor="inputDescription">
-          정보
-        </label>
-        <input type="text" name="name" id="inputDescription" required />
+          <label className="textInfo" htmlFor="inputDescription">
+            정보
+          </label>
+          <input type="text" name="name" id="inputDescription" required />
 
-        <label className="textInfo" htmlFor="inputPrice">
-          가격
-        </label>
-        <input type="text" id="inputPrice" required />
+          <label className="textInfo" htmlFor="inputPrice">
+            가격
+          </label>
+          <input type="text" id="inputPrice" required />
 
-        <label className="textInfo" htmlFor="optionNft">
-          어느곳에 민팅 하시겠어요?
-        </label>
-        <select id="optionNft" onChange={onSelectChange}>
-          {user?.master === 'true' ? (
-            <>
-              <option value="pro" defaultValue>
-                프로
-              </option>
-            </>
-          ) : (
-            <>
-              <option value="pro" defaultValue>
-                일반
-              </option>
-              <option value="auction">쇼미더머니</option>
-            </>
-          )}
-        </select>
-
-        <input type="submit" />
-      </form>
-    </main>
+          <label className="textInfo" htmlFor="optionNft">
+            어느곳에 민팅 하시겠어요?
+          </label>
+          <select id="optionNft" onChange={onSelectChange}>
+            {user?.master === 'true' ? (
+              <>
+                <option value="pro" defaultValue>
+                  프로
+                </option>
+              </>
+            ) : (
+              <>
+                <option value="pro" defaultValue>
+                  일반
+                </option>
+                <option value="auction">쇼미더머니</option>
+              </>
+            )}
+          </select>
+          <input type="submit" />
+        </form>
+      </NftEnrollContainer>
+    </>
   );
 }
 
