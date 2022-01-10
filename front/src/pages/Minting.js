@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
-import './Minting.css';
+/*import './Minting.css';*/
 import { useNavigate } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import { useStore } from '../utils/store';
 import { submitNFT } from '../utils/data';
+import styled from 'styled-components';
+
+const container = styled.div`
+border: 100px solid #393939;
+paddig: 10%;
+back
+
+`
+
+
+
 function Minting() {
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
@@ -14,6 +25,7 @@ function Minting() {
     port: 5001,
     protocol: 'https',
   });
+
 
   const encodeFileToBase64 = (fileBlob) => {
     const reader = new FileReader();
@@ -57,6 +69,7 @@ function Minting() {
 
   return (
     <main className="container">
+      <container>
       <h2>상품등록</h2>
       <input
         type="file"
@@ -106,6 +119,7 @@ function Minting() {
 
         <input type="submit" />
       </form>
+      </container>
     </main>
   );
 }

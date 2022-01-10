@@ -17,6 +17,21 @@ import Mypage from './pages/Mypage';
 import { useStore } from './utils/store';
 import { getCurrentUser, logout, parseJwt } from './utils/auth';
 import Auction from './pages/Auction';
+import styled from 'styled-components';
+
+const AppMainContainer = styled.div`
+  display: grid;
+  height: 100%;
+  grid-template-rows: 1fr;
+  background-color: #black;
+`;
+
+const AppMainMiddle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 
 function App() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
@@ -46,6 +61,7 @@ function App() {
   return (
     <div className="App">
       <HistoryRouter history={history}>
+        <AppMainContainer />
         <Header />
         <Routes>
           <Route exact path="/" element={<Home />} />
