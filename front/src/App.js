@@ -44,7 +44,7 @@ function App() {
   }, [setUser]);
 
   return (
-    <div className="App">
+    <div className="app">
       <HistoryRouter history={history}>
         <Header />
         <Routes>

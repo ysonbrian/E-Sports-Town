@@ -47,7 +47,7 @@ function Minting() {
     };
     submitNFT(result);
     setSelected('');
-    navigate('/');
+    // navigate('/');
     window.location.reload(false);
   };
 
