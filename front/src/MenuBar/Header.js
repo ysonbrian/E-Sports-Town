@@ -1,9 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import './Header.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Web3 from 'web3';
 import { useStore } from '../utils/store';
 import { login, logout } from '../utils/auth';
+import styled from 'styled-components';
+
+const HeaderContainer = styled.div`
+  height: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+
+  img {
+    width: 100px;
+    height: 100px;
+    padding: 5px;
+  }
+`
+const HeaderIsLogin = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 function Header() {
   const [web3, setWeb3] = useState();
@@ -35,29 +55,28 @@ function Header() {
   };
 
   return (
-    <div className="header">
+    <HeaderContainer>
       <Link to="/">
         <img
           alt=""
-          className="header_logo"
           src="https://drive.google.com/uc?export=view&id=1cIHsqCjp-bxD-YGMKXgcxap8YiI1v2sg"
         />
       </Link>
-      <div className="header_nav">
-        <Link to="/pro">
-          <div className="header_option">ProNFT-Market</div>
-        </Link>
-        <Link to="/normal">
-          <div className="header_option">NormalNFT-Market</div>
-        </Link>
-        <Link to="/showme">
-          <div className="header_option">ShowMeTheNFT</div>
-        </Link>
-        <Link to="/minting">
-          <div className="header_option">NFT-Minting</div>
-        </Link>
-        <div className="header_option">
-          {user?.userAddress ? (
+      <Link to="/pro">
+        ProNFT-Market
+      </Link>
+      <Link to="/normal">
+        NormalNFT-Market
+      </Link>
+      <Link to="/showme">
+        ShowMeTheNFT
+      </Link>
+      <Link to="/minting">
+        NFT-Minting
+      </Link>
+      <HeaderIsLogin>
+        {user?.userAddress ? (
+          <>
             <Link
               to="/"
               className="Logout"
@@ -68,32 +87,22 @@ function Header() {
             >
               Logout
             </Link>
-          ) : (
-            <>
-              <Link to="/" className="header_login" onClick={connectWallet}>
-                Login
-              </Link>
-              <Link
-                to="/"
-                className="Logout"
-                onClick={() => {
-                  logout();
-                  setUser({});
-                }}
-              >
-                Logout
-              </Link>
-            </>
-          )}
-          <Link to="/mypage">
-            <div className="header_Mypage">MyPage</div>
-          </Link>
-          <div className="header_PublicKey">
-            PublicKey : {user?.userAddress}
-          </div>
-        </div>
-      </div>
-    </div>
+            <Link to="/mypage">
+              <div className="header_Mypage">MyPage</div>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link to="/" className="header_login" onClick={connectWallet}>
+              Login
+            </Link>
+            <Link to="/mypage">
+              <div className="header_Mypage">MyPage</div>
+            </Link>
+          </>
+        )}
+      </HeaderIsLogin>
+    </HeaderContainer>
   );
 }
 
