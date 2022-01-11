@@ -34,7 +34,7 @@ function Header() {
     if (typeof window.ethereum !== 'undefined') {
       try {
         const web = new Web3(window.ethereum);
-        console.log(web);
+        //console.log(web);
         setWeb3(web);
       } catch (err) {
         console.log(err);
@@ -47,9 +47,10 @@ function Header() {
       method: 'eth_requestAccounts',
     });
     setUser(accounts);
+    console.log("accounts:"+accounts);
     const account = await login(accounts);
-    setUser(account.data);
-    console.log(user);
+    setUser("account.data:"+account.data);
+    console.log("connectWallet:"+user);
     navigate('/');
     window.location.reload(false);
   };
@@ -59,14 +60,11 @@ function Header() {
       <Link to="/">
         <img
           alt=""
-          src="https://drive.google.com/uc?export=view&id=1cIHsqCjp-bxD-YGMKXgcxap8YiI1v2sg"
+          src="https://drive.google.com/uc?export=view&id=1-ZWmfkTmpNTO8kglTINlT7M-k_KDQ8ai"
         />
       </Link>
-      <Link to="/pro">
-        ProNFT-Market
-      </Link>
-      <Link to="/normal">
-        NormalNFT-Market
+      <Link to="/gallery">
+        Gallery
       </Link>
       <Link to="/showme">
         ShowMeTheNFT
@@ -95,9 +93,6 @@ function Header() {
           <>
             <Link to="/" className="header_login" onClick={connectWallet}>
               Login
-            </Link>
-            <Link to="/mypage">
-              <div className="header_Mypage">MyPage</div>
             </Link>
           </>
         )}
