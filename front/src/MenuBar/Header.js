@@ -6,19 +6,62 @@ import { login, logout } from '../utils/auth';
 import styled from 'styled-components';
 
 const HeaderContainer = styled.div`
-  height: 100px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
+display: grid;
+grid-template-columns: 1fr 1fr;
+font-family: 'Lato', sans-serif;
+background-color: #FEECE9;
+`;
 
-  img {
-    width: 100px;
-    height: 100px;
-    padding: 5px;
+const Logo = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  a {
+    text-decoration: none;
+    cursor: pointer;
+    color: #00406e;
+    font-size: 20px;
   }
-`
+  a:hover {
+    color: black;
+  }
+  img {
+    width: 200px;
+    height: 100px;
+  }
+  img:hover {
+    color: black;
+  }
+`;
+
+
+const HeaderBar = styled.ul`
+display: flex;
+align-items: center;
+justify-content: flex-end;
+gap: 20px;
+padding: 10px;
+a {
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+a:hover {
+  color: #FE7E6D;
+}
+input {
+  width: 200px;
+}
+li {
+  list-style: none;
+  text-decoration: none;
+  width: 100%;
+}
+`;
+
+
 const HeaderIsLogin = styled.div`
   display: flex;
   flex-direction: column;
@@ -56,12 +99,16 @@ function Header() {
 
   return (
     <HeaderContainer>
+      <Logo>
       <Link to="/">
         <img
           alt=""
-          src="https://drive.google.com/uc?export=view&id=1cIHsqCjp-bxD-YGMKXgcxap8YiI1v2sg"
+          src="https://drive.google.com/uc?export=view&id=1-ZWmfkTmpNTO8kglTINlT7M-k_KDQ8ai"
         />
       </Link>
+      </Logo>
+
+<HeaderBar>
       <Link to="/pro">
         ProNFT-Market
       </Link>
@@ -102,6 +149,7 @@ function Header() {
           </>
         )}
       </HeaderIsLogin>
+      </HeaderBar>
     </HeaderContainer>
   );
 }

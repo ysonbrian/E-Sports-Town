@@ -15,10 +15,6 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "^4.0.3",
     "semantic-ui-react": "^2.0.4",
-<<<<<<< HEAD
-    "style-components": "^0.1.0",
-=======
->>>>>>> b2396f0560c5751d5e7d9d38baafc0c7e4229d17
     "styled-components": "^5.3.3",
     "web-vitals": "^2.1.0",
     "web3": "^1.6.1",

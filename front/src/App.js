@@ -19,29 +19,11 @@ import { getCurrentUser, logout, parseJwt } from './utils/auth';
 import Auction from './pages/Auction';
 import styled from 'styled-components';
 
-<<<<<<< HEAD
-const AppMainContainer = styled.div`
-  display: grid;
-  height: 100%;
-  grid-template-rows: 1fr;
-  background-color: #black;
-`;
-
-const AppMainMiddle = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-=======
 const RouterPages = styled.div`
-  background-color: whitesmoke;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  vertical-align: middle;
-`
->>>>>>> b2396f0560c5751d5e7d9d38baafc0c7e4229d17
+display: grid;
+height: 100%;
+grid-template-rows: 1fr;
+`;
 
 function App() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
@@ -71,7 +53,6 @@ function App() {
   return (
     <div className="App">
       <HistoryRouter history={history}>
-        <AppMainContainer />
         <Header />
         <RouterPages>
           <Routes>

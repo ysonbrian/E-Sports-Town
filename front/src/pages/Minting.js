@@ -1,42 +1,38 @@
 import React, { useState } from 'react';
-<<<<<<< HEAD
-/*import './Minting.css';*/
-=======
->>>>>>> b2396f0560c5751d5e7d9d38baafc0c7e4229d17
 import { useNavigate } from 'react-router-dom';
 import { create } from 'ipfs-http-client';
 import { useStore } from '../utils/store';
 import { submitNFT } from '../utils/data';
 import styled from 'styled-components';
 
-<<<<<<< HEAD
-const container = styled.div`
-border: 100px solid #393939;
-paddig: 10%;
-back
-
-`
-
-
-=======
-const PageTitle = styled.h1`
+const Title = styled.h1`
     margin-top: 1rem;
     color: darksalmon;
-`
+`;
 
 const NftEnrollContainer = styled.div`
-  border: solid 4px brown;
-  margin: 3rem 10rem 3rem 10rem;
   display: flex;
+  border: none;
+  border-radius: 50px;
+  margin: auto;
   flex-direction: column;
   align-items: center;
-`
+  width: 400px;
+  background-color: none;
+`;
 
 const NftUploader = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+  margin-top: 30px;
+  background-color: whitesmoke;
+  position: relative;
+`;
+
+const InputImage = styled.input`
+  display: right;
+  `
 
 const NftPreviewImg = styled.div`
   border: cadetblue dotted 2px;
@@ -47,8 +43,55 @@ const NftPreviewImg = styled.div`
     width: 295px;
     height: 295px;
   }
-`
->>>>>>> b2396f0560c5751d5e7d9d38baafc0c7e4229d17
+`;
+
+const PreviewImageCloseButton = styled.button`
+  color: #gray;
+  outline: none;
+  border: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  font-size: 20px;
+  :hover {
+    color: rgb(127, 117, 117);
+  }
+`;
+
+const InputInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 10px;
+  letter-spacing: 2px;
+  color: rgb(33, 29, 29);
+`;
+
+const InputInfo = styled.input`
+  border: 2px solid darksalmon;
+  height: 50px;
+  padding-left: 10px;
+  border-radius: 10px;
+  background-color: whitesmoke;
+  :hover {
+    background-color: # E0FFFF;
+  }
+
+`;
+
+const MintingPositionContainer = styled.div`
+margin-top: 20px;
+margin-bottom: 20px;
+`;
+
+const MintingPositionOptions = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: space-around;
+padding: 5px;
+
+`;
 
 function Minting() {
   let navigate = useNavigate();
@@ -102,97 +145,67 @@ function Minting() {
     setSelected(e.target.value);
   };
 
+  const onClickXButton = () => {
+    setImageSrc('');
+  };
+
   return (
-<<<<<<< HEAD
-    <main className="container">
-      <container>
-      <h2>상품등록</h2>
-      <input
-        type="file"
-        onChange={(e) => {
-          encodeFileToBase64(e.target.files[0]);
-        }}
-      />
-      <div className="preview">
-        {imageSrc && <img src={imageSrc} alt="preview-img" />}
-      </div>
-
-      <form onSubmit={(e) => onSubmit(e)}>
-        <label className="textInfo" htmlFor="inputName">
-          이름
-        </label>
-        <input type="text" name="name" id="inputName" required />
-
-        <label className="textInfo" htmlFor="inputDescription">
-          정보
-        </label>
-        <input type="text" name="name" id="inputDescription" required />
-
-        <label className="textInfo" htmlFor="inputPrice">
-          가격
-        </label>
-        <input type="text" id="inputPrice" required />
-
-        <label className="textInfo" htmlFor="optionNft">
-          어느곳에 민팅 하시겠어요?
-        </label>
-        <select id="optionNft" onChange={onSelectChange}>
-          {user?.master === 'true' ? (
-            <>
-              <option value="pro" defaultValue>
-                프로
-              </option>
-            </>
-          ) : (
-            <>
-              <option value="pro" defaultValue>
-                일반
-              </option>
-              <option value="auction">쇼미더머니</option>
-            </>
-          )}
-        </select>
-
-        <input type="submit" />
-      </form>
-      </container>
-    </main>
-=======
     <>
-      <PageTitle>상품등록</PageTitle>
+      <Title>Create New Item</Title>
       <NftEnrollContainer>
         <NftUploader>
-          이미지 파일 위치
           <NftPreviewImg>
             {imageSrc && <img src={imageSrc} alt="preview-img" />}
+            <PreviewImageCloseButton onClick={onClickXButton}>
+                    X
+          </PreviewImageCloseButton>
           </NftPreviewImg>
-          <input
+        </NftUploader>
+        <InputImage
             type="file"
             onChange={(e) => {
               encodeFileToBase64(e.target.files[0]);
             }}
           />
-        </NftUploader>
-
         <form onSubmit={(e) => onSubmit(e)}>
-          <label className="textInfo" htmlFor="inputName">
+        <InputInfoContainer>
+          <label htmlFor="inputName">
             이름
           </label>
-          <input type="text" name="name" id="inputName" required />
-
-          <label className="textInfo" htmlFor="inputDescription">
+          <InputInfo 
+          type="text" 
+          id="inputName" 
+          required />
+          </InputInfoContainer>
+          
+          <InputInfoContainer>
+          <label htmlFor="inputDescription">
             정보
           </label>
-          <input type="text" name="name" id="inputDescription" required />
-
-          <label className="textInfo" htmlFor="inputPrice">
+          <InputInfo 
+          type="text" 
+          id="inputDescription" 
+          required />
+          </InputInfoContainer>
+          
+          <InputInfoContainer>
+          <label htmlFor="inputPrice">
             가격
           </label>
-          <input type="text" id="inputPrice" required />
-
-          <label className="textInfo" htmlFor="optionNft">
-            어느곳에 민팅 하시겠어요?
+          <InputInfo 
+          type="text" 
+          id="inputPrice" 
+          required />
+          </InputInfoContainer>
+          
+          <MintingPositionContainer>
+            <MintingPositionOptions>
+          <label htmlFor="optionNft">
+            어느 곳에 민팅 하시겠어요?
           </label>
+          </MintingPositionOptions>
+          
+          <MintingPositionOptions>
           <select id="optionNft" onChange={onSelectChange}>
             {user?.master === 'true' ? (
               <>
@@ -209,11 +222,13 @@ function Minting() {
               </>
             )}
           </select>
+          </MintingPositionOptions>
+
           <input type="submit" />
+          </MintingPositionContainer>
         </form>
       </NftEnrollContainer>
     </>
->>>>>>> b2396f0560c5751d5e7d9d38baafc0c7e4229d17
   );
 }
 

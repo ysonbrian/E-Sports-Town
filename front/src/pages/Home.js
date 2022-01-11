@@ -6,12 +6,23 @@ const PageTitle = styled.h1`
     color: darksalmon;
 `
 
+const Container = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid darksalmon;
+
+
+`
+
+
+
 function Home() {
     return (
         <>
-            <PageTitle>
-                HomePage
-            </PageTitle>
+            <PageTitle>HomePage</PageTitle>
+           <Container>
+
+           </Container>
         </>
     );
 }
