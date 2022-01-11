@@ -8,7 +8,7 @@ import styled from 'styled-components';
 const HeaderContainer = styled.div`
 display: grid;
 grid-template-columns: 1fr 1fr;
-font-family: 'Lato', sans-serif;
+font-family: 'Be Vietnam Pro', sans-serif;
 background-color: #FEECE9;
 `;
 
@@ -30,9 +30,6 @@ const Logo = styled.div`
   img {
     width: 200px;
     height: 100px;
-  }
-  img:hover {
-    color: black;
   }
 `;
 
