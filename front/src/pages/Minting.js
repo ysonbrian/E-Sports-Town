@@ -6,9 +6,9 @@ import { submitNFT } from '../utils/data';
 import styled from 'styled-components';
 
 const PageTitle = styled.h1`
-    margin-top: 1rem;
-    color: darksalmon;
-`
+  margin-top: 1rem;
+  color: darksalmon;
+`;
 
 const NftEnrollContainer = styled.div`
   border: solid 4px brown;
@@ -16,13 +16,13 @@ const NftEnrollContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const NftUploader = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const NftPreviewImg = styled.div`
   border: cadetblue dotted 2px;
@@ -33,7 +33,7 @@ const NftPreviewImg = styled.div`
     width: 295px;
     height: 295px;
   }
-`
+`;
 
 function Minting() {
   let navigate = useNavigate();
@@ -78,11 +78,12 @@ function Minting() {
     };
     submitNFT(result);
     setSelected('');
-    // navigate('/');
+    navigate('/');
     window.location.reload(false);
   };
 
   const onSelectChange = (e) => {
+    console.log(e.target.value);
     setSelected(e.target.value);
   };
 
@@ -125,15 +126,13 @@ function Minting() {
           <select id="optionNft" onChange={onSelectChange}>
             {user?.master === 'true' ? (
               <>
-                <option value="pro" defaultValue>
-                  프로
-                </option>
+                <option></option>
+                <option value="pro">프로</option>
               </>
             ) : (
               <>
-                <option value="pro" defaultValue>
-                  일반
-                </option>
+                <option></option>
+                <option value="normal">일반</option>
                 <option value="auction">쇼미더머니</option>
               </>
             )}
