@@ -8,8 +8,7 @@ import {
 import { createBrowserHistory } from 'history';
 import Header from './MenuBar/Header';
 import Home from './pages/Home';
-import ProNFT from './pages/ProNFT';
-import NormalNFT from './pages/NormalNFT';
+import Gallery from './pages/Gallery';
 import ShowMeTheNFT from './pages/ShowMeTheNFT';
 import Minting from './pages/Minting';
 import Mypage from './pages/Mypage';
@@ -57,8 +56,7 @@ function App() {
         <RouterPages>
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route path="/pro" element={<ProNFT />} />
-            <Route path="/normal" element={<NormalNFT />} />
+            <Route path="/gallery" element={<Gallery />} />
             <Route path="/showme" element={<ShowMeTheNFT />} />
             <Route path="/minting" element={<Minting />} />
             <Route path="/mypage" element={<Mypage />} />
