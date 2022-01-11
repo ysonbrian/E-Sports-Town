@@ -9,12 +9,13 @@ const PageTitle = styled.h1`
 `
 
 const ListContainer = styled.div`
-  padding: 3rem;
-  overflow: scroll;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+    padding: 3rem;
+    overflow: scroll;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
 `
 
 const ListItem = styled.div`
@@ -31,7 +32,7 @@ function ShowMeTheNFT() {
             <ListContainer>
                 {dummydata && dummydata.nft.slice(0).reverse().map((el) => {
                     return (
-                        <ListItem>
+                        <ListItem key={el.id}>
                             <CardTemplate
                                 id={el.id}
                                 imgURI={el.imgURI}

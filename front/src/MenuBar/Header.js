@@ -74,7 +74,7 @@ function Header() {
     if (typeof window.ethereum !== 'undefined') {
       try {
         const web = new Web3(window.ethereum);
-        console.log(web);
+        //console.log(web);
         setWeb3(web);
       } catch (err) {
         console.log(err);
@@ -87,9 +87,10 @@ function Header() {
       method: 'eth_requestAccounts',
     });
     setUser(accounts);
+    console.log("accounts:" + accounts);
     const account = await login(accounts);
-    setUser(account.data);
-    console.log(user);
+    setUser("account.data:" + account.data);
+    console.log("connectWallet:" + user);
     navigate('/');
     window.location.reload(false);
   };
@@ -97,55 +98,48 @@ function Header() {
   return (
     <HeaderContainer>
       <Logo>
-      <Link to="/">
-        <img
-          alt=""
-          src="https://drive.google.com/uc?export=view&id=1-ZWmfkTmpNTO8kglTINlT7M-k_KDQ8ai"
-        />
-      </Link>
+        <Link to="/">
+          <img
+            alt=""
+            src="https://drive.google.com/uc?export=view&id=1-ZWmfkTmpNTO8kglTINlT7M-k_KDQ8ai"
+          />
+        </Link>
       </Logo>
-
-<HeaderBar>
-      <Link to="/pro">
-        ProNFT-Market
-      </Link>
-      <Link to="/normal">
-        NormalNFT-Market
-      </Link>
-      <Link to="/showme">
-        ShowMeTheNFT
-      </Link>
-      <Link to="/minting">
-        NFT-Minting
-      </Link>
-      <HeaderIsLogin>
-        {user?.userAddress ? (
-          <>
-            <Link
-              to="/"
-              className="Logout"
-              onClick={() => {
-                logout();
-                setUser({});
-              }}
-            >
-              Logout
-            </Link>
-            <Link to="/mypage">
-              <div className="header_Mypage">MyPage</div>
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link to="/" className="header_login" onClick={connectWallet}>
-              Login
-            </Link>
-            <Link to="/mypage">
-              <div className="header_Mypage">MyPage</div>
-            </Link>
-          </>
-        )}
-      </HeaderIsLogin>
+      <HeaderBar>
+        <Link to="/gallery">
+          Gallery
+        </Link>
+        <Link to="/showme">
+          ShowMeTheNFT
+        </Link>
+        <Link to="/minting">
+          NFT-Minting
+        </Link>
+        <HeaderIsLogin>
+          {user?.userAddress ? (
+            <>
+              <Link
+                to="/"
+                className="Logout"
+                onClick={() => {
+                  logout();
+                  setUser({});
+                }}
+              >
+                Logout
+              </Link>
+              <Link to="/mypage">
+                <div className="header_Mypage">MyPage</div>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/" className="header_login" onClick={connectWallet}>
+                Login
+              </Link>
+            </>
+          )}
+        </HeaderIsLogin>
       </HeaderBar>
     </HeaderContainer>
   );
