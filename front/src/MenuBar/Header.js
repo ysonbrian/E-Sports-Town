@@ -6,19 +6,59 @@ import { login, logout } from '../utils/auth';
 import styled from 'styled-components';
 
 const HeaderContainer = styled.div`
-  height: 100px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
+display: grid;
+grid-template-columns: 1fr 1fr;
+font-family: 'Be Vietnam Pro', sans-serif;
+background-color: #FEECE9;
+`;
 
-  img {
-    width: 100px;
-    height: 100px;
-    padding: 5px;
+const Logo = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  a {
+    text-decoration: none;
+    cursor: pointer;
+    color: #00406e;
+    font-size: 20px;
   }
-`
+  a:hover {
+    color: black;
+  }
+  img {
+    width: 200px;
+    height: 100px;
+  }
+`;
+
+
+const HeaderBar = styled.ul`
+display: flex;
+align-items: center;
+justify-content: flex-end;
+gap: 20px;
+padding: 10px;
+a {
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+a:hover {
+  color: #FE7E6D;
+}
+input {
+  width: 200px;
+}
+li {
+  list-style: none;
+  text-decoration: none;
+  width: 100%;
+}
+`;
+
+
 const HeaderIsLogin = styled.div`
   display: flex;
   flex-direction: column;
@@ -34,7 +74,7 @@ function Header() {
     if (typeof window.ethereum !== 'undefined') {
       try {
         const web = new Web3(window.ethereum);
-        console.log(web);
+        //console.log(web);
         setWeb3(web);
       } catch (err) {
         console.log(err);
@@ -47,61 +87,60 @@ function Header() {
       method: 'eth_requestAccounts',
     });
     setUser(accounts);
+    console.log("accounts:" + accounts);
     const account = await login(accounts);
-    setUser(account.data);
-    console.log(user);
+    setUser("account.data:" + account.data);
+    console.log("connectWallet:" + user);
     navigate('/');
     window.location.reload(false);
   };
 
   return (
     <HeaderContainer>
-      <Link to="/">
-        <img
-          alt=""
-          src="https://drive.google.com/uc?export=view&id=1cIHsqCjp-bxD-YGMKXgcxap8YiI1v2sg"
-        />
-      </Link>
-      <Link to="/pro">
-        ProNFT-Market
-      </Link>
-      <Link to="/normal">
-        NormalNFT-Market
-      </Link>
-      <Link to="/showme">
-        ShowMeTheNFT
-      </Link>
-      <Link to="/minting">
-        NFT-Minting
-      </Link>
-      <HeaderIsLogin>
-        {user?.userAddress ? (
-          <>
-            <Link
-              to="/"
-              className="Logout"
-              onClick={() => {
-                logout();
-                setUser({});
-              }}
-            >
-              Logout
-            </Link>
-            <Link to="/mypage">
-              <div className="header_Mypage">MyPage</div>
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link to="/" className="header_login" onClick={connectWallet}>
-              Login
-            </Link>
-            <Link to="/mypage">
-              <div className="header_Mypage">MyPage</div>
-            </Link>
-          </>
-        )}
-      </HeaderIsLogin>
+      <Logo>
+        <Link to="/">
+          <img
+            alt=""
+            src="https://drive.google.com/uc?export=view&id=1-ZWmfkTmpNTO8kglTINlT7M-k_KDQ8ai"
+          />
+        </Link>
+      </Logo>
+      <HeaderBar>
+        <Link to="/gallery">
+          Gallery
+        </Link>
+        <Link to="/showme">
+          ShowMeTheNFT
+        </Link>
+        <Link to="/minting">
+          NFT-Minting
+        </Link>
+        <HeaderIsLogin>
+          {user?.userAddress ? (
+            <>
+              <Link
+                to="/"
+                className="Logout"
+                onClick={() => {
+                  logout();
+                  setUser({});
+                }}
+              >
+                Logout
+              </Link>
+              <Link to="/mypage">
+                <div className="header_Mypage">MyPage</div>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/" className="header_login" onClick={connectWallet}>
+                Login
+              </Link>
+            </>
+          )}
+        </HeaderIsLogin>
+      </HeaderBar>
     </HeaderContainer>
   );
 }

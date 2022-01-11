@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import {
   unstable_HistoryRouter as HistoryRouter,
@@ -8,28 +8,30 @@ import {
 import { createBrowserHistory } from 'history';
 import Header from './MenuBar/Header';
 import Home from './pages/Home';
-import ProNFT from './pages/ProNFT';
-import NormalNFT from './pages/NormalNFT';
+import Gallery from './pages/Gallery';
 import ShowMeTheNFT from './pages/ShowMeTheNFT';
 import Minting from './pages/Minting';
 import Mypage from './pages/Mypage';
 
-import { useStore } from './utils/store';
+import { useStore, useGallery } from './utils/store';
 import { getCurrentUser, logout, parseJwt } from './utils/auth';
+import { getGalleryList } from './utils/data';
 import Auction from './pages/Auction';
 import styled from 'styled-components';
 
 const RouterPages = styled.div`
-  background-color: whitesmoke;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  vertical-align: middle;
-`
+  display: grid;
+  height: 100%;
+  grid-template-rows: 1fr;
+`;
 
 function App() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
-
+  // const [gallery, setGallery] = useGallery((state) => [
+  //   state.gallery,
+  //   state.setGallery,
+  // ]);
+  const [getData, setGetData] = useState();
   let history = createBrowserHistory();
   history.listen((location, action) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -52,6 +54,23 @@ function App() {
     }
   }, [setUser]);
 
+  // useEffect(() => {
+  //   // const fetchData = async () => {
+  //   //   const galleryData = await getGalleryList();
+  //   //   console.log('galleryData', galleryData);
+  //   //   setGetData(galleryData);
+  //   //   console.log('after', getData);
+  //   //   setGallery(getData);
+  //   //   console.log(gallery);
+  //   // };
+  //   // fetchData();
+  //   const galleryData = getGalleryList();
+  //   if (galleryData) {
+  //     setGallery(galleryData);
+  //     console.log('hahahah', gallery);
+  //   }
+  // }, [setGallery, setGetData]);
+
   return (
     <div className="app">
       <HistoryRouter history={history}>
@@ -59,8 +78,7 @@ function App() {
         <RouterPages>
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route path="/pro" element={<ProNFT />} />
-            <Route path="/normal" element={<NormalNFT />} />
+            <Route path="/gallery" element={<Gallery />} />
             <Route path="/showme" element={<ShowMeTheNFT />} />
             <Route path="/minting" element={<Minting />} />
             <Route path="/mypage" element={<Mypage />} />

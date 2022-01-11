@@ -3,32 +3,3 @@
   margin: 0;
   padding: 0;
 }
-
-.page {
-  width: 100%;
-  height: max-content;
-  background-color: whitesmoke;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.pageTitle {
-  margin-top: 1rem;
-  color: darksalmon;
-}
-
-.listContainer {
-  padding: 3rem;
-  overflow: scroll;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.listItem {
-  margin: 1rem;
-  padding: 1rem;
-}
