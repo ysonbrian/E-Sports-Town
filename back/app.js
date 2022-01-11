@@ -11,6 +11,9 @@ const normalRouter = require('./routes/normalRouter');
 const auctionRouter = require('./routes/auctionRouter');
 const createNftRouter = require('./routes/createNftRouter');
 const accountRouter = require('./routes/accountRouter');
+const galleryRouter = require('./routes/galleryRouter');
+const mypageRouter = require('./routes/mypageRouter');
+
 require('dotenv').config();
 const PORT = process.env.PORT || 1234;
 
@@ -32,6 +35,8 @@ app.use('/normal', normalRouter);
 app.use('/auction', auctionRouter);
 app.use('/mint', createNftRouter);
 app.use('/account', accountRouter);
+app.use('/gallery', galleryRouter);
+app.use('/mypage', mypageRouter);
 
 app.get('/', (req, res) => {
   res.json({ message: `Server is running on port ${PORT}` });

@@ -8,16 +8,16 @@ var erc20Contract = new web3.eth.Contract(erc20Abi, process.env.erc20CA);
 var erc721Contract = new web3.eth.Contract(erc721Abi, process.env.nftCA);
 
 module.exports = {
-  mintNft: async (req, res, metadata) => {
-    console.log(metadata.userAddress);
+  mintNft: async (req, res, data) => {
+    console.log(data.userAddress);
     const sendAccount = process.env.serverAddress;
     const privateKey = process.env.serverAddress_PK;
-    const tokenUri = `https://ipfs.io/ipfs/${metadata.path}`;
+    const tokenUri = `https://ipfs.io/ipfs/${data.metadata}`;
     const nonce = await web3.eth.getTransactionCount(sendAccount, 'latest');
     console.log(nonce);
 
-    const recieveAccount = metadata.userAddress;
-    const data = erc721Contract.methods
+    const recieveAccount = data.userAddress;
+    const contractData = erc721Contract.methods
       .mintNFT(recieveAccount, tokenUri)
       .encodeABI();
     console.log(data);
@@ -26,7 +26,7 @@ module.exports = {
       to: process.env.nftCA,
       nonce: nonce,
       gas: 5000000,
-      data: data,
+      data: contractData,
     };
 
     const signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
@@ -49,28 +49,28 @@ module.exports = {
               .call();
 
             console.log(tokenId + 'mint');
-            if (metadata.type === 'normal') {
+            if (data.type === 'normal') {
               const newNormalData = new normalData({
-                useAddress: metadata.userAddress,
-                name: metadata.name,
-                description: metadata.description,
-                imgURI: metadata.imgUri,
+                userAddress: data.userAddress,
+                name: data.name,
+                description: data.description,
+                imgURI: data.imgURI,
                 tokenURI: tokenUri,
                 tokenId: tokenId,
-                price: metadata.price,
+                price: data.price,
               });
               newNormalData.save().then((result) => {
                 console.log('Data stored in NormalData Successfully');
               });
-            } else if (metadata.type === 'pro') {
+            } else if (data.type === 'pro') {
               const newProData = new proData({
-                useAddress: metadata.userAddress,
-                name: metadata.name,
-                description: metadata.description,
-                imgUri: metadata.imgUri,
-                tokenUri: tokenUri,
+                useAddress: data.userAddress,
+                name: data.name,
+                description: data.description,
+                imgURI: data.imgUri,
+                tokenURI: tokenUri,
                 tokenId: tokenId,
-                price: metadata.price,
+                price: data.price,
               });
               newProData.save().then((result) => {
                 console.log('Data stored in NormalData Successfully');
