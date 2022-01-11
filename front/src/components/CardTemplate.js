@@ -1,13 +1,79 @@
 import React from 'react'
-import "./CardTemplate.css"
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../utils/store';
+import styled from 'styled-components';
 
-function CardTemplate({id, imgURI, user, description, price, created_at}) {
+const CardContainer = styled.div`
+    border: solid 3px gray;
+    border-radius: 1rem;
+    width: 300px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`
+
+const CardImage = styled.div`
+    border: solid 1px gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 280px;
+    height: 280px;
+    margin: 1rem;
+
+    img {
+        width: 270px;
+        height: 270px;
+    }
+`
+
+const CardContents = styled.div`
+    height: 100px;
+    width: 260px;
+    margin: 5px;
+`
+
+const Creator = styled.div`
+    display: flex;
+    align-items: flex-start;
+    margin: 2px;
+    font-weight: bolder;
+`
+
+const Description = styled.div`
+    width: 260px;
+    display: -webkit-box;
+    margin: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+`
+
+const CardMore = styled.div`
+    width: 260px;
+    flex: 1 0 0;
+    margin-bottom: 2px;
+    display: flex;
+    flex-direction: row;
+`
+
+const Price = styled.div`
+    flex: 1 0 0;
+`
+
+const Date = styled.div`
+    flex: 1 0 0;
+`
+
+
+function CardTemplate({ id, imgURI, user, description, price, created_at }) {
 
     let navigate = useNavigate();
-    const selId = useStore( (state) => state.id );
-    const setId = useStore( (state) => state.setId );
+    const selId = useStore((state) => state.id);
+    const setId = useStore((state) => state.setId);
 
 
     const goToAuction = (id) => {
@@ -20,33 +86,33 @@ function CardTemplate({id, imgURI, user, description, price, created_at}) {
     }
 
     return (
-        <div>
-            <div className='cardContainer' onClick={() => {
+        <>
+            <CardContainer onClick={() => {
                 goToAuction(id);
             }}>
-                <div className='cardImage'>
+                <CardImage>
                     <img src={imgURI} />
-                </div>
-                <div className='cardContents'>
-                    <div className='creator'>
+                </CardImage>
+                <CardContents>
+                    <Creator>
                         {user}
-                    </div>
-                    <div className='description'>
+                    </Creator>
+                    <Description>
                         {description}
-                    </div>
-                </div>
-                <div className='cardMore'>
-                    <div className='price'>
+                    </Description>
+                </CardContents>
+                <CardMore>
+                    <Price>
                         <i className="fab fa-btc"></i>
                         {price}
-                    </div>
-                    <div className='date'>
+                    </Price>
+                    <Date>
                         <i className="far fa-calendar-alt"></i>
                         {created_at}
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </Date>
+                </CardMore>
+            </CardContainer>
+        </>
     )
 }
 
