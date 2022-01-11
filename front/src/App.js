@@ -20,12 +20,10 @@ import Auction from './pages/Auction';
 import styled from 'styled-components';
 
 const RouterPages = styled.div`
-  background-color: whitesmoke;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  vertical-align: middle;
-`
+display: grid;
+height: 100%;
+grid-template-rows: 1fr;
+`;
 
 function App() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
