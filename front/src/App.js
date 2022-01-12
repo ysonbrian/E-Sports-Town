@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import {
   unstable_HistoryRouter as HistoryRouter,
@@ -13,20 +13,27 @@ import ShowMeTheNFT from './pages/ShowMeTheNFT';
 import Minting from './pages/Minting';
 import Mypage from './pages/Mypage';
 
-import { useStore } from './utils/store';
+import { useStore, useMypage } from './utils/store';
 import { getCurrentUser, logout, parseJwt } from './utils/auth';
+
 import Auction from './pages/Auction';
 import styled from 'styled-components';
 
 const RouterPages = styled.div`
-display: grid;
-height: 100%;
-grid-template-rows: 1fr;
+  display: grid;
+  height: 100%;
+  grid-template-rows: 1fr;
+`;
+
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 function App() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
-
+  const myPage = useMypage((state) => state.mypage);
+  const { fetchMyPage } = useMypage();
   let history = createBrowserHistory();
   history.listen((location, action) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -45,12 +52,13 @@ function App() {
     const user = getCurrentUser();
     if (user) {
       setUser(user);
+      fetchMyPage(user);
       console.log('User logged in!', user);
     }
   }, [setUser]);
 
   return (
-    <div className="App">
+    <AppContainer>
       <HistoryRouter history={history}>
         <Header />
         <RouterPages>
@@ -64,7 +72,7 @@ function App() {
           </Routes>
         </RouterPages>
       </HistoryRouter>
-    </div>
+    </AppContainer>
   );
 }
 

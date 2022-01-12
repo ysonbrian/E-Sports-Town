@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 const MetadataSchema = new mongoose.Schema({
   id: Number,
   userAddress: String,
-  imgURI: String,
+  name: String,
   description: String,
+  imgURI: String,
   created_at: { type: Date, default: Date.now },
 });
 

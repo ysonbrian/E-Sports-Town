@@ -7,3 +7,8 @@ export const submitNFT = (metadata) => {
     metadata,
   });
 };
+
+export const getGalleryList = async () => {
+  const { data } = await Axios.get(`${API_URL}/gallery`);
+  return data;
+};
