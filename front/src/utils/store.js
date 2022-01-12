@@ -1,6 +1,6 @@
 import create from 'zustand';
 import { Axios } from './auth';
-
+const url = 'http://localhost:1234';
 export const useStore = create((set) => ({
   user: null,
   id: null,
@@ -10,16 +10,21 @@ export const useStore = create((set) => ({
 
 export const useGallery = create((set) => ({
   gallery: [],
-  fetchData: async (url) => {
-    const res = await fetch(url);
+  fetchData: async () => {
+    const res = await fetch(`${url}/gallery`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     set({ gallery: await res.json() });
   },
 }));
 
 export const useMypage = create((set) => ({
   mypage: [],
-  fetchMyPage: async (url, user) => {
-    const res = await fetch(url, {
+  fetchMyPage: async (user) => {
+    const res = await fetch(`${url}/mypage`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -32,6 +32,7 @@ const CardImage = styled.div`
 const CardContents = styled.div`
   height: 100px;
   width: 260px;
+  overflow: auto;
   margin: 5px;
 `;
 
@@ -71,6 +72,7 @@ const Date = styled.div`
 function CardTemplate({
   id,
   imgURI,
+  tokenURI,
   user,
   name,
   description,
@@ -80,17 +82,18 @@ function CardTemplate({
   let navigate = useNavigate();
   const selId = useStore((state) => state.id);
   const setId = useStore((state) => state.setId);
-  const clickedItem = useClickedItem((state) => state.clickedItem);
   const { setClickedItem } = useClickedItem();
+  const newUserAddress = user.slice(0, 6) + '...' + user.slice(-5);
   const goToAuction = (id) => {
     const data = {
       id: id,
       imgURI: imgURI,
-      user: user,
+      tokenURI: tokenURI,
+      user: newUserAddress,
       name: name,
       description: description,
       price: price,
-      created_at: created_at,
+      created_at: rDate,
     };
     console.log('selId : ' + selId);
     console.log('CT id : ' + id);
@@ -100,6 +103,29 @@ function CardTemplate({
     navigate('/auction');
     // zustand id 저장, auction page에서 id에 대한 입찰 페이지
   };
+
+  const date = created_at.split('T');
+  console.log(date);
+  let rDate = null;
+  if (date) {
+    const newDate = date[0]?.split('-');
+    const newtime = date[1]?.split('.');
+    const newtime2 = newtime[0]?.split(':');
+    const result = [...newDate, ...newtime2];
+    const result1 = result.slice(0, 3).join('-');
+    rDate = result1 + ' ' + newtime2.join(':');
+
+    // rDate = new Date(
+    //   Date.UTC(
+    //     result[0],
+    //     result[1] - 1,
+    //     result[2],
+    //     result[3],
+    //     result[4],
+    //     result[5]
+    //   )
+    // ).toLocaleString();
+  }
 
   return (
     <>
@@ -112,7 +138,7 @@ function CardTemplate({
           <img alt="" src={imgURI} />
         </CardImage>
         <CardContents>
-          <Creator>{user}</Creator>
+          <Creator>{newUserAddress}</Creator>
           <Description>{description}</Description>
         </CardContents>
         <CardMore>
@@ -122,7 +148,7 @@ function CardTemplate({
           </Price>
           <Date>
             <i className="far fa-calendar-alt"></i>
-            {created_at}
+            {rDate}
           </Date>
         </CardMore>
       </CardContainer>

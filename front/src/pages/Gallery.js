@@ -9,6 +9,10 @@ const PageTitle = styled.h1`
   color: darksalmon;
 `;
 
+const GalleryContainer = styled.div`
+  height: 100%;
+`;
+
 const ListContainer = styled.div`
   padding: 3rem;
   overflow: scroll;
@@ -27,13 +31,13 @@ const ListItem = styled.div`
 function Gallery() {
   const gallery = useGallery((state) => state.gallery);
   const { fetchData } = useGallery();
-
+  console.log('gallery', gallery);
   useEffect(() => {
-    fetchData('http://localhost:1234/gallery');
+    fetchData();
   }, []);
 
   return (
-    <>
+    <GalleryContainer>
       <PageTitle>Gallery</PageTitle>
       <ListContainer>
         {gallery &&
@@ -43,6 +47,7 @@ function Gallery() {
                 <CardTemplate
                   id={el?._id}
                   imgURI={el?.imgURI}
+                  tokenURI={el?.tokenURI}
                   user={el?.userAddress}
                   name={el?.name}
                   description={el?.description}
@@ -53,7 +58,7 @@ function Gallery() {
             );
           })}
       </ListContainer>
-    </>
+    </GalleryContainer>
   );
 }
 

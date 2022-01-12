@@ -74,11 +74,7 @@ const NoData = styled.div`
 function Mypage() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const myPage = useMypage((state) => state.mypage);
-  const { fetchMyPage } = useMypage();
 
-  useEffect(() => {
-    fetchMyPage('http://localhost:1234/mypage', user);
-  }, []);
   console.log(myPage);
   return (
     <>
@@ -97,7 +93,7 @@ function Mypage() {
           <ListContainer>
             {myPage?.map((el) => {
               return (
-                <ListItem key={el.id}>
+                <ListItem key={el._id}>
                   <CardTemplate
                     id={el.id}
                     imgURI={el.imgURI}

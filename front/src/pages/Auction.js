@@ -172,14 +172,14 @@ function Auction() {
         </ImgNFT>
         <ProfileNFT>
           <InfoNFT>
-            <div>Aug 15 2021</div>
+            <div>{clickedItem?.created_at}</div>
             <NameIPFSMetadata>
               {clickedItem?.name}
-              <a>
+              <a href={clickedItem?.imgURI} target="_blank" rel="noreferrer">
                 <i className="fas fa-layer-group"></i>
                 ipfs
               </a>
-              <a>
+              <a href={clickedItem?.tokenURI} target="_blank" rel="noreferrer">
                 <i className="fas fa-server"></i>
                 metadata
               </a>

@@ -13,9 +13,9 @@ import ShowMeTheNFT from './pages/ShowMeTheNFT';
 import Minting from './pages/Minting';
 import Mypage from './pages/Mypage';
 
-import { useStore, useGallery } from './utils/store';
+import { useStore, useMypage } from './utils/store';
 import { getCurrentUser, logout, parseJwt } from './utils/auth';
-import { getGalleryList } from './utils/data';
+
 import Auction from './pages/Auction';
 import styled from 'styled-components';
 
@@ -25,13 +25,15 @@ const RouterPages = styled.div`
   grid-template-rows: 1fr;
 `;
 
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 function App() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
-  // const [gallery, setGallery] = useGallery((state) => [
-  //   state.gallery,
-  //   state.setGallery,
-  // ]);
-  const [getData, setGetData] = useState();
+  const myPage = useMypage((state) => state.mypage);
+  const { fetchMyPage } = useMypage();
   let history = createBrowserHistory();
   history.listen((location, action) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -50,29 +52,13 @@ function App() {
     const user = getCurrentUser();
     if (user) {
       setUser(user);
+      fetchMyPage(user);
       console.log('User logged in!', user);
     }
   }, [setUser]);
 
-  // useEffect(() => {
-  //   // const fetchData = async () => {
-  //   //   const galleryData = await getGalleryList();
-  //   //   console.log('galleryData', galleryData);
-  //   //   setGetData(galleryData);
-  //   //   console.log('after', getData);
-  //   //   setGallery(getData);
-  //   //   console.log(gallery);
-  //   // };
-  //   // fetchData();
-  //   const galleryData = getGalleryList();
-  //   if (galleryData) {
-  //     setGallery(galleryData);
-  //     console.log('hahahah', gallery);
-  //   }
-  // }, [setGallery, setGetData]);
-
   return (
-    <div className="app">
+    <AppContainer>
       <HistoryRouter history={history}>
         <Header />
         <RouterPages>
@@ -86,7 +72,7 @@ function App() {
           </Routes>
         </RouterPages>
       </HistoryRouter>
-    </div>
+    </AppContainer>
   );
 }
 
