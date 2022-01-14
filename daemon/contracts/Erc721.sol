@@ -22,16 +22,11 @@ contract Erc721 is ERC721URIStorage, Ownable {
 
     function mintNFT(address recipient, string memory tokenURI) public onlyOwner returns (uint256) {
 
-        require(token.balanceOf(recipient) > nftPrice);
-
-        token.transferFrom(recipient, msg.sender, nftPrice);
-
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _mint(recipient, newItemId);
         _setTokenURI(newItemId, tokenURI);
         getToken[tokenURI] = newItemId;
-
         return newItemId;
     }
 

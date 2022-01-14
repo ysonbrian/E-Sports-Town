@@ -4,12 +4,15 @@ import Web3 from 'web3';
 import { useStore } from '../utils/store';
 import { login, logout } from '../utils/auth';
 import styled from 'styled-components';
+import { FiLogIn } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
+import { CgProfile } from "react-icons/cg";
 
 const HeaderContainer = styled.div`
 display: grid;
 grid-template-columns: 1fr 1fr;
 font-family: 'Be Vietnam Pro', sans-serif;
-background-color: #FEECE9;
+background-color: black;
 `;
 
 const Logo = styled.div`
@@ -28,8 +31,8 @@ const Logo = styled.div`
     color: black;
   }
   img {
-    width: 200px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
   }
 `;
 
@@ -42,7 +45,7 @@ gap: 20px;
 padding: 10px;
 a {
   text-decoration: none;
-  color: black;
+  color: white;
   cursor: pointer;
 }
 a:hover {
@@ -101,7 +104,7 @@ function Header() {
         <Link to="/">
           <img
             alt=""
-            src="https://drive.google.com/uc?export=view&id=1-ZWmfkTmpNTO8kglTINlT7M-k_KDQ8ai"
+            src="https://drive.google.com/uc?export=view&id=1B6803webj_PhMXpTzM9UFkWVVD_OEKxo"
           />
         </Link>
       </Logo>
@@ -126,16 +129,16 @@ function Header() {
                   setUser({});
                 }}
               >
-                Logout
+                <FiLogOut size="25"/>
               </Link>
               <Link to="/mypage">
-                <div className="header_Mypage">MyPage</div>
+                <div className="header_Mypage"><CgProfile size="25" /></div>
               </Link>
             </>
           ) : (
             <>
               <Link to="/" className="header_login" onClick={connectWallet}>
-                Login
+              <FiLogIn size="25"/>
               </Link>
             </>
           )}
