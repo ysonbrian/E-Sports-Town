@@ -3,6 +3,8 @@ import axios from 'axios';
 const API_URL = 'http://localhost:1234';
 
 export const login = async (account) => {
+  console.log('1account-login!!', account);
+  console.log(typeof account);
   const { data } = await Axios.post(`${API_URL}/account/login`, {
     account,
   });
