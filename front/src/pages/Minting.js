@@ -4,6 +4,8 @@ import { create } from 'ipfs-http-client';
 import { useStore } from '../utils/store';
 import { submitNFT } from '../utils/data';
 import styled from 'styled-components';
+import { ImImage } from "react-icons/im";
+
 const Title = styled.h1`
   margin-top: 1rem;
   color: darksalmon;
@@ -30,16 +32,20 @@ const NftUploader = styled.div`
 `;
 
 const InputImage = styled.input`
-  display: right;
+  display: none;
 `;
 
 const NftPreviewImg = styled.div`
   border: cadetblue dotted 2px;
+  border-radius: 10px;
   width: 300px;
   height: 300px;
   img {
-    width: 295px;
-    height: 295px;
+    margin-left: -2px;
+    margin-top: -2px;
+    border-radius: 10px;
+    width: 300px;
+    height: 300px;
   }
 `;
 
@@ -68,13 +74,19 @@ const InputInfoContainer = styled.div`
 
 const InputInfo = styled.input`
   border: 2px solid darksalmon;
+  width: 300px;
   height: 50px;
   padding-left: 10px;
   border-radius: 10px;
   background-color: whitesmoke;
   :hover {
-    background-color: #e0ffff;
+    background-color: #CCD1E4;
   }
+`;
+
+const Icon = styled.div`
+margin: 120px;
+color: #2F3A8F;
 `;
 
 const MintingPositionContainer = styled.div`
@@ -87,6 +99,27 @@ const MintingPositionOptions = styled.div`
   flex-direction: column;
   justify-content: space-around;
   padding: 5px;
+`;
+
+const SubmitButton = styled.button` 
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100px;
+  height: 30px;
+  border-radius: 4px;
+  text-align: center;
+  color: #f4f4f4;
+  border: none;
+  background-color: #2F3A8F;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px 1.25rem;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-left: 95px;
+  :hover {
+    opacity: 0.7;
 `;
 
 function Minting() {
@@ -150,18 +183,29 @@ function Minting() {
 
   return (
     <>
-      <Title>Create New Item</Title>
-      <NftEnrollContainer>
-        <NftUploader>
-          <NftPreviewImg>
-            {imgSrc && <img src={imgSrc} alt="preview-img" />}
-            <PreviewImageCloseButton onClick={onClickXButton}>
-              X
-            </PreviewImageCloseButton>
-          </NftPreviewImg>
-        </NftUploader>
-        <InputImage type="file" onChange={onHandleChange} />
+        <NftEnrollContainer>
         <form onSubmit={(e) => onSubmit(e)}>
+        <Title>Create New Item</Title>
+        <InputImage
+          id="fileUpload"
+          type="file"
+          name="fileUpload"
+          onChange={onHandleChange}
+        />
+        <label htmlFor="fileUpload">
+        <NftUploader>
+        <NftPreviewImg>
+          {imgSrc && <img src={imgSrc} alt="preview-img" />}
+        <PreviewImageCloseButton onClick={onClickXButton}>
+          X
+        </PreviewImageCloseButton>
+        <Icon>
+        <ImImage 
+        size={50}/>
+        </Icon>
+        </NftPreviewImg>
+        </NftUploader>
+        </label>
           <InputInfoContainer>
             <label htmlFor="inputName">이름</label>
             <InputInfo type="text" id="inputName" required />
@@ -198,9 +242,8 @@ function Minting() {
                 )}
               </select>
             </MintingPositionOptions>
-
-            <input type="submit" />
-          </MintingPositionContainer>
+            <SubmitButton>등록</SubmitButton>
+            </MintingPositionContainer>
         </form>
       </NftEnrollContainer>
     </>
