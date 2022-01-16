@@ -14,14 +14,9 @@ import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";
 import Authereum from "authereum";
 import MewConnect from '@myetherwallet/mewconnect-web-client';
-import WalletLink from "walletlink";
-//import { METAMASK } from 'web3modal/dist/providers/injected';
 
 const providerOptions = {
   /* See Provider Options Section */
-  //metamask: {
-  //  package: METAMASK,
-  //},
   fortmatic: {
     package: Fortmatic, // required
     options: {
@@ -47,17 +42,6 @@ const providerOptions = {
   binancechainwallet: {
     package: true
   },
-  //walletlink: {
-  //  package: WalletLink, // Required
-  //  options: {
-  //    appName: "My Awesome App", // Required
-  //    infuraId: "INFURA_ID", // Required unless you provide a JSON RPC url; see `rpc` below
-  //    //rpc: "", // Optional if `infuraId` is provided; otherwise it's required
-  //    //chainId: 1, // Optional. It defaults to 1 if not provided
-  //    //appLogoUrl: null, // Optional. Application logo image URL. favicon is used if unspecified
-  //    //darkMode: false // Optional. Use dark theme, defaults to false
-  //  }
-  //}
 }
 
 const web3Modal = new Web3Modal({
