@@ -94,7 +94,7 @@ function Mypage() {
             {myPage?.map((el) => {
               return (
                 <ListItem key={el._id}>
-                  <CardTemplate
+                  <CardMyPage
                     id={el.id}
                     imgURI={el.imgURI}
                     user={el.userAddress}
