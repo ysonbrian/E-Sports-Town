@@ -4,7 +4,6 @@ import { create } from 'ipfs-http-client';
 import { useStore } from '../utils/store';
 import { submitNFT } from '../utils/data';
 import styled from 'styled-components';
-
 const Title = styled.h1`
   margin-top: 1rem;
   color: darksalmon;
