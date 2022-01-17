@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { dummydata } from '../utils/dummyData';
-import CardTemplate from '../components/CardTemplate';
+import CardMyPage from '../components/CardMyPage';
 import styled from 'styled-components';
 import { useStore, useMypage } from '../utils/store';
 
@@ -94,7 +94,7 @@ function Mypage() {
             {myPage?.map((el) => {
               return (
                 <ListItem key={el._id}>
-                  <CardTemplate
+                  <CardMyPage
                     id={el.id}
                     imgURI={el.imgURI}
                     user={el.userAddress}
