@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { dummydata } from '../utils/dummyData';
-import CardTemplate from '../components/CardTemplate';
+import CardMyPage from '../components/CardMyPage';
 import styled from 'styled-components';
 import { useStore, useMypage } from '../utils/store';
 
