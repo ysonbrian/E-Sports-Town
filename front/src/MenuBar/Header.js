@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Web3 from 'web3';
-import { useStore } from '../utils/store';
+import { useStore, useWeb3 } from '../utils/store';
 import { login, logout } from '../utils/auth';
 import styled from 'styled-components';
 
 const HeaderContainer = styled.div`
-display: grid;
-grid-template-columns: 1fr 1fr;
-font-family: 'Be Vietnam Pro', sans-serif;
-background-color: #FEECE9;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  background-color: #feece9;
 `;
 
 const Logo = styled.div`
@@ -33,64 +33,62 @@ const Logo = styled.div`
   }
 `;
 
-
 const HeaderBar = styled.ul`
-display: flex;
-align-items: center;
-justify-content: flex-end;
-gap: 20px;
-padding: 10px;
-a {
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-}
-a:hover {
-  color: #FE7E6D;
-}
-input {
-  width: 200px;
-}
-li {
-  list-style: none;
-  text-decoration: none;
-  width: 100%;
-}
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: 10px;
+  a {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+  }
+  a:hover {
+    color: #fe7e6d;
+  }
+  input {
+    width: 200px;
+  }
+  li {
+    list-style: none;
+    text-decoration: none;
+    width: 100%;
+  }
 `;
-
 
 const HeaderIsLogin = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 function Header() {
-  const [web3, setWeb3] = useState();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   let navigate = useNavigate();
 
-  useEffect(() => {
-    if (typeof window.ethereum !== 'undefined') {
-      try {
-        const web = new Web3(window.ethereum);
-        //console.log(web);
-        setWeb3(web);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof window.ethereum !== 'undefined') {
+  //     try {
+  //       const web = new Web3(window.ethereum);
+  //       //console.log(web);
+  //       setWeb3(web);
+  //       console.log(web);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // }, []);
 
   const connectWallet = async () => {
     var accounts = await window.ethereum.request({
       method: 'eth_requestAccounts',
     });
     setUser(accounts);
-    console.log("accounts:" + accounts);
+    console.log('accounts:' + accounts);
     const account = await login(accounts);
-    setUser("account.data:" + account.data);
-    console.log("connectWallet:" + user);
+    // setUser('account.data:' + account.data);
+    console.log('connectWallet:' + user);
     navigate('/');
     window.location.reload(false);
   };
@@ -106,15 +104,9 @@ function Header() {
         </Link>
       </Logo>
       <HeaderBar>
-        <Link to="/gallery">
-          Gallery
-        </Link>
-        <Link to="/showme">
-          ShowMeTheNFT
-        </Link>
-        <Link to="/minting">
-          NFT-Minting
-        </Link>
+        <Link to="/gallery">Gallery</Link>
+        <Link to="/showme">ShowMeTheNFT</Link>
+        <Link to="/minting">NFT-Minting</Link>
         <HeaderIsLogin>
           {user?.userAddress ? (
             <>

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const { mintNft } = require('../controllers/Mint.js');
+const { mintNft, sendToken, setBidding } = require('../controllers/Mint.js');
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { userAddress, type, name, description, price, metadata, imgURI } =
     req.body.metadata;
   // NFT 구현 필요
@@ -16,12 +16,22 @@ router.post('/', (req, res) => {
     price: price,
     type: type,
   };
-  mintNft(req, res, data);
+  setTimeout(() => {
+    mintNft(req, res, data);
+    return 'success';
+  }, 1000);
+
+  sendToken(req, res, req.body.metadata.userAddress);
+  // await mintNft(req, res, data);
   // try {
-  //   if (type === 'normal') {
-  //   } else if (type === 'pro') {
-  //   }
-  // } catch (error) {}
+
+  // } catch (error) {
+  //   console.log(error);
+  // }
 });
+
+// router.post('/bidding', (req, res) => {
+//   setBidding(req, res, req.body.metadata);
+// });
 
 module.exports = router;

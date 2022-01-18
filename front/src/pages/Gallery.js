@@ -31,7 +31,6 @@ const ListItem = styled.div`
 function Gallery() {
   const gallery = useGallery((state) => state.gallery);
   const { fetchData } = useGallery();
-  console.log('gallery', gallery);
   useEffect(() => {
     fetchData();
   }, []);
@@ -46,6 +45,7 @@ function Gallery() {
               <ListItem key={el?._id}>
                 <CardTemplate
                   id={el?._id}
+                  tokenId={el?.tokenId}
                   imgURI={el?.imgURI}
                   tokenURI={el?.tokenURI}
                   user={el?.userAddress}
