@@ -105,7 +105,6 @@ function Minting() {
   const onHandleChange = (event) => {
     event.preventDefault();
     setFiles(event.target.files[0]);
-    console.log(files);
     let fileReader = new FileReader();
     let file = event.target.files[0];
     fileReader.readAsDataURL(file);
@@ -137,10 +136,10 @@ function Minting() {
     setSelected('');
     navigate('/');
     window.location.reload(false);
+    // window.location.assign('http://localhost:3000');
   };
 
   const onSelectChange = (e) => {
-    console.log(e.target.value);
     setSelected(e.target.value);
   };
 

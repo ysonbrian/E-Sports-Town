@@ -9,12 +9,12 @@ const SECRET = 'BEB-01-PROJECT-03';
 const saltRounds = 10;
 
 router.post('/login', async (req, res, next) => {
-  const data = { userAddress: req.body.account[0], master: 'false' };
+  const data = { userAddress: req.body.account[0], master: 'false', token: 0 };
   const account = req.body.account[0];
 
   try {
     const isValid = await Users.findOne({ userAddress: account });
-    let id, master, userAddress;
+    let id, master, userAddress, coin;
     console.log('isValid', isValid);
     if (!isValid) {
       const user = await new Users(data);
@@ -23,11 +23,13 @@ router.post('/login', async (req, res, next) => {
       id = user._id.toString();
       master = user.master;
       userAddress = user.userAddress;
+      coin = user.token;
     } else {
       console.log(isValid);
       id = isValid._id.toString();
       master = isValid.master;
       userAddress = isValid.userAddress;
+      coin = isValid.token;
     }
 
     const token = jwt.sign(
@@ -35,6 +37,7 @@ router.post('/login', async (req, res, next) => {
         id: id,
         userAddress: userAddress,
         master: master,
+        coin: coin,
       },
       SECRET,
       { expiresIn: 86400 } // 24 시간
@@ -44,6 +47,7 @@ router.post('/login', async (req, res, next) => {
       accessToken: token,
       userAddress,
       master,
+      coin,
     });
   } catch (error) {
     console.log(error);
