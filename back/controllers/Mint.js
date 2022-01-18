@@ -171,6 +171,7 @@ module.exports = {
             });
             newAuction.save().then((result) => {
               console.log('AuctionData Bid success!');
+              res.send({ data: data, message: 'success' });
             });
             console.log(newAuction);
           } else {
