@@ -341,9 +341,12 @@ function Auction({ clickedItemList }) {
                 let result1 = result.slice(0, 3).join('-');
                 rDate = result1 + ' ' + newtime2.join(':');
               }
+              const newUserAddress =
+                el?.bidAddress?.slice(0, 6) + '...' + el?.bidAddress?.slice(-5);
+
               return (
                 <BidListItemContainer key={el?._id}>
-                  <BidItemName>{el?.bidAddress}</BidItemName>
+                  <BidItemName>{newUserAddress}</BidItemName>
                   <BidItemCreated>{rDate}</BidItemCreated>
                   <BidItemPrice>{el?.bidPrice}</BidItemPrice>
                   {clickFetchList[0]?.tokenOwnerAddress === user.userAddress ? (

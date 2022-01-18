@@ -23,6 +23,8 @@ import {
 import { getCurrentUser, login, logout, parseJwt } from './utils/auth';
 import Auction from './pages/Auction';
 import styled from 'styled-components';
+const Web3 = require('web3');
+const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
 
 const RouterPages = styled.div`
   display: flex;
@@ -30,19 +32,17 @@ const RouterPages = styled.div`
   align-items: center;
 `;
 
-
 const AppContainer = styled.div`
-display: grid;
-height: 100%;
-grid-template-rows: 1fr;
-background-color: #f4f4f4
+  display: grid;
+  height: 100%;
+  grid-template-rows: 1fr;
+  background-color: #f4f4f4;
 `;
 
 const AppMainMiddle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
 `;
 
 function App() {
@@ -89,8 +89,9 @@ function App() {
 
   useEffect(() => {
     if (typeof window.ethereum !== 'undefined') {
+      console.log(window.ethereum);
       window.ethereum.on('accountsChanged', async (accounts) => {
-        console.log("Account changed: '", accounts[0]);
+        console.log('Account changed: ', accounts);
         await logout();
         setUser({});
         const ob = await handlePersonalSign();
@@ -99,7 +100,7 @@ function App() {
         window.location.assign('http://localhost:3000/');
         console.log('Sign', sign);
         console.log('Ob', ob);
-        // window.location.reload(false);
+        window.location.reload(false);
       });
       window.ethereum.on('chainChanged', (chainId) => {
         console.log('Chain ID changed: ', chainId);
@@ -122,24 +123,18 @@ function App() {
 
   return (
     <HistoryRouter history={history}>
-    <Header />
-    <AppContainer>
-    <AppMainMiddle>
-        <RouterPages>
-          <Routes>
-            <Route exact path="/" element={<Home />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/showme" element={<ShowMeTheNFT />} />
-            <Route path="/minting" element={<Minting />} />
-            <Route path="/mypage" element={<Mypage />} />
-            <Route
-              path="/auction/:id"
-              element={<Auction clickedItemList={clickedItemList} />}
-            />
-          </Routes>
-        </RouterPages>
-    </AppMainMiddle>
-    </AppContainer>
+      <Header />
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/showme" element={<ShowMeTheNFT />} />
+        <Route path="/minting" element={<Minting />} />
+        <Route path="/mypage" element={<Mypage />} />
+        <Route
+          path="/auction/:id"
+          element={<Auction clickedItemList={clickedItemList} />}
+        />
+      </Routes>
     </HistoryRouter>
   );
 }

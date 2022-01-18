@@ -4,7 +4,6 @@ const router = express.Router();
 const NormalData = require('../models/NormalData');
 
 router.get('/', async (req, res) => {
-  console.log('hahaha');
   try {
     const result = await NormalData.find();
     if (!result) {
