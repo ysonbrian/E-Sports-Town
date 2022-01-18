@@ -27,6 +27,7 @@ contract NFTLootBox is ERC721URIStorage, Ownable {
 
          //오류지점
         token.transferFrom(recipient, msg.sender, nftPrice);
+
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _mint(recipient, newItemId);

@@ -4,12 +4,57 @@ import Web3 from 'web3';
 import { useStore, useWeb3 } from '../utils/store';
 import { login, logout } from '../utils/auth';
 import styled from 'styled-components';
+import { FiLogIn } from 'react-icons/fi';
+import { FiLogOut } from 'react-icons/fi';
+import { CgProfile } from 'react-icons/cg';
+
+import Web3Modal from 'web3modal';
+import { ethers } from 'ethers';
+import Fortmatic from 'fortmatic';
+import Portis from '@portis/web3';
+import Authereum from 'authereum';
+import MewConnect from '@myetherwallet/mewconnect-web-client';
+
+const providerOptions = {
+  /* See Provider Options Section */
+  fortmatic: {
+    package: Fortmatic, // required
+    options: {
+      key: 'pk_test_B339BA8200249E26', // required, test
+      //network: customNetworkOptions // if we don't pass it, it will default to localhost:8454
+    },
+  },
+  portis: {
+    package: Portis, // required
+    options: {
+      id: '0a7de06b-b597-48af-9e68-66547acbcea1', // required
+    },
+  },
+  authereum: {
+    package: Authereum, // required
+  },
+  mewconnect: {
+    package: MewConnect,
+    options: {
+      infuraId: process.env.REACT_APP_INFURA_ID,
+    },
+  },
+  binancechainwallet: {
+    package: true,
+  },
+};
+
+const web3Modal = new Web3Modal({
+  //network: "mainnet", // optional
+  //cacheProvider: false, // optional
+  providerOptions, // required
+});
 
 const HeaderContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   font-family: 'Be Vietnam Pro', sans-serif;
-  background-color: #feece9;
+  background-color: black;
 `;
 
 const Logo = styled.div`
@@ -28,8 +73,8 @@ const Logo = styled.div`
     color: black;
   }
   img {
-    width: 200px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
   }
 `;
 
@@ -41,7 +86,7 @@ const HeaderBar = styled.ul`
   padding: 10px;
   a {
     text-decoration: none;
-    color: black;
+    color: white;
     cursor: pointer;
   }
   a:hover {
@@ -81,17 +126,46 @@ function Header() {
   // }, []);
 
   const connectWallet = async () => {
-    var accounts = await window.ethereum.request({
-      method: 'eth_requestAccounts',
-    });
+    //var accounts = await window.ethereum.request({
+    //  method: 'eth_requestAccounts',
+    //});
+    //setUser(accounts);
+    //console.log("accounts:" + accounts);
+    //const account = await login(accounts);
+    //setUser("account.data:" + account.data);
+    //console.log("connectWallet:" + user);
+    //navigate('/');
+    //window.location.reload(false);
+
+    //var accounts = await window.ethereum.request({
+    //  method: 'eth_requestAccounts',
+    //});
+    //setUser(accounts);
+
+    const web3ModalProvider = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(web3ModalProvider);
+    const signer = await provider.getSigner(0);
+    const address = await signer.getAddress();
+
+    const accounts = [];
+    accounts.push(address);
+
     setUser(accounts);
+
     console.log('accounts:' + accounts);
     const account = await login(accounts);
-    // setUser('account.data:' + account.data);
-    console.log('connectWallet:' + user);
-    navigate('/');
+    setUser('account.data:' + account.data);
+    //console.log("connectWallet:" + user);
+    //navigate('/');
+    navigate('/mypage');
     window.location.reload(false);
   };
+
+  async function disconnectWallet() {
+    await web3Modal.clearCachedProvider();
+    logout();
+    setUser({});
+  }
 
   return (
     <HeaderContainer>
@@ -99,7 +173,7 @@ function Header() {
         <Link to="/">
           <img
             alt=""
-            src="https://drive.google.com/uc?export=view&id=1-ZWmfkTmpNTO8kglTINlT7M-k_KDQ8ai"
+            src="https://drive.google.com/uc?export=view&id=1B6803webj_PhMXpTzM9UFkWVVD_OEKxo"
           />
         </Link>
       </Logo>
@@ -113,21 +187,24 @@ function Header() {
               <Link
                 to="/"
                 className="Logout"
-                onClick={() => {
-                  logout();
-                  setUser({});
-                }}
+                onClick={disconnectWallet}
+                //onClick={() => {
+                //  logout();
+                //  setUser({});
+                //}}
               >
-                Logout
+                <FiLogOut size="25" />
               </Link>
               <Link to="/mypage">
-                <div className="header_Mypage">MyPage</div>
+                <div className="header_Mypage">
+                  <CgProfile size="25" />
+                </div>
               </Link>
             </>
           ) : (
             <>
               <Link to="/" className="header_login" onClick={connectWallet}>
-                Login
+                <FiLogIn size="25" />
               </Link>
             </>
           )}

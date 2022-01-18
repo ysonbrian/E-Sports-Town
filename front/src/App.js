@@ -25,14 +25,24 @@ import Auction from './pages/Auction';
 import styled from 'styled-components';
 
 const RouterPages = styled.div`
-  display: grid;
-  height: 100%;
-  grid-template-rows: 1fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
+
 const AppContainer = styled.div`
+display: grid;
+height: 100%;
+grid-template-rows: 1fr;
+background-color: #f4f4f4
+`;
+
+const AppMainMiddle = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
 `;
 
 function App() {
@@ -111,9 +121,10 @@ function App() {
   }, [setUser, fetchClickedItem]);
 
   return (
+    <HistoryRouter history={history}>
+    <Header />
     <AppContainer>
-      <HistoryRouter history={history}>
-        <Header />
+    <AppMainMiddle>
         <RouterPages>
           <Routes>
             <Route exact path="/" element={<Home />} />
@@ -127,8 +138,9 @@ function App() {
             />
           </Routes>
         </RouterPages>
-      </HistoryRouter>
+    </AppMainMiddle>
     </AppContainer>
+    </HistoryRouter>
   );
 }
 Modal.setAppElement('#root');
