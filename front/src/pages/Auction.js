@@ -181,6 +181,7 @@ const ImgDescription = styled.div`
 `;
 
 function Auction({ clickedItemList }) {
+  console.log('NANAN', clickedItemList);
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const id = useStore((state) => state.id);
@@ -202,8 +203,6 @@ function Auction({ clickedItemList }) {
 
   // modal
 
-  console.log('nah', clickedItemList);
-
   const clickFetchList = clickedItemList.filter(
     (data) => data.tokenId === Number(id)
   );
@@ -214,8 +213,6 @@ function Auction({ clickedItemList }) {
   const maxBidAddress =
     max?.bidAddress?.slice(0, 6) + '...' + max?.bidAddress?.slice(-5);
 
-  console.log('After', clickFetchList);
-  console.log('Max', max?.bidPrice);
   const onClickBidding = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
     const metadata = {
@@ -226,7 +223,6 @@ function Auction({ clickedItemList }) {
       signature: sign,
     };
     const submitData = await submitBid(metadata);
-    console.log('checkBidToModal', submitData);
 
     if (
       submitData.message === 'lowerThanMax' ||
@@ -251,12 +247,11 @@ function Auction({ clickedItemList }) {
     setBid(e.target.value);
   };
 
-  console.log(
-    'clicked!',
-    clickFetchList[0]?.tokenOwnerAddress,
-    'user!',
-    user.userAddress
-  );
+  console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
+
+  useEffect(() => {
+    fetchClickedItem();
+  }, []);
 
   return (
     <TotalPage>
@@ -311,7 +306,7 @@ function Auction({ clickedItemList }) {
               )}
             </WinnerEnd>
           </BidRltContainer>
-          {clickFetchList[0]?.tokenOwnerAddress !== user.userAddress ? (
+          {clickedItem.user !== user.userAddress ? (
             <BiddingContainer>
               <label>원하는 가격을 제시 하세요!</label>
               <BiddingInput>
