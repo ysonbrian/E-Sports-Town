@@ -152,7 +152,7 @@ function Header() {
 
     setUser(accounts);
 
-    console.log('accounts:' + accounts);
+    console.log('accounts!!!!!:' + accounts);
     const account = await login(accounts);
     setUser('account.data:' + account.data);
     //console.log("connectWallet:" + user);

@@ -25,7 +25,6 @@ router.post('/token', async (req, res) => {
     if (!result) {
       console.log('Not Found!');
     } else {
-      console.log(result);
       return res.send(result);
     }
   } catch (error) {

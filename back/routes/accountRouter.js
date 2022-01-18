@@ -9,8 +9,12 @@ const SECRET = 'BEB-01-PROJECT-03';
 const saltRounds = 10;
 
 router.post('/login', async (req, res, next) => {
-  const data = { userAddress: req.body.account[0], master: 'false', token: 0 };
-  const account = req.body.account[0];
+  const data = {
+    userAddress: req.body.account[0].toLowerCase(),
+    master: 'false',
+    token: 0,
+  };
+  const account = req.body.account[0].toLowerCase();
 
   try {
     const isValid = await Users.findOne({ userAddress: account });
@@ -19,13 +23,13 @@ router.post('/login', async (req, res, next) => {
     if (!isValid) {
       const user = await new Users(data);
       await user.save();
-      console.log('user', user);
+      // console.log('user', user);
       id = user._id.toString();
       master = user.master;
       userAddress = user.userAddress;
       coin = user.token;
     } else {
-      console.log(isValid);
+      console.log('not valid!');
       id = isValid._id.toString();
       master = isValid.master;
       userAddress = isValid.userAddress;
