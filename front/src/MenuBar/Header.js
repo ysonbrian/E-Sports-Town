@@ -156,8 +156,8 @@ function Header() {
     const account = await login(accounts);
     setUser('account.data:' + account.data);
     //console.log("connectWallet:" + user);
-    //navigate('/');
-    navigate('/mypage');
+    navigate('/');
+    // navigate('/mypage');
     window.location.reload(false);
   };
 
@@ -179,7 +179,7 @@ function Header() {
       </Logo>
       <HeaderBar>
         <Link to="/gallery">Gallery</Link>
-        <Link to="/showme">ShowMeTheNFT</Link>
+        {/* <Link to="/showme">ShowMeTheNFT</Link> */}
         <Link to="/minting">NFT-Minting</Link>
         <HeaderIsLogin>
           {user?.userAddress ? (

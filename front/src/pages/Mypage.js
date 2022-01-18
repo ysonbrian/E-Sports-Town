@@ -82,10 +82,12 @@ function Mypage() {
   // const [web3, setWeb3] = useWeb3((state) => [state.web3, state.setWeb3]);
   const { fetchMyPage } = useMypage();
   useEffect(() => {
+    console.log(user);
     fetchMyPage(user);
   }, []);
 
   // console.log(web3.eth.getBalance());
+  console.log(myPage);
   return (
     <>
       <Profile_container>
