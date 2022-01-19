@@ -8,9 +8,9 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { dummydata } from '../utils/dummyData';
 import styled from 'styled-components';
-import { submitBid, getClickedItemBidList } from '../utils/data';
+import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
 import ModalComponent from '../components/Modal';
-
+import ModalSubmit from '../components/ModalSubmit';
 const TotalPage = styled.div`
   height: 100vh;
   display: flex;
@@ -241,11 +241,15 @@ function Auction({ clickedItemList }) {
 
   // modal
   const [checkBidToModal, setCheckBidToModal] = useState(true);
+  const [checkSellModal, setCheckSellModal] = useState(true);
   const onClickModal = (e) => {
     console.log(e);
     setCheckBidToModal((prev) => !prev);
   };
 
+  const onSellModal = () => {
+    setCheckSellModal((prev) => !prev);
+  };
   // modal
 
   const clickFetchList = clickedItemList.filter(
@@ -292,6 +296,12 @@ function Auction({ clickedItemList }) {
     setBid(e.target.value);
   };
 
+  const onClickToSell = (e) => {
+    onSellModal();
+    console.log(e);
+    submitSell();
+  };
+
   console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
 
   useEffect(() => {
@@ -302,6 +312,8 @@ function Auction({ clickedItemList }) {
     <TotalPage>
       {!checkBidToModal ? (
         <ModalComponent bidMessage={bidMessage} onClickModal={onClickModal} />
+      ) : !checkSellModal ? (
+        <ModalSubmit onSellModal={onSellModal} />
       ) : null}
       {/* <ModalComponent onClickModal={onClickModal} /> */}
       <PageTitle>Auction</PageTitle>
@@ -395,7 +407,9 @@ function Auction({ clickedItemList }) {
                   <BidItemCreated>{rDate}</BidItemCreated>
                   <BidItemPrice>{el?.bidPrice}</BidItemPrice>
                   {clickFetchList[0]?.tokenOwnerAddress === user.userAddress ? (
-                    <BidItemSellButton>판매</BidItemSellButton>
+                    <BidItemSellButton onClick={() => onClickToSell(el)}>
+                      판매
+                    </BidItemSellButton>
                   ) : null}
                 </BidListItemContainer>
               );

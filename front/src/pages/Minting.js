@@ -4,11 +4,17 @@ import { create } from 'ipfs-http-client';
 import { useStore } from '../utils/store';
 import { submitNFT } from '../utils/data';
 import styled from 'styled-components';
+import mainImage from '../mainImage.jpg';
 
 const Title = styled.h1`
   margin-top: 1rem;
   color: white;
-`
+`;
+
+const NftContainer = styled.div`
+  background-image: url(${mainImage});
+  background-size: cover;
+`;
 
 const NftEnrollContainer = styled.div`
   display: flex;
@@ -20,7 +26,7 @@ const NftEnrollContainer = styled.div`
   width: 400px;
   height: 100%;
   background-color: none;
-`
+`;
 
 const NftUploader = styled.div`
   display: flex;
@@ -29,11 +35,11 @@ const NftUploader = styled.div`
   margin-top: 30px;
   background-color: whitesmoke;
   position: relative;
-`
+`;
 
 const InputImage = styled.input`
   display: none;
-`
+`;
 
 const NftPreviewImg = styled.div`
   border: cadetblue dotted 2px;
@@ -46,7 +52,7 @@ const NftPreviewImg = styled.div`
   :hover {
     background-color: #e0ffff;
   }
-`
+`;
 
 const PreviewImageCloseButton = styled.button`
   color: #gray;
@@ -60,17 +66,17 @@ const PreviewImageCloseButton = styled.button`
   :hover {
     color: rgb(127, 117, 117);
   }
-`
+`;
 
 const InputInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  width:300px;
+  width: 300px;
   gap: 10px;
   letter-spacing: 2px;
   color: white;
-`
+`;
 
 const InputInfo = styled.input`
   height: 50px;
@@ -80,20 +86,20 @@ const InputInfo = styled.input`
   :hover {
     background-color: #e0ffff;
   }
-`
+`;
 
 const MintingPosition = styled.div`
   margin-top: 20px;
   margin-bottom: 20px;
   color: white;
-`
+`;
 
 const MintingPositionOptions = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   padding: 5px;
-`
+`;
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -116,14 +122,14 @@ const SubmitButton = styled.button`
   text-align: center;
   color: #f4f4f4;
   border: none;
-  background-color: #5800FF;
+  background-color: #5800ff;
   font-weight: bold;
   cursor: pointer;
   padding: 0px 1.25rem;
   margin-right: 10px;
   letter-spacing: 2px;
   :hover {
-    background-color: #E900FF;
+    background-color: #e900ff;
   }
 `;
 
@@ -186,26 +192,27 @@ function Minting() {
   };
 
   return (
-    <>
+    <NftContainer>
       <NftEnrollContainer>
-      <Title>Create New Item</Title>
+        <Title>Create New Item</Title>
 
         <label htmlFor="upload">
-        <NftUploader>
-          <NftPreviewImg>
-            {imgSrc && <img src={imgSrc} alt="preview-img" />}
-            <PreviewImageCloseButton onClick={onClickXButton}>
-              X
-            </PreviewImageCloseButton>
-          </NftPreviewImg>
-        </NftUploader>
+          <NftUploader>
+            <NftPreviewImg>
+              {imgSrc && <img src={imgSrc} alt="preview-img" />}
+              <PreviewImageCloseButton onClick={onClickXButton}>
+                X
+              </PreviewImageCloseButton>
+            </NftPreviewImg>
+          </NftUploader>
         </label>
-        
+
         <InputImage
-        id="upload"
-        type="file" 
-        name="upload"
-        onChange={onHandleChange} />
+          id="upload"
+          type="file"
+          name="upload"
+          onChange={onHandleChange}
+        />
 
         <form onSubmit={(e) => onSubmit(e)}>
           <InputInfoContainer>
@@ -245,13 +252,12 @@ function Minting() {
               </select>
             </MintingPositionOptions>
             <ButtonContainer>
-          <SubmitButton>제출</SubmitButton>
-        </ButtonContainer>
-           
+              <SubmitButton>제출</SubmitButton>
+            </ButtonContainer>
           </MintingPosition>
         </form>
       </NftEnrollContainer>
-    </>
+    </NftContainer>
   );
 }
 
