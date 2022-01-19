@@ -6,7 +6,7 @@ import { useStore, useMypage } from '../utils/store';
 
 const PageTitle = styled.h1`
   margin-top: 1rem;
-  color: darksalmon;
+  color: white;
 `;
 
 const Profile_container = styled.div`
@@ -15,6 +15,7 @@ const Profile_container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  color: white;
 `;
 
 const Profile = styled.div`
@@ -25,7 +26,6 @@ const Profile = styled.div`
 
 const ListContainer = styled.div`
   padding: 3rem;
-  overflow: scroll;
   width: 100%;
   height: 100%;
   display: grid;
@@ -35,7 +35,15 @@ const ListContainer = styled.div`
 
 const ListItem = styled.div`
   margin: 1rem;
-  padding: 1rem;
+  background-color: #5800FF;
+  border: none;
+  border-radius: 1rem;
+  width: 300px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
 `;
 
 const UserName = styled.div`

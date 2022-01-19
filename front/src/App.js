@@ -19,25 +19,16 @@ import { getCurrentUser, logout, parseJwt } from './utils/auth';
 import Auction from './pages/Auction';
 import styled from 'styled-components';
 
+const AppContainer = styled.div`
+  display: grid;
+  margin: 0px;
+  height: 100%;
+  grid-template-rows: 1fr;
+`
 const RouterPages = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-
-const AppContainer = styled.div`
-display: grid;
-height: 100%;
-grid-template-rows: 1fr;
-background-color: #f4f4f4
-`;
-
-const AppMainMiddle = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
 `;
 
 function App() {
@@ -70,9 +61,6 @@ function App() {
   return (
     <HistoryRouter history={history}>
     <Header />
-    <AppContainer>
-    <AppMainMiddle>
-        <RouterPages>
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route path="/gallery" element={<Gallery />} />
@@ -81,9 +69,6 @@ function App() {
             <Route path="/mypage" element={<Mypage />} />
             <Route path="/auction" element={<Auction />} />
           </Routes>
-        </RouterPages>
-    </AppMainMiddle>
-    </AppContainer>
     </HistoryRouter>
   );
 }

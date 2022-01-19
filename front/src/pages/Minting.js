@@ -4,10 +4,11 @@ import { create } from 'ipfs-http-client';
 import { useStore } from '../utils/store';
 import { submitNFT } from '../utils/data';
 import styled from 'styled-components';
+
 const Title = styled.h1`
   margin-top: 1rem;
-  color: darksalmon;
-`;
+  color: white;
+`
 
 const NftEnrollContainer = styled.div`
   display: flex;
@@ -17,8 +18,9 @@ const NftEnrollContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 400px;
+  height: 100%;
   background-color: none;
-`;
+`
 
 const NftUploader = styled.div`
   display: flex;
@@ -27,11 +29,11 @@ const NftUploader = styled.div`
   margin-top: 30px;
   background-color: whitesmoke;
   position: relative;
-`;
+`
 
 const InputImage = styled.input`
-  display: right;
-`;
+  display: none;
+`
 
 const NftPreviewImg = styled.div`
   border: cadetblue dotted 2px;
@@ -41,7 +43,10 @@ const NftPreviewImg = styled.div`
     width: 295px;
     height: 295px;
   }
-`;
+  :hover {
+    background-color: #e0ffff;
+  }
+`
 
 const PreviewImageCloseButton = styled.button`
   color: #gray;
@@ -55,19 +60,19 @@ const PreviewImageCloseButton = styled.button`
   :hover {
     color: rgb(127, 117, 117);
   }
-`;
+`
 
 const InputInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
+  width:300px;
   gap: 10px;
   letter-spacing: 2px;
-  color: rgb(33, 29, 29);
-`;
+  color: white;
+`
 
 const InputInfo = styled.input`
-  border: 2px solid darksalmon;
   height: 50px;
   padding-left: 10px;
   border-radius: 10px;
@@ -75,18 +80,51 @@ const InputInfo = styled.input`
   :hover {
     background-color: #e0ffff;
   }
-`;
+`
 
-const MintingPositionContainer = styled.div`
+const MintingPosition = styled.div`
   margin-top: 20px;
   margin-bottom: 20px;
-`;
+  color: white;
+`
 
 const MintingPositionOptions = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   padding: 5px;
+`
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+  margin-top: 20px;
+  gap: 20px;
+`;
+
+const SubmitButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 40px;
+  border-radius: 8px;
+  text-align: center;
+  color: #f4f4f4;
+  border: none;
+  background-color: #5800FF;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px 1.25rem;
+  margin-right: 10px;
+  letter-spacing: 2px;
+  :hover {
+    background-color: #E900FF;
+  }
 `;
 
 function Minting() {
@@ -150,8 +188,10 @@ function Minting() {
 
   return (
     <>
-      <Title>Create New Item</Title>
       <NftEnrollContainer>
+      <Title>Create New Item</Title>
+
+        <label htmlFor="upload">
         <NftUploader>
           <NftPreviewImg>
             {imgSrc && <img src={imgSrc} alt="preview-img" />}
@@ -160,7 +200,14 @@ function Minting() {
             </PreviewImageCloseButton>
           </NftPreviewImg>
         </NftUploader>
-        <InputImage type="file" onChange={onHandleChange} />
+        </label>
+        
+        <InputImage
+        id="upload"
+        type="file" 
+        name="upload"
+        onChange={onHandleChange} />
+
         <form onSubmit={(e) => onSubmit(e)}>
           <InputInfoContainer>
             <label htmlFor="inputName">이름</label>
@@ -177,7 +224,7 @@ function Minting() {
             <InputInfo type="text" id="inputPrice" required />
           </InputInfoContainer>
 
-          <MintingPositionContainer>
+          <MintingPosition>
             <MintingPositionOptions>
               <label htmlFor="optionNft">어느 곳에 민팅 하시겠어요?</label>
             </MintingPositionOptions>
@@ -198,9 +245,11 @@ function Minting() {
                 )}
               </select>
             </MintingPositionOptions>
-
-            <input type="submit" />
-          </MintingPositionContainer>
+            <ButtonContainer>
+          <SubmitButton>제출</SubmitButton>
+        </ButtonContainer>
+           
+          </MintingPosition>
         </form>
       </NftEnrollContainer>
     </>

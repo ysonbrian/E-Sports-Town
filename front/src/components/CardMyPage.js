@@ -4,7 +4,15 @@ import { useStore, useClickedItem } from '../utils/store';
 import styled from 'styled-components';
 
 const CardContainer = styled.div`
-  border: solid 3px gray;
+  border: solid 3px #5800FF;
+  border-radius: 1rem;
+  width: 300px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #5800FF;
+  color: white;;
   border-radius: 1rem;
   width: 300px;
   height: 450px;
