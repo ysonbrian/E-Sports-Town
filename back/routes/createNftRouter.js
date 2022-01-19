@@ -22,16 +22,6 @@ router.post('/', async (req, res) => {
   }, 1000);
 
   sendToken(req, res, req.body.metadata.userAddress);
-  // await mintNft(req, res, data);
-  // try {
-
-  // } catch (error) {
-  //   console.log(error);
-  // }
 });
-
-// router.post('/bidding', (req, res) => {
-//   setBidding(req, res, req.body.metadata);
-// });
 
 module.exports = router;

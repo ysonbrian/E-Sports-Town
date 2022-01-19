@@ -7,9 +7,9 @@ import {
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { submitBid, getClickedItemBidList } from '../utils/data';
+import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
 import ModalComponent from '../components/Modal';
-
+import ModalSubmit from '../components/ModalSubmit';
 const TotalPage = styled.div`
   height: 100vh;
   display: flex;
@@ -170,16 +170,58 @@ const BidItemSellButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50px;
-  padding: 5px;
-  font-weight: 600;
+  width: 100px;
+  height: 40px;
+  border-radius: 6px;
+  text-align: center;
+  color: #f4f4f4;
+  border: none;
+  background-color: #fe7e6d;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px 1.25rem;
+  margin-right: 10px;
+  letter-spacing: 2px;
   :hover {
-    color: #fe7e6d;
+    opacity: 0.7;
   }
 `;
 
 const ImgDescription = styled.div`
   margin: 20px;
+`;
+
+const BidListHeaderContainer = styled.div`
+  margin: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const BidHeaderOne = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 30px;
+`;
+const BidHeaderTwo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 50px;
+`;
+const BidHeaderThree = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 20px;
+`;
+const BidHeaderFour = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 40px;
 `;
 
 function Auction({ clickedItemList }) {
@@ -198,11 +240,15 @@ function Auction({ clickedItemList }) {
 
   // modal
   const [checkBidToModal, setCheckBidToModal] = useState(true);
+  const [checkSellModal, setCheckSellModal] = useState(true);
   const onClickModal = (e) => {
     console.log(e);
     setCheckBidToModal((prev) => !prev);
   };
 
+  const onSellModal = () => {
+    setCheckSellModal((prev) => !prev);
+  };
   // modal
 
   const clickFetchList = clickedItemList.filter(
@@ -249,6 +295,12 @@ function Auction({ clickedItemList }) {
     setBid(e.target.value);
   };
 
+  const onClickToSell = (e) => {
+    onSellModal();
+    console.log(e);
+    submitSell();
+  };
+
   console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
 
   useEffect(() => {
@@ -259,6 +311,8 @@ function Auction({ clickedItemList }) {
     <TotalPage>
       {!checkBidToModal ? (
         <ModalComponent bidMessage={bidMessage} onClickModal={onClickModal} />
+      ) : !checkSellModal ? (
+        <ModalSubmit onSellModal={onSellModal} />
       ) : null}
       {/* <ModalComponent onClickModal={onClickModal} /> */}
       <PageTitle>Auction</PageTitle>
@@ -325,7 +379,12 @@ function Auction({ clickedItemList }) {
             <BiddingContainer>원하는 가격을 결정 하세요!</BiddingContainer>
           )}
           <BidListContainer>
-            <h3>bid listing</h3>
+            <BidListHeaderContainer>
+              <BidHeaderOne>비드 유저</BidHeaderOne>
+              <BidHeaderTwo>비드 날짜</BidHeaderTwo>
+              <BidHeaderThree>비드 금액</BidHeaderThree>
+              <BidHeaderFour>비고</BidHeaderFour>
+            </BidListHeaderContainer>
             {clickFetchList[0]?.biddingList?.map((el) => {
               let rDate = null;
               if (el?.created_at) {
@@ -347,7 +406,9 @@ function Auction({ clickedItemList }) {
                   <BidItemCreated>{rDate}</BidItemCreated>
                   <BidItemPrice>{el?.bidPrice}</BidItemPrice>
                   {clickFetchList[0]?.tokenOwnerAddress === user.userAddress ? (
-                    <BidItemSellButton>판매</BidItemSellButton>
+                    <BidItemSellButton onClick={() => onClickToSell(el)}>
+                      판매
+                    </BidItemSellButton>
                   ) : null}
                 </BidListItemContainer>
               );
