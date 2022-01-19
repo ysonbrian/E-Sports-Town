@@ -4,15 +4,16 @@ import Web3 from 'web3';
 import { useStore, useWeb3 } from '../utils/store';
 import { login, logout } from '../utils/auth';
 import styled from 'styled-components';
-import { FiLogIn } from 'react-icons/fi';
-import { FiLogOut } from 'react-icons/fi';
-import { CgProfile } from 'react-icons/cg';
+import { FiLogIn } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
+import { CgProfile } from "react-icons/cg";
+import logo from '../logo.png';
 
-import Web3Modal from 'web3modal';
-import { ethers } from 'ethers';
-import Fortmatic from 'fortmatic';
-import Portis from '@portis/web3';
-import Authereum from 'authereum';
+import Web3Modal from "web3modal";
+import { ethers } from "ethers";
+import Fortmatic from "fortmatic";
+import Portis from "@portis/web3";
+import Authereum from "authereum";
 import MewConnect from '@myetherwallet/mewconnect-web-client';
 
 const providerOptions = {
@@ -51,10 +52,9 @@ const web3Modal = new Web3Modal({
 });
 
 const HeaderContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  font-family: 'Be Vietnam Pro', sans-serif;
-  background-color: black;
+display: flex;
+justify-content: space-between;
+font-family: 'Be Vietnam Pro', sans-serif;
 `;
 
 const Logo = styled.div`
@@ -63,48 +63,49 @@ const Logo = styled.div`
   align-items: center;
   padding: 10px;
   gap: 10px;
-  a {
-    text-decoration: none;
-    cursor: pointer;
-    color: #00406e;
-    font-size: 20px;
-  }
-  a:hover {
-    color: black;
-  }
+  
   img {
-    width: 120px;
-    height: 120px;
+    width: 200px;
+    height: 100px;
   }
 `;
 
 const HeaderBar = styled.ul`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 20px;
-  padding: 10px;
-  a {
-    text-decoration: none;
-    color: white;
-    cursor: pointer;
-  }
-  a:hover {
-    color: #fe7e6d;
-  }
-  input {
-    width: 200px;
-  }
-  li {
-    list-style: none;
-    text-decoration: none;
-    width: 100%;
-  }
-`;
+display: flex;
+align-items: center;
+justify-content: center;
+gap:40px;
+padding: 10px;
+font-size: 20px;
+a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+a:hover {
+  color: #E900FF;
+}
+`
+
+const Login = styled.div`
+display: flex;
+align-items: center;
+justify-content: flex-end;
+gap: 20px;
+padding: 10px;
+a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+a:hover {
+  color: #E900FF;
+}
+`
 
 const HeaderIsLogin = styled.div`
   display: flex;
-  flex-direction: column;
+  margin-right: 5px;
   align-items: center;
 `;
 
@@ -171,10 +172,7 @@ function Header() {
     <HeaderContainer>
       <Logo>
         <Link to="/">
-          <img
-            alt=""
-            src="https://drive.google.com/uc?export=view&id=1B6803webj_PhMXpTzM9UFkWVVD_OEKxo"
-          />
+        <img src={logo} />
         </Link>
       </Logo>
       <HeaderBar>
@@ -193,8 +191,9 @@ function Header() {
                 //  setUser({});
                 //}}
               >
-                <FiLogOut size="25" />
+                <FiLogOut size="30" />
               </Link>
+            
               <Link to="/mypage">
                 <div className="header_Mypage">
                   <CgProfile size="25" />
@@ -204,12 +203,12 @@ function Header() {
           ) : (
             <>
               <Link to="/" className="header_login" onClick={connectWallet}>
-                <FiLogIn size="25" />
+                <FiLogIn size="30" />
               </Link>
             </>
           )}
         </HeaderIsLogin>
-      </HeaderBar>
+        </HeaderBar>
     </HeaderContainer>
   );
 }

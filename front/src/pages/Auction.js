@@ -15,6 +15,7 @@ const TotalPage = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  color: white;
 `;
 
 const PageTitle = styled.h1`
@@ -23,7 +24,9 @@ const PageTitle = styled.h1`
   align-items: center;
   padding: 10px;
   margin-top: 1rem;
-  color: darksalmon;
+  color: white;
+  display: flex;
+  justify-content: center;
 `;
 
 const AuctionNFT = styled.div`
