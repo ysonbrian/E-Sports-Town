@@ -6,7 +6,6 @@ const Users = require('../models/Users');
 router.get('/click', async (req, res) => {
   try {
     const data = await auctionData.find();
-    console.log(data);
     if (data) {
       res.json(data);
     } else {
@@ -19,21 +18,9 @@ router.get('/click', async (req, res) => {
 
 router.post('/:id/bidding', async (req, res) => {
   const { currentAddress, tokenId, bid } = req.body.metadata;
-  // console.log(req.body.metadata);
   try {
-    // const userToken = await Users.find({ userAddress: currentAddress });
-    // console.log(userToken);
-    // console.log(userToken[0].token >= Number(bid));
-    // if (userToken.token >= Number(bid)) {
-    //   console.log('ahaha');
-    //   setBidding(req, res, req.body.metadata);
-    //   res.send(true);
-    // } else {
-    //   res.send(false);
-    // }
     const user = await Users.find({ userAddress: currentAddress });
     const auction = await auctionData.find({ tokenId: tokenId });
-    console.log(auction);
     if (auction.length === 0) {
       setBidding(req, res, req.body.metadata);
     } else if (auction[0]?.biddingList?.length === 1) {

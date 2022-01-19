@@ -29,3 +29,7 @@ export const submitBid = async (metadata) => {
   console.log('data??', data);
   return data;
 };
+
+export const submitSell = async (metadata) => {
+  console.log(metadata);
+};

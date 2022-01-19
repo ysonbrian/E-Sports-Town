@@ -3,6 +3,7 @@ import { dummydata } from '../utils/dummyData';
 import CardMyPage from '../components/CardMyPage';
 import styled from 'styled-components';
 import { useStore, useMypage, useMyToken, useWeb3 } from '../utils/store';
+import mainImage from '../mainImage.jpg';
 
 const PageTitle = styled.h1`
   margin-top: 1rem;
@@ -16,6 +17,8 @@ const Profile_container = styled.div`
   align-items: center;
   flex-direction: column;
   color: white;
+  background-image: url(${mainImage});
+  background-size: cover;
 `;
 
 const Profile = styled.div`
@@ -35,7 +38,7 @@ const ListContainer = styled.div`
 
 const ListItem = styled.div`
   margin: 1rem;
-  background-color: #5800FF;
+  background-color: #5800ff;
   border: none;
   border-radius: 1rem;
   width: 300px;
