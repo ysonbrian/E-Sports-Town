@@ -49,7 +49,7 @@ const NftPreviewImg = styled.div`
 `
 
 const PreviewImageCloseButton = styled.button`
-  color: #gray;
+  color: gray;
   outline: none;
   border: none;
   position: absolute;
@@ -188,24 +188,24 @@ function Minting() {
   return (
     <>
       <NftEnrollContainer>
-      <Title>Create New Item</Title>
+        <Title>Create New Item</Title>
 
         <label htmlFor="upload">
-        <NftUploader>
-          <NftPreviewImg>
-            {imgSrc && <img src={imgSrc} alt="preview-img" />}
-            <PreviewImageCloseButton onClick={onClickXButton}>
-              X
-            </PreviewImageCloseButton>
-          </NftPreviewImg>
-        </NftUploader>
+          <NftUploader>
+            <NftPreviewImg>
+              {imgSrc && <img src={imgSrc} alt="preview-img" />}
+              <PreviewImageCloseButton onClick={onClickXButton}>
+                X
+              </PreviewImageCloseButton>
+            </NftPreviewImg>
+          </NftUploader>
         </label>
-        
+
         <InputImage
-        id="upload"
-        type="file" 
-        name="upload"
-        onChange={onHandleChange} />
+          id="upload"
+          type="file"
+          name="upload"
+          onChange={onHandleChange} />
 
         <form onSubmit={(e) => onSubmit(e)}>
           <InputInfoContainer>
@@ -245,9 +245,9 @@ function Minting() {
               </select>
             </MintingPositionOptions>
             <ButtonContainer>
-          <SubmitButton>제출</SubmitButton>
-        </ButtonContainer>
-           
+              <SubmitButton>제출</SubmitButton>
+            </ButtonContainer>
+
           </MintingPosition>
         </form>
       </NftEnrollContainer>

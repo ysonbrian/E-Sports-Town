@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { dummydata } from '../utils/dummyData';
 import CardMyPage from '../components/CardMyPage';
 import styled from 'styled-components';
 import { useStore, useMypage, useMyToken, useWeb3 } from '../utils/store';

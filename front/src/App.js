@@ -9,7 +9,6 @@ import { createBrowserHistory } from 'history';
 import Header from './MenuBar/Header';
 import Home from './pages/Home';
 import Gallery from './pages/Gallery';
-import ShowMeTheNFT from './pages/ShowMeTheNFT';
 import Minting from './pages/Minting';
 import Mypage from './pages/Mypage';
 import Modal from 'react-modal';

@@ -19,6 +19,7 @@ const CardContainer = styled.div`
     border: #e0ffff;
     transform: scale(1.1);
     cursor: pointer;
+  }
 `;
 
 const CardImage = styled.div`

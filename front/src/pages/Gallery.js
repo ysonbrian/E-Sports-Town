@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { dummydata } from '../utils/dummyData';
 import CardTemplate from '../components/CardTemplate';
 import styled from 'styled-components';
 import { useGallery } from '../utils/store';

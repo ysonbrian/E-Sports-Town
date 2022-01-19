@@ -90,26 +90,7 @@ function CardMyPage({
   let navigate = useNavigate();
   const selId = useStore((state) => state.id);
   const setId = useStore((state) => state.setId);
-  const { setClickedItem } = useClickedItem();
   const newUserAddress = user.slice(0, 6) + '...' + user.slice(-5);
-  //const goToAuction = (id) => {
-  //  const data = {
-  //    id: id,
-  //    imgURI: imgURI,
-  //    tokenURI: tokenURI,
-  //    user: newUserAddress,
-  //    name: name,
-  //    description: description,
-  //    price: price,
-  //    created_at: rDate,
-  //  };
-  //  console.log('selId : ' + selId);
-  //  console.log('CT id : ' + id);
-  //  setId(id);
-  //  console.log('selId : ' + selId);
-  //  setClickedItem(data);
-  //  navigate('/auction');
-  //};
 
   console.log(created_at);
   const date = created_at.split('T');
@@ -126,11 +107,7 @@ function CardMyPage({
 
   return (
     <>
-      <CardContainer
-        //onClick={() => {
-        //  goToAuction(id);
-        //}}
-      >
+      <CardContainer>
         <CardImage>
           <img alt="" src={imgURI} />
         </CardImage>

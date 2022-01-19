@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 
 const HomeContainer = styled.div`
   height: 100%;
-  width: 100%
+  width: 100%;
   background-image: backgroundImage;
   background-size: cover;
 `
@@ -28,7 +28,6 @@ const MottoImg =styled.div`
         width: 612px;
         height: 612px;
       }
-
 `
 
 const MottoContent = styled.div`
@@ -95,7 +94,7 @@ const BestNftTitle = styled.h1`
 const BestOne = styled.div`
     border:2px solid white;
     color: white;
-    text-align: center;s
+    text-align: center;
     margin-bottom: 50px;
     padding: 200px 100px;
 `
@@ -109,7 +108,7 @@ const BestTwo = styled.div`
 const BestThree = styled.div`
     border:2px solid white;
     color: white;
-    text-align: center;s
+    text-align: center;
     margin-bottom: 50px;
     padding: 200px 100px;
 
