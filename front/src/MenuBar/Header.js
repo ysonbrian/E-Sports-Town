@@ -9,11 +9,10 @@ import { FiLogOut } from 'react-icons/fi';
 import { CgProfile } from 'react-icons/cg';
 import logo from '../logo.png';
 
-import Web3Modal from 'web3modal';
-import { ethers } from 'ethers';
-import Fortmatic from 'fortmatic';
-import Portis from '@portis/web3';
-import Authereum from 'authereum';
+import Web3Modal from "web3modal";
+import { ethers } from "ethers";
+import Fortmatic from "fortmatic";
+import Portis from "@portis/web3";
 import MewConnect from '@myetherwallet/mewconnect-web-client';
 
 import mainImage from '../mainImage.jpg';
@@ -24,7 +23,6 @@ const providerOptions = {
     package: Fortmatic, // required
     options: {
       key: 'pk_test_B339BA8200249E26', // required, test
-      //network: customNetworkOptions // if we don't pass it, it will default to localhost:8454
     },
   },
   portis: {
@@ -32,9 +30,6 @@ const providerOptions = {
     options: {
       id: '0a7de06b-b597-48af-9e68-66547acbcea1', // required
     },
-  },
-  authereum: {
-    package: Authereum, // required
   },
   mewconnect: {
     package: MewConnect,
@@ -116,36 +111,7 @@ function Header() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   let navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (typeof window.ethereum !== 'undefined') {
-  //     try {
-  //       const web = new Web3(window.ethereum);
-  //       //console.log(web);
-  //       setWeb3(web);
-  //       console.log(web);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  // }, []);
-
   const connectWallet = async () => {
-    //var accounts = await window.ethereum.request({
-    //  method: 'eth_requestAccounts',
-    //});
-    //setUser(accounts);
-    //console.log("accounts:" + accounts);
-    //const account = await login(accounts);
-    //setUser("account.data:" + account.data);
-    //console.log("connectWallet:" + user);
-    //navigate('/');
-    //window.location.reload(false);
-
-    //var accounts = await window.ethereum.request({
-    //  method: 'eth_requestAccounts',
-    //});
-    //setUser(accounts);
-
     const web3ModalProvider = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(web3ModalProvider);
     const signer = await provider.getSigner(0);
@@ -159,9 +125,7 @@ function Header() {
     console.log('accounts!!!!!:' + accounts);
     const account = await login(accounts);
     setUser('account.data:' + account.data);
-    //console.log("connectWallet:" + user);
     navigate('/');
-    // navigate('/mypage');
     window.location.reload(false);
   };
 
@@ -180,7 +144,6 @@ function Header() {
       </Logo>
       <HeaderBar>
         <Link to="/gallery">Gallery</Link>
-        {/* <Link to="/showme">ShowMeTheNFT</Link> */}
         <Link to="/minting">NFT-Minting</Link>
         <HeaderIsLogin>
           {user?.userAddress ? (
@@ -189,10 +152,6 @@ function Header() {
                 to="/"
                 className="Logout"
                 onClick={disconnectWallet}
-                //onClick={() => {
-                //  logout();
-                //  setUser({});
-                //}}
               >
                 <FiLogOut size="30" />
               </Link>

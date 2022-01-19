@@ -6,7 +6,6 @@ import {
   useClickedItemBidList,
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
-import { dummydata } from '../utils/dummyData';
 import styled from 'styled-components';
 import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
 import ModalComponent from '../components/Modal';
