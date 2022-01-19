@@ -79,6 +79,7 @@ const Date = styled.div`
 
 function CardTemplate({
   id,
+  tokenId,
   imgURI,
   tokenURI,
   user,
@@ -95,9 +96,10 @@ function CardTemplate({
   const goToAuction = (id) => {
     const data = {
       id: id,
+      tokenId: tokenId,
       imgURI: imgURI,
       tokenURI: tokenURI,
-      user: newUserAddress,
+      user: user,
       name: name,
       description: description,
       price: price,
@@ -105,15 +107,13 @@ function CardTemplate({
     };
     console.log('selId : ' + selId);
     console.log('CT id : ' + id);
-    setId(id);
-    console.log('selId : ' + selId);
+    setId(tokenId);
     setClickedItem(data);
-    navigate('/auction');
+    navigate(`/auction/${tokenId}`);
     // zustand id 저장, auction page에서 id에 대한 입찰 페이지
   };
 
   const date = created_at.split('T');
-  console.log(date);
   let rDate = null;
   if (date) {
     const newDate = date[0]?.split('-');
@@ -122,17 +122,6 @@ function CardTemplate({
     const result = [...newDate, ...newtime2];
     const result1 = result.slice(0, 3).join('-');
     rDate = result1 + ' ' + newtime2.join(':');
-
-    // rDate = new Date(
-    //   Date.UTC(
-    //     result[0],
-    //     result[1] - 1,
-    //     result[2],
-    //     result[3],
-    //     result[4],
-    //     result[5]
-    //   )
-    // ).toLocaleString();
   }
 
   return (

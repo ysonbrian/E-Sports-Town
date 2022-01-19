@@ -8,6 +8,30 @@ export const useStore = create((set) => ({
   setId: (input) => set((state) => ({ id: input })),
 }));
 
+export const useWeb3 = create((set) => ({
+  web3: null,
+  setWeb3: (web3) => set({ web3 }),
+}));
+
+export const useSign = create((set) => ({
+  sign: null,
+  setSign: (sign) => set({ sign }),
+}));
+
+export const useMyToken = create((set) => ({
+  myToken: null,
+  fetchMyToken: async (user) => {
+    const res = await fetch(`${url}/mypage/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    });
+    set({ myToken: await res.json() });
+  },
+}));
+
 export const useGallery = create((set) => ({
   gallery: [],
   fetchData: async () => {
@@ -38,4 +62,12 @@ export const useMypage = create((set) => ({
 export const useClickedItem = create((set) => ({
   clickedItem: [],
   setClickedItem: (clickedItem) => set({ clickedItem }),
+}));
+
+export const useClickedItemBidList = create((set) => ({
+  clickedItemList: [],
+  fetchClickedItem: async () => {
+    const { data } = await Axios.get(`${url}/auction/click`);
+    set({ clickedItemList: await data });
+  },
 }));

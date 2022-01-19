@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { dummydata } from '../utils/dummyData';
 import CardMyPage from '../components/CardMyPage';
 import styled from 'styled-components';
-import { useStore, useMypage } from '../utils/store';
+import { useStore, useMypage, useMyToken, useWeb3 } from '../utils/store';
 
 const PageTitle = styled.h1`
   margin-top: 1rem;
@@ -79,10 +79,22 @@ const NoData = styled.div`
   border-radius: 10px;
 `;
 
+const Coin = styled.div`
+  margin: 10px;
+`;
+
 function Mypage() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const myPage = useMypage((state) => state.mypage);
+  const myToken = useMyToken((state) => state.myToken);
+  // const [web3, setWeb3] = useWeb3((state) => [state.web3, state.setWeb3]);
+  const { fetchMyPage } = useMypage();
+  useEffect(() => {
+    console.log(user);
+    fetchMyPage(user);
+  }, []);
 
+  // console.log(web3.eth.getBalance());
   console.log(myPage);
   return (
     <>
@@ -94,21 +106,22 @@ function Mypage() {
             {user?.username ? user.username : 'unnamed'}
           </UserName>
           <PublicKey>{user?.userAddress}</PublicKey>
-          <CollectionNumber></CollectionNumber>
+          <Coin>Coin : {myToken[0].token ? myToken[0].token : null}</Coin>
+          <CollectionNumber>Number of NFT : {myPage.length}</CollectionNumber>
         </Profile>
         <PageTitle>NFT List</PageTitle>
         {myPage.length !== 0 ? (
           <ListContainer>
             {myPage?.map((el) => {
               return (
-                <ListItem key={el._id}>
+                <ListItem key={el?._id}>
                   <CardMyPage
-                    id={el.id}
-                    imgURI={el.imgURI}
-                    user={el.userAddress}
-                    description={el.description}
-                    price={el.price}
-                    created_at={el.created_at}
+                    id={el?.id}
+                    imgURI={el?.imgURI}
+                    user={el?.userAddress}
+                    description={el?.description}
+                    price={el?.price}
+                    created_at={el?.created_at}
                   />
                 </ListItem>
               );
