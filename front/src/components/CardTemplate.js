@@ -4,21 +4,22 @@ import { useStore, useClickedItem } from '../utils/store';
 import styled from 'styled-components';
 
 const CardContainer = styled.div`
-  border: solid 3px #5800FF;
+  border: solid 3px #5800ff;
   border-radius: 1rem;
   width: 300px;
   height: 450px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #5800FF;
+  background-color: #5800ff;
   color: white;
-  &:hover {
+  :hover {
     background-color: #e0ffff;
     color: black;
     border: #e0ffff;
     transform: scale(1.1);
     cursor: pointer;
+  }
 `;
 
 const CardImage = styled.div`
@@ -105,8 +106,6 @@ function CardTemplate({
       price: price,
       created_at: rDate,
     };
-    console.log('selId : ' + selId);
-    console.log('CT id : ' + id);
     setId(tokenId);
     setClickedItem(data);
     navigate(`/auction/${tokenId}`);
