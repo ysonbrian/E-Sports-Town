@@ -1,7 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
+import { submitSell } from '../utils/data';
+
+import { useModalSubmitData } from '../utils/store';
+
 const ModalAllContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -49,8 +54,7 @@ const ModalButtonContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-const ModalButton = styled.button`
+const ModalConfirmButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,7 +64,7 @@ const ModalButton = styled.button`
   text-align: center;
   color: #f4f4f4;
   border: none;
-  background-color: #fe7e6d;
+  background-color: #3d13b1;
   font-weight: bold;
   cursor: pointer;
   padding: 0px 1.25rem;
@@ -71,8 +75,33 @@ const ModalButton = styled.button`
   }
 `;
 
+const ModalCancelButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  border-radius: 6px;
+  text-align: center;
+  color: #f4f4f4;
+  border: none;
+  background-color: #cc0707;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px 1.25rem;
+  letter-spacing: 2px;
+  :hover {
+    opacity: 0.7;
+  }
+`;
+
 const ModalComponent = ({ onSellModal }) => {
+  let navigate = useNavigate();
   const [open, setOpen] = useState(true);
+  const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
+    state.modalSubmitData,
+    state.setModalSubmitData,
+  ]);
 
   const customStyles = {
     content: {
@@ -86,8 +115,12 @@ const ModalComponent = ({ onSellModal }) => {
     },
   };
 
-  const onSellButton = () => {
+  const onSellButton = async () => {
+    await submitSell(modalSubmitData);
     onSellModal(true);
+    setOpen(false);
+    navigate('/');
+    window.location.reload(false);
   };
 
   const onCloseButton = () => {
@@ -114,8 +147,8 @@ const ModalComponent = ({ onSellModal }) => {
             <ModalInfo>판매를 하시겠습니까?</ModalInfo>
           </ModalInfoContainer>
           <ModalButtonContainer>
-            <ModalButton onClick={onSellButton}>판매</ModalButton>
-            <ModalButton onClick={onCloseButton}>취소</ModalButton>
+            <ModalConfirmButton onClick={onSellButton}>판매</ModalConfirmButton>
+            <ModalCancelButton onClick={onCloseButton}>취소</ModalCancelButton>
           </ModalButtonContainer>
         </ModalAllContainer>
       </Modal>

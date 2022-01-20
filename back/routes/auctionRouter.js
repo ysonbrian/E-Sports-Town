@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { mintNft, sendToken, setBidding } = require('../controllers/Mint.js');
+const { sellNft, setToken, setBidding } = require('../controllers/Mint.js');
+
 const auctionData = require('../models/AuctionData');
 const Users = require('../models/Users');
 router.get('/click', async (req, res) => {
@@ -45,6 +46,19 @@ router.post('/:id/bidding', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+router.post('/:id/sell', async (req, res) => {
+  console.log(req.body);
+  setToken(req, res);
+  setTimeout(() => {
+    sellNft(req, res, req.body.metadata);
+  }, 3000);
+  // try {
+
+  // } catch (error) {
+  //   console.log(error);
+  // }
 });
 
 module.exports = router;
