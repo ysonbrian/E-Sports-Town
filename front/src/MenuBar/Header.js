@@ -15,8 +15,6 @@ import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";
 import MewConnect from '@myetherwallet/mewconnect-web-client';
 
-import mainImage from '../mainImage.jpg';
-
 const providerOptions = {
   /* See Provider Options Section */
   fortmatic: {
@@ -75,22 +73,6 @@ const HeaderBar = styled.ul`
   gap: 40px;
   padding: 10px;
   font-size: 20px;
-  a {
-    text-decoration: none;
-    color: white;
-    cursor: pointer;
-  }
-  a:hover {
-    color: #e900ff;
-  }
-`;
-
-const Login = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 20px;
-  padding: 10px;
   a {
     text-decoration: none;
     color: white;

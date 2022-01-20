@@ -228,7 +228,7 @@ const BidHeaderFour = styled.div`
   padding-right: 40px;
 `;
 
-function Auction({ clickedItemList }) {
+function MultiAuction({ clickedItemList }) {
   console.log('NANAN', clickedItemList);
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
@@ -319,7 +319,7 @@ function Auction({ clickedItemList }) {
         <ModalSubmit onSellModal={onSellModal} />
       ) : null}
       {/* <ModalComponent onClickModal={onClickModal} /> */}
-      <PageTitle>Auction</PageTitle>
+      <PageTitle>Multi-Auction</PageTitle>
       <AuctionNFT>
         <ImgNFT>
           <NftPreviewImg>
@@ -424,4 +424,4 @@ function Auction({ clickedItemList }) {
   );
 }
 
-export default Auction;
+export default MultiAuction;
