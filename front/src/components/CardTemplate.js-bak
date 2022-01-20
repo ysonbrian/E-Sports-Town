@@ -12,44 +12,45 @@ const CardContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #5800FF;
-  color: white;;
-  border-radius: 1rem;
-  width: 300px;
-  height: 450px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
+  color: white;
+  &:hover {
+    background-color: #e0ffff;
+    color: black;
+    border: #e0ffff;
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+`;
 
 const CardImage = styled.div`
-  border: solid 1px gray;
+  border: solid 1px #041562;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 280px;
-  height: 280px;
+  width: 270px;
+  height: 270px;
   margin: 1rem;
 
   img {
     width: 270px;
     height: 270px;
   }
-`
+`;
 
 const CardContents = styled.div`
   height: 100px;
   width: 260px;
   overflow: auto;
   margin: 5px;
-`
+`;
 
 const Creator = styled.div`
   display: flex;
   align-items: flex-start;
   margin: 2px;
   font-weight: bolder;
-`
+`;
 
 const Description = styled.div`
   width: 260px;
@@ -59,7 +60,7 @@ const Description = styled.div`
   text-overflow: ellipsis;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-`
+`;
 
 const CardMore = styled.div`
   width: 260px;
@@ -67,18 +68,19 @@ const CardMore = styled.div`
   margin-bottom: 2px;
   display: flex;
   flex-direction: row;
-`
+`;
 
 const Price = styled.div`
   flex: 1 0 0;
-`
+`;
 
 const Date = styled.div`
   flex: 1 0 0;
-`
+`;
 
-function CardMyPage({
+function CardTemplate({
   id,
+  tokenId,
   imgURI,
   tokenURI,
   user,
@@ -90,11 +92,29 @@ function CardMyPage({
   let navigate = useNavigate();
   const selId = useStore((state) => state.id);
   const setId = useStore((state) => state.setId);
+  const { setClickedItem } = useClickedItem();
   const newUserAddress = user.slice(0, 6) + '...' + user.slice(-5);
+  const goToAuction = (id) => {
+    const data = {
+      id: id,
+      tokenId: tokenId,
+      imgURI: imgURI,
+      tokenURI: tokenURI,
+      user: user,
+      name: name,
+      description: description,
+      price: price,
+      created_at: rDate,
+    };
+    console.log('selId : ' + selId);
+    console.log('CT id : ' + id);
+    setId(tokenId);
+    setClickedItem(data);
+    navigate(`/auction/${tokenId}`);
+    // zustand id 저장, auction page에서 id에 대한 입찰 페이지
+  };
 
-  console.log(created_at);
   const date = created_at.split('T');
-  console.log(date);
   let rDate = null;
   if (date) {
     const newDate = date[0]?.split('-');
@@ -107,7 +127,11 @@ function CardMyPage({
 
   return (
     <>
-      <CardContainer>
+      <CardContainer
+        onClick={() => {
+          goToAuction(id);
+        }}
+      >
         <CardImage>
           <img alt="" src={imgURI} />
         </CardImage>
@@ -130,4 +154,4 @@ function CardMyPage({
   );
 }
 
-export default CardMyPage;
+export default CardTemplate;

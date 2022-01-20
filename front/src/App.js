@@ -9,7 +9,6 @@ import { createBrowserHistory } from 'history';
 import Header from './MenuBar/Header';
 import Home from './pages/Home';
 import Gallery from './pages/Gallery';
-import ShowMeTheNFT from './pages/ShowMeTheNFT';
 import Minting from './pages/Minting';
 import Mypage from './pages/Mypage';
 import Modal from 'react-modal';
@@ -22,6 +21,7 @@ import {
 } from './utils/store';
 import { getCurrentUser, login, logout, parseJwt } from './utils/auth';
 import Auction from './pages/Auction';
+import MultiAuction from './pages/MultiAuction';
 import styled from 'styled-components';
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
@@ -113,6 +113,10 @@ function App() {
         <Route
           path="/auction/:id"
           element={<Auction clickedItemList={clickedItemList} />}
+        />
+        <Route
+          path="/multiauction/:id"
+          element={<MultiAuction clickedItemList={clickedItemList} />}
         />
       </Routes>
     </HistoryRouter>

@@ -78,6 +78,34 @@ const Date = styled.div`
   flex: 1 0 0;
 `;
 
+const ButtonContainer = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+const SubmitButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 40px;
+  border-radius: 8px;
+  text-align: center;
+  color: #f4f4f4;
+  border: none;
+  background-color: #5800ff;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px 1.25rem;
+  margin-right: 10px;
+  letter-spacing: 2px;
+  :hover {
+    background-color: #e900ff;
+  }
+`;
+
 function CardTemplate({
   id,
   tokenId,
@@ -112,6 +140,26 @@ function CardTemplate({
     // zustand id 저장, auction page에서 id에 대한 입찰 페이지
   };
 
+  const goToMultiAuction = (id) => {
+    const data = {
+      id: id,
+      tokenId: tokenId,
+      imgURI: imgURI,
+      tokenURI: tokenURI,
+      user: user,
+      name: name,
+      description: description,
+      price: price,
+      created_at: rDate,
+    };
+    console.log('selId : ' + selId);
+    console.log('CT id : ' + id);
+    setId(tokenId);
+    setClickedItem(data);
+    navigate(`/multiauction/${tokenId}`);
+    // zustand id 저장, auction page에서 id에 대한 입찰 페이지
+  };
+
   const date = created_at.split('T');
   let rDate = null;
   if (date) {
@@ -126,9 +174,9 @@ function CardTemplate({
   return (
     <>
       <CardContainer
-        onClick={() => {
-          goToAuction(id);
-        }}
+      //onClick={() => {
+      //  goToAuction(id);
+      //}}
       >
         <CardImage>
           <img alt="" src={imgURI} />
@@ -147,6 +195,19 @@ function CardTemplate({
             {rDate}
           </Date>
         </CardMore>
+        <ButtonContainer>
+          <SubmitButton
+            onClick={() => {
+              goToAuction(id);
+            }}
+          >Auction</SubmitButton>
+          <SubmitButton
+            onClick={() => {
+              goToMultiAuction(id);
+            }}
+          >Multi
+          Auction</SubmitButton>
+        </ButtonContainer>
       </CardContainer>
     </>
   );

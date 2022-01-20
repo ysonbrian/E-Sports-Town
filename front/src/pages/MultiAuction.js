@@ -8,7 +8,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
-import { useModalSubmitData } from '../utils/store';
 import ModalComponent from '../components/Modal';
 import ModalSubmit from '../components/ModalSubmit';
 import mainImage from '../mainImage.jpg';
@@ -79,15 +78,6 @@ const NameIPFSMetadata = styled.h2`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  a {
-    text-decoration: none;
-    color: white;
-    display: flex;
-    gap: 10px;
-  }
-  a:hover {
-    opacity: 0.7;
-  }
 `;
 
 const BidRltContainer = styled.div`
@@ -157,7 +147,7 @@ const BidListContainer = styled.div`
 const BidListItemContainer = styled.div`
   margin: 0.5rem;
   padding: 0.5rem;
-  background-color: #3d2c8d;
+  background-color: gainsboro;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -238,7 +228,8 @@ const BidHeaderFour = styled.div`
   padding-right: 40px;
 `;
 
-function Auction({ clickedItemList }) {
+function MultiAuction({ clickedItemList }) {
+  console.log('NANAN', clickedItemList);
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const id = useStore((state) => state.id);
@@ -254,10 +245,6 @@ function Auction({ clickedItemList }) {
   // modal
   const [checkBidToModal, setCheckBidToModal] = useState(true);
   const [checkSellModal, setCheckSellModal] = useState(true);
-  const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
-    state.modalSubmitData,
-    state.setModalSubmitData,
-  ]);
   const onClickModal = (e) => {
     console.log(e);
     setCheckBidToModal((prev) => !prev);
@@ -308,22 +295,17 @@ function Auction({ clickedItemList }) {
   };
 
   const onChangeBid = (e) => {
+    console.log(e.target.value);
     setBid(e.target.value);
   };
 
   const onClickToSell = (e) => {
     onSellModal();
-    // console.log(clickFetchList);
-    const metadata = {
-      tokenId: id,
-      tokenOwnerAddress: clickFetchList[0].tokenOwnerAddress,
-      bidAddress: e.bidAddress,
-      bidPrice: e.bidPrice,
-    };
-    setModalSubmitData(metadata);
+    console.log(e);
+    submitSell();
   };
 
-  // console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
+  console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
 
   useEffect(() => {
     fetchClickedItem();
@@ -337,7 +319,7 @@ function Auction({ clickedItemList }) {
         <ModalSubmit onSellModal={onSellModal} />
       ) : null}
       {/* <ModalComponent onClickModal={onClickModal} /> */}
-      <PageTitle>Auction</PageTitle>
+      <PageTitle>Multi-Auction</PageTitle>
       <AuctionNFT>
         <ImgNFT>
           <NftPreviewImg>
@@ -442,4 +424,4 @@ function Auction({ clickedItemList }) {
   );
 }
 
-export default Auction;
+export default MultiAuction;

@@ -55,7 +55,7 @@ const NftPreviewImg = styled.div`
 `;
 
 const PreviewImageCloseButton = styled.button`
-  color: #gray;
+  color: gray;
   outline: none;
   border: none;
   position: absolute;
