@@ -1,17 +1,17 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useStore, useClickedItem } from '../utils/store';
-import styled from 'styled-components';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useStore, useClickedItem } from "../utils/store";
+import styled from "styled-components";
 
 const CardContainer = styled.div`
-  border: solid 3px #5800FF;
+  border: solid 3px #5800ff;
   border-radius: 1rem;
   width: 300px;
   height: 450px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #5800FF;
+  background-color: #5800ff;
   color: white;
   &:hover {
     background-color: #e0ffff;
@@ -83,7 +83,7 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`
+`;
 
 const SubmitButton = styled.button`
   display: flex;
@@ -121,7 +121,7 @@ function CardTemplate({
   const selId = useStore((state) => state.id);
   const setId = useStore((state) => state.setId);
   const { setClickedItem } = useClickedItem();
-  const newUserAddress = user.slice(0, 6) + '...' + user.slice(-5);
+  const newUserAddress = user.slice(0, 6) + "..." + user.slice(-5);
   const goToAuction = (id) => {
     const data = {
       id: id,
@@ -134,8 +134,8 @@ function CardTemplate({
       price: price,
       created_at: rDate,
     };
-    console.log('selId : ' + selId);
-    console.log('CT id : ' + id);
+    console.log("selId : " + selId);
+    console.log("CT id : " + id);
     setId(tokenId);
     setClickedItem(data);
     navigate(`/auction/${tokenId}`);
@@ -154,23 +154,23 @@ function CardTemplate({
       price: price,
       created_at: rDate,
     };
-    console.log('selId : ' + selId);
-    console.log('CT id : ' + id);
+    console.log("selId : " + selId);
+    console.log("CT id : " + id);
     setId(tokenId);
     setClickedItem(data);
     navigate(`/multiauction/${tokenId}`);
     // zustand id 저장, auction page에서 id에 대한 입찰 페이지
   };
 
-  const date = created_at.split('T');
+  const date = created_at.split("T");
   let rDate = null;
   if (date) {
-    const newDate = date[0]?.split('-');
-    const newtime = date[1]?.split('.');
-    const newtime2 = newtime[0]?.split(':');
+    const newDate = date[0]?.split("-");
+    const newtime = date[1]?.split(".");
+    const newtime2 = newtime[0]?.split(":");
     const result = [...newDate, ...newtime2];
-    const result1 = result.slice(0, 3).join('-');
-    rDate = result1 + ' ' + newtime2.join(':');
+    const result1 = result.slice(0, 3).join("-");
+    rDate = result1;
   }
 
   return (
@@ -202,13 +202,16 @@ function CardTemplate({
             onClick={() => {
               goToAuction(id);
             }}
-          >Auction</SubmitButton>
+          >
+            Auction
+          </SubmitButton>
           <SubmitButton
             onClick={() => {
               goToMultiAuction(id);
             }}
-          >Multi
-          Auction</SubmitButton>
+          >
+            Multi Auction
+          </SubmitButton>
         </ButtonContainer>
       </CardContainer>
     </>

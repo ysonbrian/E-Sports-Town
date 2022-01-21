@@ -1,35 +1,43 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { create } from 'ipfs-http-client';
-import { useStore } from '../utils/store';
-import { submitNFT } from '../utils/data';
-import styled from 'styled-components';
-import mainImage from '../mainImage.jpg';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { create } from "ipfs-http-client";
+import { useStore } from "../utils/store";
+import { submitNFT } from "../utils/data";
+import styled from "styled-components";
+import mainImage from "../MainImage.jpg";
 
 const Title = styled.h1`
-  margin-top: 1rem;
+  padding-bottom: 3rem;
   color: white;
+  display: flex;
+  justify-content: center;
+  font-size: 50px;
 `;
 
 const NftContainer = styled.div`
   background-image: url(${mainImage});
   background-size: cover;
+  padding: 100px;
 `;
 
 const NftEnrollContainer = styled.div`
   display: flex;
-  border: none;
+  border: solid 1px gray;
   border-radius: 50px;
   margin: auto;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  width: 400px;
-  height: 100%;
-  background-color: none;
+  justify-content: space-around;
+  width: 80%;
+  height: 40%;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding-bottom: 1rem;
+  position: relative;
 `;
 
 const NftUploader = styled.div`
   display: flex;
+  border-radius: 40px;
   flex-direction: column;
   align-items: center;
   margin-top: 30px;
@@ -43,14 +51,16 @@ const InputImage = styled.input`
 
 const NftPreviewImg = styled.div`
   border: cadetblue dotted 2px;
-  width: 300px;
-  height: 300px;
+  border-radius: 40px;
+  width: 500px;
+  height: 500px;
   img {
-    width: 295px;
-    height: 295px;
+    width: 500px;
+    height: 50px;
+    border-radius: 40px;
   }
   :hover {
-    background-color: #e0ffff;
+    background-color: #eef2ff;
   }
 `;
 
@@ -71,11 +81,16 @@ const PreviewImageCloseButton = styled.button`
 const InputInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 50px;
   width: 300px;
   gap: 10px;
   letter-spacing: 2px;
-  color: white;
+  color: black;
+`;
+
+const InputTitle = styled.h1`
+  color: black;
+  align-items: center;
 `;
 
 const InputInfo = styled.input`
@@ -84,21 +99,8 @@ const InputInfo = styled.input`
   border-radius: 10px;
   background-color: whitesmoke;
   :hover {
-    background-color: #e0ffff;
+    background-color: #eef2ff;
   }
-`;
-
-const MintingPosition = styled.div`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  color: white;
-`;
-
-const MintingPositionOptions = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 5px;
 `;
 
 const ButtonContainer = styled.div`
@@ -116,8 +118,8 @@ const SubmitButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 70px;
-  height: 40px;
+  width: 300px;
+  height: 80px;
   border-radius: 8px;
   text-align: center;
   color: #f4f4f4;
@@ -126,7 +128,7 @@ const SubmitButton = styled.button`
   font-weight: bold;
   cursor: pointer;
   padding: 0px 1.25rem;
-  margin-right: 10px;
+  margin-top: 50px;
   letter-spacing: 2px;
   :hover {
     background-color: #e900ff;
@@ -136,14 +138,14 @@ const SubmitButton = styled.button`
 function Minting() {
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
-  const [selected, setSelected] = useState('');
-  const [files, setFiles] = useState('');
-  const [imgSrc, setImgSrc] = useState('');
+  const [selected, setSelected] = useState("");
+  const [files, setFiles] = useState("");
+  const [imgSrc, setImgSrc] = useState("");
 
   const ipfs = create({
-    host: 'ipfs.infura.io',
+    host: "ipfs.infura.io",
     port: 5001,
-    protocol: 'https',
+    protocol: "https",
   });
 
   const onHandleChange = (event) => {
@@ -177,25 +179,21 @@ function Minting() {
       imgURI: metadata.imgURI,
     };
     const data = await submitNFT(result);
-    setSelected('');
-    navigate('/');
+    setSelected("");
+    navigate("/");
     window.location.reload(false);
     // window.location.assign('http://localhost:3000');
   };
 
-  const onSelectChange = (e) => {
-    setSelected(e.target.value);
-  };
-
   const onClickXButton = () => {
-    setImgSrc('');
+    setImgSrc("");
   };
 
   return (
     <NftContainer>
-      <NftEnrollContainer>
-        <Title>Create New Item</Title>
+      <Title>Create New Item</Title>
 
+      <NftEnrollContainer>
         <label htmlFor="upload">
           <NftUploader>
             <NftPreviewImg>
@@ -216,6 +214,7 @@ function Minting() {
 
         <form onSubmit={(e) => onSubmit(e)}>
           <InputInfoContainer>
+            <InputTitle>정보를 입력하세요</InputTitle>
             <label htmlFor="inputName">이름</label>
             <InputInfo type="text" id="inputName" required />
           </InputInfoContainer>
@@ -230,31 +229,9 @@ function Minting() {
             <InputInfo type="text" id="inputPrice" required />
           </InputInfoContainer>
 
-          <MintingPosition>
-            <MintingPositionOptions>
-              <label htmlFor="optionNft">어느 곳에 민팅 하시겠어요?</label>
-            </MintingPositionOptions>
-
-            <MintingPositionOptions>
-              <select id="optionNft" onChange={onSelectChange}>
-                {user?.master === 'true' ? (
-                  <>
-                    <option></option>
-                    <option value="pro">프로</option>
-                  </>
-                ) : (
-                  <>
-                    <option></option>
-                    <option value="normal">일반</option>
-                    <option value="auction">쇼미더머니</option>
-                  </>
-                )}
-              </select>
-            </MintingPositionOptions>
-            <ButtonContainer>
-              <SubmitButton>제출</SubmitButton>
-            </ButtonContainer>
-          </MintingPosition>
+          <ButtonContainer>
+            <SubmitButton>제출</SubmitButton>
+          </ButtonContainer>
         </form>
       </NftEnrollContainer>
     </NftContainer>
