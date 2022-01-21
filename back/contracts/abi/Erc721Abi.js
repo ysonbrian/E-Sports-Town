@@ -155,6 +155,43 @@ const Erc721Abi = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'erc20Token',
+    outputs: [
+      {
+        internalType: 'contract IERC20',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'spender',
+        type: 'address',
+      },
+    ],
+    name: 'getAllowance',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -176,12 +213,31 @@ const Erc721Abi = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getTokenPrice',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'string',
         name: '',
         type: 'string',
       },
     ],
-    name: 'getToken',
+    name: 'getTokenURI',
     outputs: [
       {
         internalType: 'uint256',
@@ -227,6 +283,11 @@ const Erc721Abi = [
         internalType: 'string',
         name: 'tokenURI',
         type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: '_tokenPrice',
+        type: 'uint256',
       },
     ],
     name: 'mintNFT',
@@ -360,6 +421,40 @@ const Erc721Abi = [
     inputs: [
       {
         internalType: 'address',
+        name: 'buyer',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'tokenOwner',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_nftPrice',
+        type: 'uint256',
+      },
+    ],
+    name: 'sellNFT',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: 'operator',
         type: 'address',
       },
@@ -378,7 +473,25 @@ const Erc721Abi = [
     inputs: [
       {
         internalType: 'address',
-        name: 'tokenAddress',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'setApprove',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'erc20CA',
         type: 'address',
       },
     ],
@@ -426,13 +539,19 @@ const Erc721Abi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'token',
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'tokenPrice',
     outputs: [
       {
-        internalType: 'contract IERC20',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',

@@ -71,3 +71,8 @@ export const useClickedItemBidList = create((set) => ({
     set({ clickedItemList: await data });
   },
 }));
+
+export const useModalSubmitData = create((set) => ({
+  modalSubmitData: [],
+  setModalSubmitData: (modalSubmitData) => set({ modalSubmitData }),
+}));

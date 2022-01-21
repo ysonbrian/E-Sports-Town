@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   useStore,
   useClickedItem,
   useSign,
   useClickedItemBidList,
-} from '../utils/store';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
-import ModalComponent from '../components/Modal';
-import ModalSubmit from '../components/ModalSubmit';
-import mainImage from '../mainImage.jpg';
+} from "../utils/store";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { submitBid, getClickedItemBidList, submitSell } from "../utils/data";
+import { useModalSubmitData } from "../utils/store";
+import ModalComponent from "../components/Modal";
+import ModalSubmit from "../components/ModalSubmit";
+import mainImage from "../MainImage.jpg";
 
 const TotalPage = styled.div`
   height: 100vh;
@@ -78,6 +79,15 @@ const NameIPFSMetadata = styled.h2`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  a {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    gap: 10px;
+  }
+  a:hover {
+    opacity: 0.7;
+  }
 `;
 
 const BidRltContainer = styled.div`
@@ -147,7 +157,7 @@ const BidListContainer = styled.div`
 const BidListItemContainer = styled.div`
   margin: 0.5rem;
   padding: 0.5rem;
-  background-color: gainsboro;
+  background-color: #3d2c8d;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -229,7 +239,6 @@ const BidHeaderFour = styled.div`
 `;
 
 function Auction({ clickedItemList }) {
-  console.log('NANAN', clickedItemList);
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const id = useStore((state) => state.id);
@@ -245,6 +254,10 @@ function Auction({ clickedItemList }) {
   // modal
   const [checkBidToModal, setCheckBidToModal] = useState(true);
   const [checkSellModal, setCheckSellModal] = useState(true);
+  const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
+    state.modalSubmitData,
+    state.setModalSubmitData,
+  ]);
   const onClickModal = (e) => {
     console.log(e);
     setCheckBidToModal((prev) => !prev);
@@ -263,7 +276,7 @@ function Auction({ clickedItemList }) {
   }); //returns object
 
   const maxBidAddress =
-    max?.bidAddress?.slice(0, 6) + '...' + max?.bidAddress?.slice(-5);
+    max?.bidAddress?.slice(0, 6) + "..." + max?.bidAddress?.slice(-5);
 
   const onClickBidding = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
@@ -277,35 +290,40 @@ function Auction({ clickedItemList }) {
     const submitData = await submitBid(metadata);
 
     if (
-      submitData.message === 'lowerThanMax' ||
-      submitData.message === 'NoMoney'
+      submitData.message === "lowerThanMax" ||
+      submitData.message === "NoMoney"
     ) {
-      console.log('after submitData.message!!', submitData.message);
+      console.log("after submitData.message!!", submitData.message);
       setBidMessage(submitData.message);
       setCheckBidToModal(false);
     } else {
-      console.log('AFTER submitData.message!!', submitData.message);
+      console.log("AFTER submitData.message!!", submitData.message);
       setBidMessage(submitData.message);
       setCheckBidToModal(true);
       // navigate('/');
-      window.location.assign('http://localhost:3000');
+      window.location.assign("http://localhost:3000");
       // window.location.reload(false);
     }
-    setBid('');
+    setBid("");
   };
 
   const onChangeBid = (e) => {
-    console.log(e.target.value);
     setBid(e.target.value);
   };
 
   const onClickToSell = (e) => {
     onSellModal();
-    console.log(e);
-    submitSell();
+    // console.log(clickFetchList);
+    const metadata = {
+      tokenId: id,
+      tokenOwnerAddress: clickFetchList[0].tokenOwnerAddress,
+      bidAddress: e.bidAddress,
+      bidPrice: e.bidPrice,
+    };
+    setModalSubmitData(metadata);
   };
 
-  console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
+  // console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
 
   useEffect(() => {
     fetchClickedItem();
@@ -352,14 +370,14 @@ function Auction({ clickedItemList }) {
               {true ? <div>현재 최고가</div> : <div>Current bid</div>}
               <WinningCurrent_Price>
                 <i className="fas fa-bars"></i>
-                {max?.bidPrice ? max?.bidPrice : '제시 금액이 없습니다.'}
+                {max?.bidPrice ? max?.bidPrice : "제시 금액이 없습니다."}
               </WinningCurrent_Price>
             </WinningCurrent>
             <WinnerEnd>
               {true ? <div>최고가 제시 유저</div> : <div>Ends in</div>}
               {true ? (
                 <WinningCurrent_Price>
-                  {max?.bidAddress ? maxBidAddress : '최고가를 기록 해보세요!'}
+                  {max?.bidAddress ? maxBidAddress : "최고가를 기록 해보세요!"}
                 </WinningCurrent_Price>
               ) : (
                 <WinningCurrent_Price>2h 21m 50s</WinningCurrent_Price>
@@ -392,17 +410,17 @@ function Auction({ clickedItemList }) {
             {clickFetchList[0]?.biddingList?.map((el) => {
               let rDate = null;
               if (el?.created_at) {
-                let date = el?.created_at.split('T');
+                let date = el?.created_at.split("T");
 
-                let newDate = date[0]?.split('-');
-                let newtime = date[1]?.split('.');
-                let newtime2 = newtime[0]?.split(':');
+                let newDate = date[0]?.split("-");
+                let newtime = date[1]?.split(".");
+                let newtime2 = newtime[0]?.split(":");
                 let result = [...newDate, ...newtime2];
-                let result1 = result.slice(0, 3).join('-');
-                rDate = result1 + ' ' + newtime2.join(':');
+                let result1 = result.slice(0, 3).join("-");
+                rDate = result1 + " " + newtime2.join(":");
               }
               const newUserAddress =
-                el?.bidAddress?.slice(0, 6) + '...' + el?.bidAddress?.slice(-5);
+                el?.bidAddress?.slice(0, 6) + "..." + el?.bidAddress?.slice(-5);
 
               return (
                 <BidListItemContainer key={el?._id}>

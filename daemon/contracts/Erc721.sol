@@ -1,70 +1,76 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
+pragma solidity ^0.8.11;
 
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
-import "../node_modules/openzeppelin-solidity/contracts/utils/Counters.sol";
-import "../node_modules/openzeppelin-solidity/contracts/access/Ownable.sol";
-import "../node_modules/openzeppelin-solidity/contracts//token/ERC721/extensions/ERC721URIStorage.sol";
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+// import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
+// import "../node_modules/openzeppelin-solidity/contracts/utils/Counters.sol";
+// import "../node_modules/openzeppelin-solidity/contracts/access/Ownable.sol";
+// import "../node_modules/openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+// import "../node_modules/openzeppelin-solidity/contracts//token/ERC721/extensions/ERC721URIStorage.sol";
+// import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-
-contract NFTLootBox is ERC721URIStorage, Ownable {
+contract Erc721 is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
-    IERC20 public token;
+    IERC20 public erc20Token;
     uint256 public nftPrice;
-    mapping (string => uint256) public getToken;
+    mapping (string => uint256) public getTokenURI;
     mapping (uint256 => uint256) public tokenPrice;
+
 
     constructor() ERC721("MyNFTs", "MNFT") {
 
-        nftPrice = 100e18;
     }
 
-    function mintNFT(address recipient, string memory tokenURI) public onlyOwner returns (uint256) {
+    function mintNFT(address recipient, string memory tokenURI, uint256 _tokenPrice) public onlyOwner returns (uint256) {
 
-        require(token.balanceOf(recipient) >= nftPrice);
-
-         //오류지점
-        token.transferFrom(recipient, msg.sender, nftPrice);
-
+        require(recipient != address(0x0), "No recipient address!");
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _mint(recipient, newItemId);
         _setTokenURI(newItemId, tokenURI);
-        getToken[tokenURI] = newItemId;
-        _setApprovalForAll(recipient, msg.sender, true);
+        getTokenURI[tokenURI] = newItemId;
+        tokenPrice[newItemId] = _tokenPrice;
+
         return newItemId;
     }
 
-    function setToken (address tokenAddress) public onlyOwner returns (bool) {
-        require(tokenAddress != address(0x0));
-        token = IERC20(tokenAddress);
+    function setToken(address erc20CA ) public  returns(bool) {
+        require(erc20CA != address(0x0));
+        erc20Token = IERC20(erc20CA);
         return true;
     }
+    function sellNFT(address buyer, address tokenOwner, uint256 _tokenId, uint256 _nftPrice) public onlyOwner returns (uint256) {
+
+        nftPrice = tokenPrice[_tokenId];
+        address serverAddr = ownerOf(_tokenId);
+        require(erc20Token.balanceOf(buyer) > _nftPrice, "Buyer has no enough money!");
+        require(msg.sender != serverAddr,"Caller is Server Address");  //전체관리 걔정은 구매를 못함
+        // require(nftPrice == _nftPrice, "NftPrice and buyer's money are not same");
+        // erc20Token.transferFrom(buyer, tokenOwner, _nftPrice);
+        safeTransferFrom(tokenOwner, buyer, _tokenId);
+
+        return _tokenId;
+    }
+
+    function setApprove(address to, uint256 amount) public {
+        erc20Token.approve(to, amount);
+    }
+
     function checkTokenId(string memory tokenUri) public view returns(uint256){
-        return getToken[tokenUri];
+        return getTokenURI[tokenUri];
     }
 
-
-    function setForSale(uint256 _tokenId, uint256 _price) public onlyOwner {
-        //토큰의 소유자 계정만 판매하도록 만드는 함수
-        address tokenOwner = ownerOf(_tokenId);
-        require(_price > 0,'price is zero or lower');
-        require(isApprovedForAll(tokenOwner, msg.sender),'token owner did not approve');
-        tokenPrice[_tokenId] = _price;
+    function getTokenPrice(uint _tokenId) public view returns(uint) {
+        return tokenPrice[_tokenId];
     }
-
-    function purchaseToken(uint256 _tokenId,address buyer) public onlyOwner {
-
-        uint256 price = tokenPrice[_tokenId];
-        address tokenSeller = ownerOf(_tokenId);
-        require(msg.sender != tokenSeller,"caller is token seller");  //전체관리 걔정은 구매를 못함
-        require(tokenSeller != buyer,"owner not buy itself");  //본인은 구매를 못함
-
-
-        token.transferFrom(buyer,tokenSeller,price);
-        safeTransferFrom(tokenSeller, buyer, _tokenId);
-
+    function getAllowance(address owner, address spender) public view returns(uint256) {
+        return erc20Token.allowance(owner, spender);
     }
 }

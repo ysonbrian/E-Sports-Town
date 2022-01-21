@@ -10,5 +10,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-Modal.setAppElement('#root');

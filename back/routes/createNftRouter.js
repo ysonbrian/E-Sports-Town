@@ -1,7 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const { mintNft, sendToken, setBidding } = require('../controllers/Mint.js');
+const {
+  mintNft,
+  sendToken,
+  setBidding,
+  setApproveForAll,
+  mint20Token,
+} = require('../controllers/Mint.js');
 
 router.post('/', async (req, res) => {
   const { userAddress, type, name, description, price, metadata, imgURI } =
@@ -16,12 +22,17 @@ router.post('/', async (req, res) => {
     price: price,
     type: type,
   };
+
+  mintNft(req, res, data);
+
   setTimeout(() => {
-    mintNft(req, res, data);
+    // mint20Token(req, res, req.body.metadata.userAddress);
+    sendToken(req, res, req.body.metadata.userAddress);
     return 'success';
   }, 1000);
-
-  sendToken(req, res, req.body.metadata.userAddress);
+  setTimeout(() => {
+    setApproveForAll(req, res, data);
+  }, 3000);
 });
 
 module.exports = router;

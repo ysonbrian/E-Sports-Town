@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Web3 from 'web3';
-import { useStore, useWeb3 } from '../utils/store';
-import { login, logout } from '../utils/auth';
-import styled from 'styled-components';
-import { FiLogIn } from 'react-icons/fi';
-import { FiLogOut } from 'react-icons/fi';
-import { CgProfile } from 'react-icons/cg';
-import logo from '../logo.png';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Web3 from "web3";
+import { useStore, useWeb3 } from "../utils/store";
+import { login, logout } from "../utils/auth";
+import styled from "styled-components";
+import { FiLogIn } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
+import { CgProfile } from "react-icons/cg";
+import logo from "../logo.png";
 
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
@@ -19,16 +19,15 @@ const providerOptions = {
   fortmatic: {
     package: Fortmatic, // required
     options: {
-      key: 'pk_test_B339BA8200249E26', // required, test
+      key: "pk_test_B339BA8200249E26", // required, test
     },
   },
   portis: {
     package: Portis, // required
     options: {
-      id: '0a7de06b-b597-48af-9e68-66547acbcea1', // required
+      id: "0a7de06b-b597-48af-9e68-66547acbcea1", // required
     },
   },
-
   binancechainwallet: {
     package: true,
   },
@@ -43,7 +42,7 @@ const web3Modal = new Web3Modal({
 const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: "Be Vietnam Pro", sans-serif;
   background-color: black;
 `;
 
@@ -99,10 +98,10 @@ function Header() {
 
     setUser(accounts);
 
-    console.log('accounts!!!!!:' + accounts);
+    console.log("accounts!!!!!:" + accounts);
     const account = await login(accounts);
-    setUser('account.data:' + account.data);
-    navigate('/');
+    setUser("account.data:" + account.data);
+    navigate("/");
     window.location.reload(false);
   };
 
@@ -125,11 +124,7 @@ function Header() {
         <HeaderIsLogin>
           {user?.userAddress ? (
             <>
-              <Link
-                to="/"
-                className="Logout"
-                onClick={disconnectWallet}
-              >
+              <Link to="/" className="Logout" onClick={disconnectWallet}>
                 <FiLogOut size="30" />
               </Link>
 

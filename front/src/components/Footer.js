@@ -13,7 +13,7 @@ const FooterWrapper = styled.footer`
   font-size: 10px;
 `;
 
-const Footer: FunctionComponent = function () {
+const Footer = () => {
   return (
     <FooterWrapper>
       <br />

@@ -13,7 +13,7 @@ const CardContainer = styled.div`
   align-items: center;
   background-color: #5800ff;
   color: white;
-  &:hover {
+  :hover {
     background-color: #e0ffff;
     color: black;
     border: #e0ffff;
@@ -134,8 +134,6 @@ function CardTemplate({
       price: price,
       created_at: rDate,
     };
-    console.log("selId : " + selId);
-    console.log("CT id : " + id);
     setId(tokenId);
     setClickedItem(data);
     navigate(`/auction/${tokenId}`);

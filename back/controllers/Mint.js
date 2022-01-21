@@ -15,10 +15,10 @@ module.exports = {
     const privateKey = process.env.serverAddress_PK;
     const tokenUri = `https://ipfs.io/ipfs/${data.metadata}`;
     const nonce = await web3.eth.getTransactionCount(sendAccount, 'latest');
-
+    const price = data.price + '000000000000000000';
     const recieveAccount = data.userAddress;
     const contractData = erc721Contract.methods
-      .mintNFT(recieveAccount, tokenUri)
+      .mintNFT(recieveAccount, tokenUri, price)
       .encodeABI();
     const tx = {
       from: sendAccount,
@@ -46,7 +46,6 @@ module.exports = {
               .call();
 
             console.log(tokenId + 'mint');
-
             if (data.type === 'normal') {
               const newNormalData = new normalData({
                 userAddress: data.userAddress,
@@ -76,6 +75,53 @@ module.exports = {
             }
           } else {
             console.log('failed!');
+          }
+        }
+      );
+    });
+  },
+  mint20Token: async (req, res, userAddress) => {
+    const sendAccount = process.env.serverAddress;
+    const privateKey = process.env.serverAddress_PK;
+    const recieveAccount = userAddress;
+    const nonce = await web3.eth.getTransactionCount(sendAccount, 'latest');
+    const contractData = erc20Contract.methods
+      .mintToken(recieveAccount, process.env.nftCA, '1000000000000000000')
+      .encodeABI();
+
+    const tx = {
+      from: sendAccount,
+      to: process.env.erc20CA,
+      nonce: nonce,
+      gas: 5000000,
+      data: contractData,
+    };
+    const signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
+
+    signPromise.then((signedTx) => {
+      web3.eth.sendSignedTransaction(
+        signedTx.rawTransaction,
+        async function (err, hash) {
+          if (!err) {
+            let newErc20Contract = new web3.eth.Contract(
+              erc20Abi,
+              process.env.erc20CA
+            );
+            const balance = await newErc20Contract.methods
+              .balanceOf(recieveAccount)
+              .call();
+            console.log(balance / 1000000000000000000);
+            const filter = { userAddress: recieveAccount.toLowerCase() };
+            const update = { token: balance / 1000000000000000000 };
+            let result = await users.findOneAndUpdate(filter, update);
+            res.json({
+              message: 'Erc20 Token success',
+              message: hash,
+              result: result,
+            });
+          } else {
+            console.log(err);
+            console.log('mint20Token Failed!');
           }
         }
       );
@@ -139,7 +185,7 @@ module.exports = {
     const currentAddress = data.currentAddress;
     const tokenOwnerAddress = data.tokenOwnerAddress;
     const tokenId = data.tokenId;
-    const amount = Number(data.bid);
+    const amount = data.bid;
     console.log('amount', amount);
     const signature = data.signature;
 
@@ -150,7 +196,7 @@ module.exports = {
     );
     // let response = contract.methods.approve(spenderAccount, amount).encodeABI();
     let response = contract.methods
-      .approve(spenderAccount, amount)
+      .approve(spenderAccount, web3.utils.toWei(amount, 'ether'))
       .send({ from: data.currentAddress }, async (err, transactionHash) => {
         if (err) {
           console.log(err);
@@ -190,48 +236,148 @@ module.exports = {
               }
             );
           }
-          // const newAuction = new auctionData({
-          //   tokenId: tokenId,
-          //   tokenOwnerAddress: tokenOwnerAddress,
-          //   biddingList:
-          // });
-          // const data = { currentAddress: currentAddress, amount: amount };
-          // newAuction.addBid(data);
-          // newAuction.save().then((result) => {
-          //   console.log('Data stored in newAuction Successfully');
-          // });
         }
       });
+  },
 
-    console.log(response);
+  setApproveForAll: async (req, res, metadata) => {
+    console.log(metadata);
+    const serverAccount = process.env.serverAddress;
+    const tokenOwnerAddress = metadata.userAddress;
+    // const contract = await erc721Contract.methods
+    //   .setApprovalForAll(serverAccount, true)
+    //   .encodeABI();
+    let contract = new web3.eth.Contract(erc721Abi, process.env.nftCA);
 
-    // const tx = {
-    //   from: data.currentAddress,
-    //   to: process.env.erc20CA,
-    //   nonce: nonce,
-    //   gas: 5000000,
-    //   data: response,
-    // };
-    // console.log(nonce);
+    const nonce = await web3.eth.getTransactionCount(
+      tokenOwnerAddress,
+      'latest'
+    );
 
-    // const signPromise = web3.eth.sendTransaction(tx);
+    contract.methods
+      .setApprovalForAll(serverAccount, true)
+      .send({ from: tokenOwnerAddress }, async (err, transactionHash) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('setApprovalForAll success!');
+          console.log(transactionHash);
+        }
+      });
+  },
 
-    // console.log(signPromise);
-    // signPromise.then((signedTx) => {
-    //   web3.eth.sendSignedTransaction(
-    //     signedTx.rawTransaction,
-    //     async function (err, hash) {
-    //       if (!err) {
-    //         res.json({
-    //           message: 'Erc20 Token success',
-    //           message: hash,
-    //         });
-    //       } else {
-    //         console.log(err);
-    //         console.log('Failed!');
-    //       }
-    //     }
-    //   );
-    // });
+  setToken: async (req, res) => {
+    const serverAccount = process.env.serverAddress;
+    const privateKey = process.env.serverAddress_PK;
+    const nonce = await web3.eth.getTransactionCount(serverAccount, 'latest');
+    let contract = new web3.eth.Contract(erc721Abi, process.env.nftCA);
+    contract.methods
+      .setToken(process.env.erc20CA)
+      .send({ from: serverAccount }, async (err, transactionHash) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('setToken success!');
+        }
+      });
+  },
+
+  sellNft: async (req, res, metadata) => {
+    // Erc721 contract에 ERC20 컨트렉트 부른후 IERC를 이용하면 transferFrom시 approve 안되는 오류발생
+    const { tokenId, tokenOwnerAddress, bidAddress } = metadata;
+    const serverAccount = process.env.serverAddress;
+    const privateKey = process.env.serverAddress_PK;
+    const nonce = await web3.eth.getTransactionCount(serverAccount, 'latest');
+    console.log(tokenId, tokenOwnerAddress, bidAddress, metadata.bidPrice);
+    const etherPrice = String(metadata.bidPrice) + '000000000000000000';
+
+    const sellContract = erc721Contract.methods
+      .sellNFT(bidAddress, tokenOwnerAddress, tokenId, etherPrice)
+      .encodeABI();
+
+    const tx = {
+      from: serverAccount,
+      to: process.env.nftCA,
+      nonce: nonce,
+      gas: 5000000,
+      data: sellContract,
+    };
+
+    const signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
+    signPromise
+      .then((signedTx) => {
+        web3.eth.sendSignedTransaction(
+          signedTx.rawTransaction,
+          async (err, hash) => {
+            if (!err) {
+              let newErc20Contract = new web3.eth.Contract(
+                erc20Abi,
+                process.env.erc20CA
+              );
+              newErc20Contract.methods
+                .transferFrom(bidAddress, tokenOwnerAddress, etherPrice)
+                .send({ from: serverAccount }, async (err, transactionHash) => {
+                  if (!err) {
+                    console.log('Transfer Token completed');
+                    let balance1 = await newErc20Contract.methods
+                      .balanceOf(bidAddress)
+                      .call();
+                    balance1 = balance1 / 1000000000000000000;
+                    let balance2 = await newErc20Contract.methods
+                      .balanceOf(tokenOwnerAddress)
+                      .call();
+                    balance2 = balance2 / 1000000000000000000;
+                    console.log('balance1', balance1);
+                    console.log('balance2', balance2);
+                    users
+                      .findOneAndUpdate(
+                        { userAddress: bidAddress },
+                        { token: balance1 }
+                      )
+                      .then((response) => {
+                        console.log(response, 'bidAddress 성공!');
+                      })
+                      .catch((err) => console.log('bidAddress 실패!'));
+                    users
+                      .findOneAndUpdate(
+                        { userAddress: tokenOwnerAddress },
+                        { token: balance2 }
+                      )
+                      .then((response) => {
+                        console.log(response, 'tokenOwnerAddress 성공!');
+                      })
+                      .catch((err) => console.log('tokenOwnerAddress 실패!'));
+
+                    res.send('Success!');
+                  } else {
+                    console.log(err);
+                  }
+                });
+              const filter = { tokenId: tokenId };
+              const update = { userAddress: bidAddress };
+              normalData
+                .findOneAndUpdate(filter, update)
+                .then((response) => {
+                  console.log('updated!: ', response);
+                })
+                .catch((err) =>
+                  console.log(err, 'NFT 어카운트 주소 이전 실패!')
+                );
+              auctionData
+                .findOneAndDelete({ tokenId: tokenId })
+                .then((response) => {
+                  console.log('비드 데이터 삭제 성공!');
+                })
+                .catch((err) => console.log(err, '삭제 실패!'));
+            } else {
+              console.log(err);
+              console.log('sellNFT failed!!');
+            }
+          }
+        );
+      })
+      .catch((err) => {
+        console.log('Promise failed:', err);
+      });
   },
 };

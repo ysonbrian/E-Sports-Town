@@ -6,6 +6,8 @@ export const submitNFT = (metadata) => {
   const data = Axios.post(`${API_URL}/mint`, {
     metadata,
   });
+  console.log(data);
+  // return data;
 };
 
 export const getGalleryList = async () => {
@@ -32,4 +34,8 @@ export const submitBid = async (metadata) => {
 
 export const submitSell = async (metadata) => {
   console.log(metadata);
+  const { data } = await Axios.post(
+    `${API_URL}/auction/${metadata.tokenId}/sell`,
+    { metadata }
+  );
 };
