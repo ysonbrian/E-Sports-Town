@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   useStore,
   useClickedItem,
   useSign,
   useClickedItemBidList,
-} from '../utils/store';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
-import ModalComponent from '../components/Modal';
-import ModalSubmit from '../components/ModalSubmit';
-import mainImage from '../mainImage.jpg';
+} from "../utils/store";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { submitBid, getClickedItemBidList, submitSell } from "../utils/data";
+import ModalComponent from "../components/Modal";
+import ModalSubmit from "../components/ModalSubmit";
+import mainImage from "../MainImage.jpg";
 
 const TotalPage = styled.div`
   height: 100vh;
@@ -195,7 +195,7 @@ const ImgDescription = styled.div`
   margin: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center
+  justify-content: center;
 `;
 
 const ImgDescriptionPrice = styled.div`
@@ -203,7 +203,7 @@ const ImgDescriptionPrice = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const BidListHeaderContainer = styled.div`
   margin: 0.5rem;
@@ -239,7 +239,7 @@ const BidHeaderFour = styled.div`
 `;
 
 function MultiAuction({ clickedItemList }) {
-  console.log('NANAN', clickedItemList);
+  console.log("NANAN", clickedItemList);
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const id = useStore((state) => state.id);
@@ -274,7 +274,7 @@ function MultiAuction({ clickedItemList }) {
   }); //returns object
 
   const maxBidAddress =
-    max?.bidAddress?.slice(0, 6) + '...' + max?.bidAddress?.slice(-5);
+    max?.bidAddress?.slice(0, 6) + "..." + max?.bidAddress?.slice(-5);
 
   const onClickBidding = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
@@ -284,7 +284,7 @@ function MultiAuction({ clickedItemList }) {
       tokenOwnerAddress: clickedItem.user,
       //bid: bid,
       joiner: joiner,
-      
+
       signature: sign,
     };
     const submitData = await submitBid(metadata);
@@ -305,9 +305,9 @@ function MultiAuction({ clickedItemList }) {
       // window.location.reload(false);
     }*/
 
-    window.location.assign('http://localhost:3000');
+    window.location.assign("http://localhost:3000");
 
-    setJoiner('');
+    setJoiner("");
   };
 
   const onChangeBid = (e) => {
@@ -321,7 +321,7 @@ function MultiAuction({ clickedItemList }) {
     submitSell();
   };
 
-  console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
+  console.log("clicked!", clickedItem.user, "user!", user.userAddress);
 
   useEffect(() => {
     fetchClickedItem();
@@ -374,14 +374,16 @@ function MultiAuction({ clickedItemList }) {
               {true ? <div>최대 모금 금액</div> : <div>Current bid</div>}
               <WinningCurrent_Price>
                 <i className="fas fa-bars"></i>
-                {max?.bidPrice ? max?.bidPrice : '모금된 금액이 없습니다.'}
+                {max?.bidPrice ? max?.bidPrice : "모금된 금액이 없습니다."}
               </WinningCurrent_Price>
             </WinningCurrent>
             <WinnerEnd>
               {true ? <div>최대 모금 그룹</div> : <div>Ends in</div>}
               {true ? (
                 <WinningCurrent_Price>
-                  {max?.bidAddress ? maxBidAddress : '공동구매 그룹을 만들어 주세요!'}
+                  {max?.bidAddress
+                    ? maxBidAddress
+                    : "공동구매 그룹을 만들어 주세요!"}
                 </WinningCurrent_Price>
               ) : (
                 <WinningCurrent_Price>2h 21m 50s</WinningCurrent_Price>
@@ -402,7 +404,9 @@ function MultiAuction({ clickedItemList }) {
               </BiddingInput>
             </BiddingContainer>
           ) : (
-            <BiddingContainer>함께 구매를 원하는 인원을 설정하세요!</BiddingContainer>
+            <BiddingContainer>
+              함께 구매를 원하는 인원을 설정하세요!
+            </BiddingContainer>
           )}
           <BidListContainer>
             <BidListHeaderContainer>
