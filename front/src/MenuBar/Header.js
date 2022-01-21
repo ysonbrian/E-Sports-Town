@@ -13,7 +13,6 @@ import Web3Modal from "web3modal";
 import { ethers } from "ethers";
 import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";
-import MewConnect from '@myetherwallet/mewconnect-web-client';
 
 const providerOptions = {
   /* See Provider Options Section */
@@ -27,12 +26,6 @@ const providerOptions = {
     package: Portis, // required
     options: {
       id: '0a7de06b-b597-48af-9e68-66547acbcea1', // required
-    },
-  },
-  mewconnect: {
-    package: MewConnect,
-    options: {
-      infuraId: process.env.REACT_APP_INFURA_ID,
     },
   },
   binancechainwallet: {
