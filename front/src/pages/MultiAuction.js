@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   useStore,
   useClickedItem,
   useSign,
   useClickedItemBidList,
-} from '../utils/store';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
-import ModalComponent from '../components/Modal';
-import ModalSubmit from '../components/ModalSubmit';
-import mainImage from '../mainImage.jpg';
+} from "../utils/store";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { submitBid, getClickedItemBidList, submitSell } from "../utils/data";
+import ModalComponent from "../components/Modal";
+import ModalSubmit from "../components/ModalSubmit";
+import mainImage from "../MainImage.jpg";
 
 const TotalPage = styled.div`
   height: 100vh;
@@ -193,6 +193,16 @@ const BidItemSellButton = styled.button`
 
 const ImgDescription = styled.div`
   margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const ImgDescriptionPrice = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 const BidListHeaderContainer = styled.div`
@@ -229,7 +239,7 @@ const BidHeaderFour = styled.div`
 `;
 
 function MultiAuction({ clickedItemList }) {
-  console.log('NANAN', clickedItemList);
+  console.log("NANAN", clickedItemList);
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const id = useStore((state) => state.id);
@@ -239,7 +249,8 @@ function MultiAuction({ clickedItemList }) {
   const { fetchClickedItem } = useClickedItemBidList();
 
   const [clickedBidList, setClickedBidList] = useState();
-  const [bid, setBid] = useState();
+  // const [bid, setBid] = useState(); // Auction
+  const [joiner, setJoiner] = useState();
   const [bidMessage, setBidMessage] = useState();
 
   // modal
@@ -263,7 +274,7 @@ function MultiAuction({ clickedItemList }) {
   }); //returns object
 
   const maxBidAddress =
-    max?.bidAddress?.slice(0, 6) + '...' + max?.bidAddress?.slice(-5);
+    max?.bidAddress?.slice(0, 6) + "..." + max?.bidAddress?.slice(-5);
 
   const onClickBidding = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
@@ -271,12 +282,14 @@ function MultiAuction({ clickedItemList }) {
       currentAddress: currentAddress,
       tokenId: id,
       tokenOwnerAddress: clickedItem.user,
-      bid: bid,
+      //bid: bid,
+      joiner: joiner,
+
       signature: sign,
     };
     const submitData = await submitBid(metadata);
 
-    if (
+    /*if (
       submitData.message === 'lowerThanMax' ||
       submitData.message === 'NoMoney'
     ) {
@@ -290,13 +303,16 @@ function MultiAuction({ clickedItemList }) {
       // navigate('/');
       window.location.assign('http://localhost:3000');
       // window.location.reload(false);
-    }
-    setBid('');
+    }*/
+
+    window.location.assign("http://localhost:3000");
+
+    setJoiner("");
   };
 
   const onChangeBid = (e) => {
     console.log(e.target.value);
-    setBid(e.target.value);
+    setJoiner(e.target.value);
   };
 
   const onClickToSell = (e) => {
@@ -305,7 +321,7 @@ function MultiAuction({ clickedItemList }) {
     submitSell();
   };
 
-  console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
+  console.log("clicked!", clickedItem.user, "user!", user.userAddress);
 
   useEffect(() => {
     fetchClickedItem();
@@ -319,14 +335,20 @@ function MultiAuction({ clickedItemList }) {
         <ModalSubmit onSellModal={onSellModal} />
       ) : null}
       {/* <ModalComponent onClickModal={onClickModal} /> */}
-      <PageTitle>Multi-Auction</PageTitle>
+      <PageTitle>공동 구매</PageTitle>
       <AuctionNFT>
         <ImgNFT>
           <NftPreviewImg>
             <img src={clickedItem?.imgURI} alt="preview-img" />
           </NftPreviewImg>
           <ImgDescription>
-            <h2>{clickedItem?.description}</h2>
+            <div>
+              <h2>{clickedItem?.description}</h2>
+            </div>
+            <ImgDescriptionPrice>
+              <i className="fab fa-btc"></i>
+              <h2>{clickedItem?.price}</h2>
+            </ImgDescriptionPrice>
           </ImgDescription>
         </ImgNFT>
         <ProfileNFT>
@@ -349,17 +371,19 @@ function MultiAuction({ clickedItemList }) {
           </InfoNFT>
           <BidRltContainer>
             <WinningCurrent>
-              {true ? <div>현재 최고가</div> : <div>Current bid</div>}
+              {true ? <div>최대 모금 금액</div> : <div>Current bid</div>}
               <WinningCurrent_Price>
                 <i className="fas fa-bars"></i>
-                {max?.bidPrice ? max?.bidPrice : '제시 금액이 없습니다.'}
+                {max?.bidPrice ? max?.bidPrice : "모금된 금액이 없습니다."}
               </WinningCurrent_Price>
             </WinningCurrent>
             <WinnerEnd>
-              {true ? <div>최고가 제시 유저</div> : <div>Ends in</div>}
+              {true ? <div>최대 모금 그룹</div> : <div>Ends in</div>}
               {true ? (
                 <WinningCurrent_Price>
-                  {max?.bidAddress ? maxBidAddress : '최고가를 기록 해보세요!'}
+                  {max?.bidAddress
+                    ? maxBidAddress
+                    : "공동구매 그룹을 만들어 주세요!"}
                 </WinningCurrent_Price>
               ) : (
                 <WinningCurrent_Price>2h 21m 50s</WinningCurrent_Price>
@@ -368,28 +392,30 @@ function MultiAuction({ clickedItemList }) {
           </BidRltContainer>
           {clickedItem.user !== user.userAddress ? (
             <BiddingContainer>
-              <label>원하는 가격을 제시 하세요!</label>
+              <label>함께 구매를 원하는 인원을 설정하세요!</label>
               <BiddingInput>
                 <input
                   type="text"
-                  placeholder="ETH"
-                  value={bid}
+                  placeholder="참여인원"
+                  value={joiner}
                   onChange={(e) => onChangeBid(e)}
                 ></input>
-                <button onClick={onClickBidding}>Bid</button>
+                <button onClick={onClickBidding}>공동구매 그룹 생성</button>
               </BiddingInput>
             </BiddingContainer>
           ) : (
-            <BiddingContainer>원하는 가격을 결정 하세요!</BiddingContainer>
+            <BiddingContainer>
+              함께 구매를 원하는 인원을 설정하세요!
+            </BiddingContainer>
           )}
           <BidListContainer>
             <BidListHeaderContainer>
-              <BidHeaderOne>비드 유저</BidHeaderOne>
-              <BidHeaderTwo>비드 날짜</BidHeaderTwo>
-              <BidHeaderThree>비드 금액</BidHeaderThree>
+              <BidHeaderOne>그룹 생성자</BidHeaderOne>
+              <BidHeaderTwo>그룹 생성 날짜</BidHeaderTwo>
+              <BidHeaderThree>1인당 참여 금액</BidHeaderThree>
               <BidHeaderFour>비고</BidHeaderFour>
             </BidListHeaderContainer>
-            {clickFetchList[0]?.biddingList?.map((el) => {
+            {/*clickFetchList[0]?.biddingList?.map((el) => {
               let rDate = null;
               if (el?.created_at) {
                 let date = el?.created_at.split('T');
@@ -416,7 +442,7 @@ function MultiAuction({ clickedItemList }) {
                   ) : null}
                 </BidListItemContainer>
               );
-            })}
+            })*/}
           </BidListContainer>
         </ProfileNFT>
       </AuctionNFT>
