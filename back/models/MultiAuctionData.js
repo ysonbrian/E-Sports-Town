@@ -14,9 +14,4 @@ const MultiAuctionDataSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now },
 });
 
-MultiAuctionDataSchema.methods.addGroup = function (info) {
-  this.GroupAddressList.push({ GroupAddress: info.id, });
-  return this.save();
-};
-
 module.exports = mongoose.model('MultiAuctionData', MultiAuctionDataSchema);

@@ -305,13 +305,14 @@ const BidItemSellButton = styled.div`
 `;
 
 
-function MultiAuction({/* clickedItemGroupList */}) {
+function MultiAuction({/* clickedItemGroupList */ }) {
   //console.log("NANAN", clickedItemGroupList);
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const id = useStore((state) => state.id);
   const clickedItem = useClickedItem((state) => state.clickedItem);
   const [sign, setSign] = useSign((state) => [state.sign, state.setSign]);
+  const setId = useStore((state) => state.setId);
 
   const clickedItemGroupList = useClickedItemGroupList((state) => state.clickedItemGroupList);
 
@@ -354,7 +355,7 @@ function MultiAuction({/* clickedItemGroupList */}) {
       tokenOwnerAddress: clickedItem.user,
       joinerCnt: joinerCnt,
       currentAddress: currentAddress,
-      priceper1: ((clickedItem?.price)/joinerCnt),
+      priceper1: ((clickedItem?.price) / joinerCnt),
       signature: sign,
     };
     const submitDataGroup = await submitGroup(metadata);
@@ -487,37 +488,38 @@ function MultiAuction({/* clickedItemGroupList */}) {
             <BidListHeaderContainer>
               <BidHeaderOne>그룹 생성자</BidHeaderOne>
               <BidHeaderTwo>그룹 생성 날짜</BidHeaderTwo>
-              <BidHeaderThree>1인당 금액({})</BidHeaderThree>
+              <BidHeaderThree>1인당 금액({ })</BidHeaderThree>
               <BidHeaderFour>비고</BidHeaderFour>
             </BidListHeaderContainer>
-            {clickedItemGroupList?.map((el) => {
-              let rDate = null;
-              if (el?.created_at) {
-                let date = el?.created_at.split('T');
-
-                let newDate = date[0]?.split('-');
-                let newtime = date[1]?.split('.');
-                let newtime2 = newtime[0]?.split(':');
-                let result = [...newDate, ...newtime2];
-                let result1 = result.slice(0, 3).join('-');
-                rDate = result1 + ' ' + newtime2.join(':');
-              }
-              const newUserAddress =
-                el?.GroupAddress?.slice(0, 6) + '...' + el?.GroupAddress?.slice(-5);
-
-              return (
-                <BidListItemContainer key={el?._id}>
-                  <BidItemName>{newUserAddress}</BidItemName>
-                  <BidItemCreated>{rDate}</BidItemCreated>
-                  <BidItemPrice>{el?.GroupPricePer1}</BidItemPrice>
-                  {clickedItemGroupList?.tokenOwnerAddress === user.userAddress ? (
-                    <BidItemSellButton onClick={() => onClickToSell(el)}>
-                      참여
-                    </BidItemSellButton>
-                  ) : <BidItemSellButton></BidItemSellButton>}
-                </BidListItemContainer>
-              );
-            })}
+            {((clickedItemGroupList?.tokenId === id) ?
+              (
+                clickedItemGroupList?.map((el) => {
+                  let rDate = null;
+                  if (el?.created_at) {
+                    let date = el?.created_at.split('T');
+                    let newDate = date[0]?.split('-');
+                    let newtime = date[1]?.split('.');
+                    let newtime2 = newtime[0]?.split(':');
+                    let result = [...newDate, ...newtime2];
+                    let result1 = result.slice(0, 3).join('-');
+                    rDate = result1 + ' ' + newtime2.join(':');
+                  }
+                  const newUserAddress =
+                    el?.GroupAddress?.slice(0, 6) + '...' + el?.GroupAddress?.slice(-5);
+                  return (
+                    <BidListItemContainer key={el?._id}>
+                      <BidItemName>{newUserAddress}</BidItemName>
+                      <BidItemCreated>{rDate}</BidItemCreated>
+                      <BidItemPrice>{el?.GroupPricePer1}</BidItemPrice>
+                      {clickedItemGroupList?.tokenOwnerAddress === user.userAddress ? (
+                        <BidItemSellButton onClick={() => onClickToSell(el)}>
+                          참여
+                        </BidItemSellButton>
+                      ) : <BidItemSellButton></BidItemSellButton>}
+                    </BidListItemContainer>
+                  );
+                })
+              ) : (0))}
           </BidListContainer>
         </ProfileNFT>
       </AuctionNFT>
