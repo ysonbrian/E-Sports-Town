@@ -72,6 +72,15 @@ export const useClickedItemBidList = create((set) => ({
   },
 }));
 
+export const useClickedItemGroupList = create((set) => ({
+  clickedItemGroupList: [],
+  fetchClickedItemGroup: async () => {
+    const { data } = await Axios.get(`${url}/auction/multiclick`);
+    //console.log(data)
+    set({ clickedItemGroupList: await data });
+  },
+}));
+
 export const useModalSubmitData = create((set) => ({
   modalSubmitData: [],
   setModalSubmitData: (modalSubmitData) => set({ modalSubmitData }),
