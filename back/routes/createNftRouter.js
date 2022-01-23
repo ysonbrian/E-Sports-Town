@@ -20,9 +20,8 @@ router.post('/', async (req, res) => {
     imgURI: imgURI,
     metadata: metadata,
     price: price,
-    type: type,
   };
-
+  console.log(data);
   mintNft(req, res, data);
 
   setTimeout(() => {
