@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { create } from "ipfs-http-client";
-import { useStore } from "../utils/store";
-import { submitNFT } from "../utils/data";
-import styled from "styled-components";
-import mainImage from "../MainImage.jpg";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { create } from 'ipfs-http-client';
+import { useStore } from '../utils/store';
+import { submitNFT } from '../utils/data';
+import styled from 'styled-components';
+import mainImage from '../mainImage.jpg';
 
 const Title = styled.h1`
   padding-bottom: 3rem;
@@ -55,8 +55,8 @@ const NftPreviewImg = styled.div`
   width: 500px;
   height: 500px;
   img {
-    width: 500px;
-    height: 50px;
+    width: 100%;
+    height: 100%;
     border-radius: 40px;
   }
   :hover {
@@ -138,14 +138,14 @@ const SubmitButton = styled.button`
 function Minting() {
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
-  const [selected, setSelected] = useState("");
-  const [files, setFiles] = useState("");
-  const [imgSrc, setImgSrc] = useState("");
+  const [selected, setSelected] = useState('');
+  const [files, setFiles] = useState('');
+  const [imgSrc, setImgSrc] = useState('');
 
   const ipfs = create({
-    host: "ipfs.infura.io",
+    host: 'ipfs.infura.io',
     port: 5001,
-    protocol: "https",
+    protocol: 'https',
   });
 
   const onHandleChange = (event) => {
@@ -179,14 +179,14 @@ function Minting() {
       imgURI: metadata.imgURI,
     };
     const data = await submitNFT(result);
-    setSelected("");
-    navigate("/");
+    setSelected('');
+    navigate('/');
     window.location.reload(false);
     // window.location.assign('http://localhost:3000');
   };
 
   const onClickXButton = () => {
-    setImgSrc("");
+    setImgSrc('');
   };
 
   return (

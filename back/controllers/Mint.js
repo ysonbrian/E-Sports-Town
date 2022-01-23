@@ -46,33 +46,18 @@ module.exports = {
               .call();
 
             console.log(tokenId + 'mint');
-            if (data.type === 'normal') {
-              const newNormalData = new normalData({
-                userAddress: data.userAddress,
-                name: data.name,
-                description: data.description,
-                imgURI: data.imgURI,
-                tokenURI: tokenUri,
-                tokenId: tokenId,
-                price: data.price,
-              });
-              newNormalData.save().then((result) => {
-                console.log('Data stored in NormalData Successfully');
-              });
-            } else if (data.type === 'pro') {
-              const newProData = new proData({
-                useAddress: data.userAddress,
-                name: data.name,
-                description: data.description,
-                imgURI: data.imgUri,
-                tokenURI: tokenUri,
-                tokenId: tokenId,
-                price: data.price,
-              });
-              newProData.save().then((result) => {
-                console.log('Data stored in ProData Successfully');
-              });
-            }
+            const newNormalData = new normalData({
+              userAddress: data.userAddress,
+              name: data.name,
+              description: data.description,
+              imgURI: data.imgURI,
+              tokenURI: tokenUri,
+              tokenId: tokenId,
+              price: data.price,
+            });
+            newNormalData.save().then((result) => {
+              console.log('Data stored in NormalData Successfully');
+            });
           } else {
             console.log('failed!');
           }
