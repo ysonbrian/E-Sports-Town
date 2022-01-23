@@ -4,6 +4,8 @@ const { sellNft, setToken, setBidding } = require('../controllers/Mint.js');
 
 const auctionData = require('../models/AuctionData');
 const Users = require('../models/Users');
+const multiAuctionData = require('../models/MultiAuctionData');
+
 router.get('/click', async (req, res) => {
   try {
     const data = await auctionData.find();
@@ -47,6 +49,61 @@ router.post('/:id/bidding', async (req, res) => {
     console.log(error);
   }
 });
+
+
+router.post('/:id/Grouping', async (req, res) => {
+  const { currentAddress, tokenId, tokenOwnerAddress, joinerCnt, priceper1 } = req.body.metadata;
+
+  console.log("currentAddress :" + currentAddress)
+  console.log("tokenId :" + tokenId)
+  console.log("tokenOwnerAddress :" + tokenOwnerAddress)
+  console.log("joinerCnt :" + joinerCnt)
+  console.log("priceper1 :" + priceper1)
+  //console.log("signature :" + signature)
+
+  const newMultiAuctionData = new multiAuctionData({
+    tokenId: tokenId,
+    tokenOwnerAddress: tokenOwnerAddress,
+    GroupAddres: currentAddress,
+    GroupPricePer1: priceper1,
+  });
+
+  try {
+    await newMultiAuctionData.save(); 
+  } catch(err) {
+    console.log(err)
+  }
+
+
+  //try {
+  //  const user = await Users.find({ userAddress: currentAddress });
+  //  const auction = await auctionData.find({ tokenId: tokenId });
+  //  if (auction.length === 0) {
+  //    setBidding(req, res, req.body.metadata);
+  //  } else if (auction[0]?.biddingList?.length === 1) {
+  //    let max = auction[0]?.biddingList[0].bidPrice;
+  //    if (max >= Number(bid)) {
+  //      return res.send({ message: 'lowerThanMax' });
+  //    } else {
+  //      setBidding(req, res, req.body.metadata);
+  //    }
+  //  } else if (user[0]?.token >= Number(bid)) {
+  //    let max = auction[0]?.biddingList?.reduce((acc, val) => {
+  //      return acc > val.bidPrice ? acc : val.bidPrice;
+  //    });
+  //    if (max < Number(bid)) {
+  //      setBidding(req, res, req.body.metadata);
+  //    } else {
+  //      return res.send({ message: 'lowerThanMax' });
+  //    }
+  //  } else {
+  //    return res.send({ message: 'NoMoney' });
+  //  }
+  //} catch (error) {
+  //  console.log(error);
+  //}
+});
+
 
 router.post('/:id/sell', async (req, res) => {
   console.log(req.body);

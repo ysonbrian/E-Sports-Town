@@ -32,6 +32,18 @@ export const submitBid = async (metadata) => {
   return data;
 };
 
+export const submitGroup = async (metadata) => {
+  console.log(metadata);
+  const { data } = await Axios.post(
+    `${API_URL}/auction/${metadata.tokenId}/Grouping`,
+    {
+      metadata,
+    }
+  );
+  console.log('data??', data);
+  return data;
+};
+
 export const submitSell = async (metadata) => {
   console.log(metadata);
   const { data } = await Axios.post(
