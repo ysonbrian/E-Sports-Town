@@ -51,29 +51,48 @@ router.post('/:id/bidding', async (req, res) => {
 });
 
 
-router.post('/:id/Grouping', async (req, res) => {
-  const { currentAddress, tokenId, tokenOwnerAddress, joinerCnt, priceper1 } = req.body.metadata;
+router.get('/multiclick', async (req, res) => {
+  try {
+    const data = await multiAuctionData.find();
+    console.log("multiclick")
+    if (data) {
+      console.log(data)
+      res.json(data);
+    } else {
+      console.log('No data!');
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-  console.log("currentAddress :" + currentAddress)
+
+router.post('/:id/Grouping', async (req, res) => {
+  const { tokenId, tokenOwnerAddress, joinerCnt, currentAddress, priceper1 } = req.body.metadata;
+
   console.log("tokenId :" + tokenId)
   console.log("tokenOwnerAddress :" + tokenOwnerAddress)
   console.log("joinerCnt :" + joinerCnt)
+  console.log("currentAddress :" + currentAddress)
   console.log("priceper1 :" + priceper1)
   //console.log("signature :" + signature)
 
   const newMultiAuctionData = new multiAuctionData({
     tokenId: tokenId,
     tokenOwnerAddress: tokenOwnerAddress,
-    GroupAddres: currentAddress,
+    totalJoinerCnt: joinerCnt,
+    GroupAddress: currentAddress,
     GroupPricePer1: priceper1,
   });
 
   try {
-    await newMultiAuctionData.save(); 
+    await newMultiAuctionData.save();
+    const groupData = await multiAuctionData.find({tokenId : tokenId});
+    console.log(groupData)
+    return res.send(groupData)
   } catch(err) {
     console.log(err)
   }
-
 
   //try {
   //  const user = await Users.find({ userAddress: currentAddress });

@@ -3,7 +3,7 @@ import CardTemplate from '../components/CardTemplate';
 import styled from 'styled-components';
 import { useGallery } from '../utils/store';
 import { getGalleryList } from '../utils/data';
-import mainImage from '../mainImage.jpg';
+import mainImage from '../main.jpg';
 
 const PageTitle = styled.h1`
   color: white;
