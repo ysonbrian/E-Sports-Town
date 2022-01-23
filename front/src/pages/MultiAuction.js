@@ -7,7 +7,7 @@ import {
 } from "../utils/store";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { submitBid, getClickedItemBidList, submitSell } from "../utils/data";
+import { submitGroup, getClickedItemBidList, submitSell } from "../utils/data";
 import ModalComponent from "../components/Modal";
 import ModalSubmit from "../components/ModalSubmit";
 import mainImage from "../MainImage.jpg";
@@ -250,7 +250,7 @@ function MultiAuction({ clickedItemList }) {
 
   const [clickedBidList, setClickedBidList] = useState();
   // const [bid, setBid] = useState(); // Auction
-  const [joiner, setJoiner] = useState();
+  const [joinerCnt, setJoinerCnt] = useState();
   const [bidMessage, setBidMessage] = useState();
 
   // modal
@@ -276,18 +276,18 @@ function MultiAuction({ clickedItemList }) {
   const maxBidAddress =
     max?.bidAddress?.slice(0, 6) + "..." + max?.bidAddress?.slice(-5);
 
-  const onClickBidding = async () => {
+  const onClickGrouping = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
     const metadata = {
       currentAddress: currentAddress,
       tokenId: id,
       tokenOwnerAddress: clickedItem.user,
-      //bid: bid,
-      joiner: joiner,
-
+      joinerCnt: joinerCnt,
+      priceper1: ((clickedItem?.price)/joinerCnt),
       signature: sign,
     };
-    const submitData = await submitBid(metadata);
+    const submitDataGroup = await submitGroup(metadata);
+    console.log(submitDataGroup)
 
     /*if (
       submitData.message === 'lowerThanMax' ||
@@ -307,12 +307,12 @@ function MultiAuction({ clickedItemList }) {
 
     window.location.assign("http://localhost:3000");
 
-    setJoiner("");
+    setJoinerCnt("");
   };
 
   const onChangeBid = (e) => {
     console.log(e.target.value);
-    setJoiner(e.target.value);
+    setJoinerCnt(e.target.value);
   };
 
   const onClickToSell = (e) => {
@@ -397,10 +397,10 @@ function MultiAuction({ clickedItemList }) {
                 <input
                   type="text"
                   placeholder="참여인원"
-                  value={joiner}
+                  value={joinerCnt}
                   onChange={(e) => onChangeBid(e)}
                 ></input>
-                <button onClick={onClickBidding}>공동구매 그룹 생성</button>
+                <button onClick={onClickGrouping}>공동구매 그룹 생성</button>
               </BiddingInput>
             </BiddingContainer>
           ) : (
