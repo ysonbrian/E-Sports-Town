@@ -4,6 +4,9 @@ const users = require('../models/Users');
 const normalData = require('../models/NormalData');
 const auctionData = require('../models/AuctionData');
 const proData = require('../models/ProData');
+
+const multiAuctionData = require('../models/MultiAuctionData');
+
 const erc20Abi = require('../contracts/abi/Erc20Abi');
 const erc721Abi = require('../contracts/abi/Erc721Abi');
 var erc20Contract = new web3.eth.Contract(erc20Abi, process.env.erc20CA);
