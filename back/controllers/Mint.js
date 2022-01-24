@@ -272,15 +272,17 @@ module.exports = {
 
   sellNft: async (req, res, metadata) => {
     // Erc721 contract에 ERC20 컨트렉트 부른후 IERC를 이용하면 transferFrom시 approve 안되는 오류발생
-    const { tokenId, tokenOwnerAddress, bidAddress } = metadata;
+    // metadata의 type이 normal이면 숫자 1 아니면 숫자 2로 설정해서 sellNFT를 실행해야함
+    const { tokenId, tokenOwnerAddress, bidAddress, type } = metadata;
     const serverAccount = process.env.serverAddress;
     const privateKey = process.env.serverAddress_PK;
     const nonce = await web3.eth.getTransactionCount(serverAccount, 'latest');
     console.log(tokenId, tokenOwnerAddress, bidAddress, metadata.bidPrice);
     const etherPrice = String(metadata.bidPrice) + '000000000000000000';
+    const finalType = type === 'normal' ? 1 : 2;
 
     const sellContract = erc721Contract.methods
-      .sellNFT(bidAddress, tokenOwnerAddress, tokenId, etherPrice)
+      .sellNFT(bidAddress, tokenOwnerAddress, tokenId, etherPrice, finalType)
       .encodeABI();
 
     const tx = {

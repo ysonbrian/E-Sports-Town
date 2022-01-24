@@ -319,6 +319,7 @@ function Auction({ clickedItemList }) {
       tokenOwnerAddress: clickFetchList[0].tokenOwnerAddress,
       bidAddress: e.bidAddress,
       bidPrice: e.bidPrice,
+      type: 'normal',
     };
     setModalSubmitData(metadata);
   };
