@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { useEffect, useState } from "react";
+import React from 'react';
+import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 
 const InfoContainer = styled.div`
   display: flex;
@@ -27,9 +27,9 @@ function Info() {
     setPosition(window.scrollY);
   }
   useEffect(() => {
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener('scroll', onScroll);
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
@@ -47,13 +47,13 @@ function Info() {
           <div>우리는 새로운 무역 생태계를 조성합니다.</div>
           <div>
             게이머들은 수집하는 것을 좋아합니다. 그들은 물건에 대한 투기적
-            가치와{" "}
+            가치와{' '}
           </div>
           <div>시장에서 그것들을 큰 거래로 바꾸면서,</div>
           <div>이들 노력의 일부를 실제 달러로 벌기 위해</div>
           <div>
             다시 파는 것을 좋아합니다. 블록체인에서 이미 이런 일은 일어나고
-            있습니다.{" "}
+            있습니다.{' '}
           </div>
         </div>
       </InfoText>
