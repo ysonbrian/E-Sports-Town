@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import {
   useStore,
   useClickedItem,
-  useSign,
+  //useSign,
   useClickedItemGroupList,
 } from '../utils/store';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { submitGroup, getClickedItemBidList, submitAddJoinerGroup, submitSell } from '../utils/data';
-import ModalComponent from '../components/Modal';
-import ModalSubmit from '../components/ModalSubmit';
+import { submitMultiBid, /*getClickedItemBidList,*/ submitAddJoinerGroup, submitSell } from '../utils/data';
+//import ModalComponent from '../components/Modal';
+//import ModalSubmit from '../components/ModalSubmit';
 import mainImage from '../mainImage.jpg';
 
 const TotalPage = styled.div`
@@ -20,7 +20,6 @@ const TotalPage = styled.div`
   background-image: url(${mainImage});
   background-size: cover;
 `;
-
 const PageTitle = styled.h1`
   display: flex;
   justify-content: center;
@@ -31,39 +30,51 @@ const PageTitle = styled.h1`
   display: flex;
   justify-content: center;
 `;
-
-const AuctionNFT = styled.div`
+const MultiAuctionPage = styled.div`
   flex: 2 0 0;
   display: flex;
   flex-direction: row;
 `;
-
-const ImgNFT = styled.div`
+/* (Start)LeftSide */
+const PreViewNFT = styled.div`
   flex: 1 0 0;
   display: flex;
   flex-direction: column;
   margin: 1rem;
   align-items: center;
 `;
-
-const NftPreviewImg = styled.div`
+const PreViewNFTImg = styled.div`
   width: 300px;
   height: 300px;
-
   img {
     width: 295px;
     height: 295px;
   }
 `;
+const PreViewNFTInfo = styled.div`
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+const PreViewNFTInfoName = styled.h2`
+`
+const PreViewNFTInfoPrice = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+/* (End)LeftSide */
 
-const ProfileNFT = styled.div`
+/* (Start)RightSide */
+const MultiAuctionInfo = styled.div`
   flex: 2 0 0;
   display: flex;
   flex-direction: column;
   margin: 1rem;
 `;
-
-const InfoNFT = styled.div`
+const NFTInfo = styled.div`
   flex: 1 0 0;
   margin: 1rem;
   display: flex;
@@ -72,15 +83,15 @@ const InfoNFT = styled.div`
   padding-bottom: 1rem;
   border-bottom: solid 1px black;
 `;
-
+const NFTDate = styled.div`
+`
 const NameIPFSMetadata = styled.h2`
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 `;
-
-const BidRltContainer = styled.div`
+const MultiAuctionRltContainer = styled.div`
   flex: 2 0 0;
   margin: 1rem;
   display: flex;
@@ -88,22 +99,22 @@ const BidRltContainer = styled.div`
   padding-bottom: 1rem;
   border-bottom: solid 1px black;
 `;
-
-const WinningCurrent = styled.div`
+const RemainingContainer = styled.div`
   flex: 1 0 0;
   border-right: solid 1px black;
 `;
-
-const WinningCurrent_Price = styled.div`
+const RemainingPrice = styled.div`
   font-size: 2rem;
   font-weight: 200;
 `;
-
-const WinnerEnd = styled.div`
+const MaxBidder = styled.div`
   flex: 1 0 0;
   border-left: solid 1px black;
 `;
-
+const MaxBiddingPrice = styled.div`
+  font-size: 2rem;
+  font-weight: 200;
+`;
 const BiddingContainer = styled.div`
   margin: 1rem;
   display: flex;
@@ -112,7 +123,6 @@ const BiddingContainer = styled.div`
   padding-bottom: 1rem;
   border-bottom: solid 1px black;
 `;
-
 const BiddingInput = styled.div`
   width: 100%;
   display: flex;
@@ -135,6 +145,9 @@ const BiddingInput = styled.div`
   }
 `;
 
+/* (Start)List Part */
+/* (Start)List Part-Header */
+// List 전체를 담는 공간
 const BidListContainer = styled.div`
   flex: 15 0 0;
   margin: 1rem;
@@ -143,145 +156,92 @@ const BidListContainer = styled.div`
   border: solid 2px gainsboro;
   overflow: auto;
 `;
-
-//const BidListItemContainer = styled.div`
-//  margin: 0.5rem;
-//  padding: 0.5rem;
-//  background-color: gainsboro;
-//  display: flex;
-//  flex-direction: row;
-//  justify-content: space-between;
-//`;
-
-//const BidItemName = styled.div`
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//`;
-
-//const BidItemPrice = styled.div`
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//`;
-//const BidItemCreated = styled.div`
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//`;
-
-//const BidItemSellButton = styled.button`
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//  width: 100px;
-//  height: 40px;
-//  border-radius: 6px;
-//  text-align: center;
-//  color: #f4f4f4;
-//  border: none;
-//  background-color: #fe7e6d;
-//  font-weight: bold;
-//  cursor: pointer;
-//  padding: 0px 1.25rem;
-//  margin-right: 10px;
-//  letter-spacing: 2px;
-//  :hover {
-//    opacity: 0.7;
-//  }
-//`;
-
-const ImgDescription = styled.div`
-  margin: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const ImgDescriptionPrice = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
+// ListHeader를 담는 공간
 const BidListHeaderContainer = styled.div`
   margin: 0.5rem;
   padding: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: row;
 `;
-
-const BidHeaderOne = styled.div`
+// ListHeaderJoiners
+const BidHeaderJoiners = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 30px;
+  flex: 1 0 0;
 `;
-const BidHeaderTwo = styled.div`
+// ListHeaderDate
+const BidHeaderDate = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 50px;
+  flex: 1 0 0;
 `;
-const BidHeaderThree = styled.div`
+// ListHeaderPricePer
+const BidHeaderPrice = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 20px;
+  flex: 1 0 0;
 `;
-const BidHeaderFour = styled.div`
+// ListHeaderButtonSector
+const BidHeaderButtonSector = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-right: 40px;
+  flex: 1 0 0;
 `;
-
+/* (End)List Part-Header */
+/* (Start)List Part-Items */
+// ListItem을 담는 공간
 const BidListItemContainer = styled.div`
-  align-items: center;
-
   margin: 0.5rem;
   padding: 0.5rem;
   background-color: gainsboro;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-
-`;
-
-const BidItemName = styled.div`
-
-  display: flex;
-  justify-content: center;
   align-items: center;
-  padding-left: 30px;
-  color: black;
+  flex-direction: row;
 `;
-const BidItemCreated = styled.div`
-
+// ListItemJoiner
+const BidItemJoiner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   color: black;
-  //padding-left: 50px;
+  flex: 1 0 0;
 `;
+// ListItemDate
+const BidItemDate = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  flex: 1 0 0;
+`;
+// ListItemPrice
 const BidItemPrice = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   color: black;
-
-  //display: flex;
-  //justify-content: center;
-  //align-items: center;
-  //padding-left: 20px;
+  flex: 1 0 0;
 `;
-const BidItemJoinButton = styled.div`
+// BidButtonContainer
+const BidButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex: 1 0 0;
+`
+// ListItemUpdateButton
+const BidItemUpdateButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
+  width: 80px;
   height: 40px;
   border-radius: 6px;
   text-align: center;
@@ -291,19 +251,39 @@ const BidItemJoinButton = styled.div`
   font-weight: bold;
   cursor: pointer;
   padding: 0px 1.25rem;
-  margin-right: 10px;
   letter-spacing: 2px;
   color: black;
   :hover {
     opacity: 0.7;
   }
 `;
-
+// ListItemDeleteButton
+const BidItemDeleteButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 40px;
+  border-radius: 6px;
+  text-align: center;
+  color: #f4f4f4;
+  border: none;
+  background-color: #fe7e6d;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px 1.25rem;
+  letter-spacing: 2px;
+  color: black;
+  :hover {
+    opacity: 0.7;
+  }
+`;
+// ListItemDeleteButton
 const BidItemSellButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
+  width: 80px;
   height: 40px;
   border-radius: 6px;
   text-align: center;
@@ -313,31 +293,36 @@ const BidItemSellButton = styled.button`
   font-weight: bold;
   cursor: pointer;
   padding: 0px 1.25rem;
-  margin-right: 10px;
   letter-spacing: 2px;
   color: black;
   :hover {
     opacity: 0.7;
   }
 `;
+/* (End)List Part-Items */
+/* (End)List Part */
+/* (End)RightSide */
 
-function MultiAuction({/* clickedItemGroupList */ }) {
-  //console.log("NANAN", clickedItemGroupList);
-  let navigate = useNavigate();
+
+function MultiAuction() {
+  //let navigate = useNavigate();
+  // user: accessToken, coin, id, master, userAddress
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
+  // id: multiauctiondatas findAll
   const id = useStore((state) => state.id);
+  // clickedItem: clicked-nft Info(created_at, description, id, imgURI, name, price, tokenId, tokenURI, user=tokenOwnerAddress)
   const clickedItem = useClickedItem((state) => state.clickedItem);
-  const [sign, setSign] = useSign((state) => [state.sign, state.setSign]);
-  const setId = useStore((state) => state.setId);
+  //const [sign, setSign] = useSign((state) => [state.sign, state.setSign]);
+  //const setId = useStore((state) => state.setId);
 
+  // clickedItemGroupList: multiauctiondatas findAll
   const clickedItemGroupList = useClickedItemGroupList((state) => state.clickedItemGroupList);
-
-  //const { fetchClickedItem } = useClickedItemBidList();
+  //console.log("test-clickedItemGroupList",clickedItemGroupList)
   const { fetchClickedItemGroup } = useClickedItemGroupList();
 
+  //??
   const [clickedBidList, setClickedBidList] = useState();
-  // const [bid, setBid] = useState(); // Auction
-  const [joinerCnt, setJoinerCnt] = useState();
+  const [bid, setBid] = useState();
   const [bidMessage, setBidMessage] = useState();
 
   // modal
@@ -360,36 +345,39 @@ function MultiAuction({/* clickedItemGroupList */ }) {
   //const maxBidAddress =
   //  max?.bidAddress?.slice(0, 6) + "..." + max?.bidAddress?.slice(-5);
 
-
-
-  const onClickGrouping = async () => {
+  const onClickMultiBidding = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
     const metadata = {
       tokenId: id,
       tokenOwnerAddress: clickedItem.user,
-      joinerCnt: joinerCnt,
+      bid: bid,
       currentAddress: currentAddress,
-      priceper1: ((clickedItem?.price) / joinerCnt),
-      signature: sign,
+      //signature: sign,
     };
-    const submitDataGroup = await submitGroup(metadata);
-    console.log(submitDataGroup);
+    const submitMultiBidData = await submitMultiBid(metadata);
+    console.log(submitMultiBidData);
     window.location.assign('http://localhost:3000');
+
+    setBid('');
   };
 
   const onChangeBid = (e) => {
     console.log(e.target.value);
-    setJoinerCnt(e.target.value);
+    setBid(e.target.value);
   };
 
-  const onClickToSell = (e) => {
-    onSellModal();
-    console.log(e);
-    submitSell();
-  };
+  const onClickToMultiSell = (e) => {
+    // type: multi 객체 추가
+    console.log("MultiSell-e", e)
+    const Owners = [];
+    e.GroupAddressList?.map((el) => {
+      Owners.push(el.GroupAddress);
+    })
+    console.log("Owners", Owners)
+  }
 
   const onClickToJoin = async (e) => {
-    console.log("e",e);
+    console.log("e", e);
     const currentAddress = window.web3.currentProvider.selectedAddress;
     const metadata = {
       GroupInfo: e,
@@ -397,57 +385,54 @@ function MultiAuction({/* clickedItemGroupList */ }) {
     };
     console.log("metadata", metadata);
     const submitDataAddJoinerGroup = await submitAddJoinerGroup(metadata);
+    window.location.assign('http://localhost:3000');
   }
 
   //console.log("clicked!", clickedItem.user, "user!", user.userAddress);
-  console.log(clickedItemGroupList);
-  console.log(clickedItemGroupList[0]);
+  //console.log(clickedItemGroupList);
+  //console.log(clickedItemGroupList[0]);
 
   const clickFetchGroupList = clickedItemGroupList.filter(
     (data) => data.tokenId === Number(id)
   );
 
   useEffect(() => {
-    //fetchClickedItem();
     fetchClickedItemGroup();
-    //const currentAddress = window.web3.currentProvider.selectedAddress;
-    //console.log(currentAddress)
-    //setUser(currentAddress);
-    //console.log(user)
   }, []);
 
-  console.log("로그인주소",user.userAddress)
+  //console.log("로그인주소", user.userAddress)
+  //console.log("clickFetchGroupList", clickFetchGroupList)
 
   return (
     <TotalPage>
-      {!checkBidToModal ? (
+      {/*!checkBidToModal ? (
         <ModalComponent bidMessage={bidMessage} onClickModal={onClickModal} />
       ) : !checkSellModal ? (
         <ModalSubmit onSellModal={onSellModal} />
-      ) : null}
+      ) : null*/}
       {/* <ModalComponent onClickModal={onClickModal} /> */}
-      <PageTitle>공동 구매</PageTitle>
-      <AuctionNFT>
-        <ImgNFT>
-          <NftPreviewImg>
+      <PageTitle>MultiAuction</PageTitle>
+      <MultiAuctionPage>
+        <PreViewNFT>
+          <PreViewNFTImg>
             <img src={clickedItem?.imgURI} alt="preview-img" />
-          </NftPreviewImg>
-          <ImgDescription>
-            <div>
-              <h2>{clickedItem?.description}</h2>
-            </div>
-            <ImgDescriptionPrice>
+          </PreViewNFTImg>
+          <PreViewNFTInfo>
+            <PreViewNFTInfoName>
+              {clickedItem?.description}
+            </PreViewNFTInfoName>
+            <PreViewNFTInfoPrice>
               <i className="fab fa-btc"></i>
               <h2>{clickedItem?.price}</h2>
-            </ImgDescriptionPrice>
-          </ImgDescription>
-        </ImgNFT>
-        <ProfileNFT>
-          <InfoNFT>
-            <div>
+            </PreViewNFTInfoPrice>
+          </PreViewNFTInfo>
+        </PreViewNFT>
+        <MultiAuctionInfo>
+          <NFTInfo>
+            <NFTDate>
               <span>상품등록 시간: </span>
               <span>{clickedItem?.created_at}</span>
-            </div>
+            </NFTDate>
             <NameIPFSMetadata>
               {clickedItem?.name}
               <a href={clickedItem?.imgURI} target="_blank" rel="noreferrer">
@@ -459,52 +444,52 @@ function MultiAuction({/* clickedItemGroupList */ }) {
                 metadata
               </a>
             </NameIPFSMetadata>
-          </InfoNFT>
-          <BidRltContainer>
-            <WinningCurrent>
-              {true ? <div>최대 모금 금액</div> : <div>Current bid</div>}
-              <WinningCurrent_Price>
+          </NFTInfo>
+          <MultiAuctionRltContainer>
+            <RemainingContainer>
+              {true ? <div>Remaining Bid</div> : <div>Current bid</div>}
+              <RemainingPrice>
                 <i className="fas fa-bars"></i>
                 {/*max?.bidPrice ? max?.bidPrice : */"모금된 금액이 없습니다."}
-              </WinningCurrent_Price>
-            </WinningCurrent>
-            <WinnerEnd>
-              {true ? <div>최대 모금 그룹</div> : <div>Ends in</div>}
+              </RemainingPrice>
+            </RemainingContainer>
+            <MaxBidder>
+              {true ? <div>MaxBidder</div> : <div>Ends in</div>}
               {true ? (
-                <WinningCurrent_Price>
+                <MaxBiddingPrice>
                   {/*max?.bidAddress
                     ? maxBidAddress
                     : */"공동구매 그룹을 만들어 주세요!"}
-                </WinningCurrent_Price>
+                </MaxBiddingPrice>
               ) : (
-                <WinningCurrent_Price>2h 21m 50s</WinningCurrent_Price>
+                <MaxBiddingPrice>2h 21m 50s</MaxBiddingPrice>
               )}
-            </WinnerEnd>
-          </BidRltContainer>
+            </MaxBidder>
+          </MultiAuctionRltContainer>
           {clickedItem.user !== user.userAddress ? (
             <BiddingContainer>
-              <label>함께 구매를 원하는 인원을 설정하세요!</label>
+              <label>원하는 가격을 입력하세요!</label>
               <BiddingInput>
                 <input
                   type="text"
-                  placeholder="참여인원"
-                  value={joinerCnt}
+                  placeholder="ETH"
+                  value={bid}
                   onChange={(e) => onChangeBid(e)}
                 ></input>
-                <button onClick={onClickGrouping}>공동구매 그룹 생성</button>
+                <button onClick={onClickMultiBidding}>Bid</button>
               </BiddingInput>
             </BiddingContainer>
-          ) : (
+          ) : ( // 이미 참여한 경우, 이미 bidding을 완료했습니다 추가 필요.
             <BiddingContainer>
               본인의 NFT 입니다.
             </BiddingContainer>
           )}
           <BidListContainer>
             <BidListHeaderContainer>
-              <BidHeaderOne>그룹 생성자</BidHeaderOne>
-              <BidHeaderTwo>그룹 생성 날짜</BidHeaderTwo>
-              <BidHeaderThree>1인당 금액({ })</BidHeaderThree>
-              <BidHeaderFour>비고</BidHeaderFour>
+              <BidHeaderJoiners>참가자</BidHeaderJoiners>
+              <BidHeaderDate>생성날짜</BidHeaderDate>
+              <BidHeaderPrice>1인당 금액</BidHeaderPrice>
+              <BidHeaderButtonSector>비고</BidHeaderButtonSector>
             </BidListHeaderContainer>
             {
               clickFetchGroupList?.map((el) => {
@@ -522,19 +507,26 @@ function MultiAuction({/* clickedItemGroupList */ }) {
                   el?.GroupAddressList[0].GroupAddress?.slice(0, 6) + '...' + el?.GroupAddressList[0].GroupAddress?.slice(-5);
                 return (
                   <BidListItemContainer key={el?._id}>
-                    <BidItemName>{newUserAddress}</BidItemName>
-                    <BidItemCreated>{rDate}</BidItemCreated>
+                    <BidItemJoiner>{newUserAddress}</BidItemJoiner>
+                    <BidItemDate>{rDate}</BidItemDate>
                     <BidItemPrice>{el?.GroupPricePer1}</BidItemPrice>
-                    {clickedItemGroupList?.tokenOwnerAddress !== user.userAddress ?
+                    {clickFetchGroupList[0]?.tokenOwnerAddress != user.userAddress ?
                       (
-                        <BidItemJoinButton onClick={() => onClickToJoin(el)}>
-                          참여
-                        </BidItemJoinButton>
-                      ) : 
+                        <BidButtonContainer>
+                          <BidItemUpdateButton onClick={() => onClickToJoin(el)}>
+                            수정
+                          </BidItemUpdateButton>
+                          <BidItemDeleteButton>
+                            취소
+                          </BidItemDeleteButton>
+                        </BidButtonContainer>
+                      ) :
                       (
-                        <BidItemSellButton onClick={() => onClickToSell(el)}>
-                          판매
-                        </BidItemSellButton>
+                        <BidButtonContainer>
+                          <BidItemSellButton onClick={() => onClickToMultiSell(el)}>
+                            판매
+                          </BidItemSellButton>
+                        </BidButtonContainer>
                       )
                     }
                   </BidListItemContainer>
@@ -542,8 +534,8 @@ function MultiAuction({/* clickedItemGroupList */ }) {
               })
             }
           </BidListContainer>
-        </ProfileNFT>
-      </AuctionNFT>
+        </MultiAuctionInfo>
+      </MultiAuctionPage>
     </TotalPage>
   );
 }

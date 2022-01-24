@@ -32,10 +32,10 @@ export const submitBid = async (metadata) => {
   return data;
 };
 
-export const submitGroup = async (metadata) => {
+export const submitMultiBid = async (metadata) => {
   console.log(metadata);
   const { data } = await Axios.post(
-    `${API_URL}/auction/${metadata.tokenId}/Grouping`,
+    `${API_URL}/auction/${metadata.tokenId}/MultiBidding`,
     {
       metadata,
     }
