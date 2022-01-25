@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import {
   useStore,
   useClickedItem,
-  useSign,
+  //useSign,
   useClickedItemGroupList,
+  useBidState,
+  useModalSubmitData,
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
-  submitGroup,
-  getClickedItemBidList,
+  submitMultiBid,
+  submitAlreadyBid,
   submitAddJoinerGroup,
   submitSell,
 } from '../utils/data';
@@ -25,7 +27,6 @@ const TotalPage = styled.div`
   background-image: url(${mainImage});
   background-size: cover;
 `;
-
 const PageTitle = styled.h1`
   display: flex;
   justify-content: center;
@@ -36,39 +37,50 @@ const PageTitle = styled.h1`
   display: flex;
   justify-content: center;
 `;
-
-const AuctionNFT = styled.div`
+const MultiAuctionPage = styled.div`
   flex: 2 0 0;
   display: flex;
   flex-direction: row;
 `;
-
-const ImgNFT = styled.div`
+/* (Start)LeftSide */
+const PreViewNFT = styled.div`
   flex: 1 0 0;
   display: flex;
   flex-direction: column;
   margin: 1rem;
   align-items: center;
 `;
-
-const NftPreviewImg = styled.div`
+const PreViewNFTImg = styled.div`
   width: 300px;
   height: 300px;
-
   img {
     width: 295px;
     height: 295px;
   }
 `;
+const PreViewNFTInfo = styled.div`
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+const PreViewNFTInfoName = styled.h2``;
+const PreViewNFTInfoPrice = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+/* (End)LeftSide */
 
-const ProfileNFT = styled.div`
+/* (Start)RightSide */
+const MultiAuctionInfo = styled.div`
   flex: 2 0 0;
   display: flex;
   flex-direction: column;
   margin: 1rem;
 `;
-
-const InfoNFT = styled.div`
+const NFTInfo = styled.div`
   flex: 1 0 0;
   margin: 1rem;
   display: flex;
@@ -77,15 +89,14 @@ const InfoNFT = styled.div`
   padding-bottom: 1rem;
   border-bottom: solid 1px black;
 `;
-
+const NFTDate = styled.div``;
 const NameIPFSMetadata = styled.h2`
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 `;
-
-const BidRltContainer = styled.div`
+const MultiAuctionRltContainer = styled.div`
   flex: 2 0 0;
   margin: 1rem;
   display: flex;
@@ -93,22 +104,22 @@ const BidRltContainer = styled.div`
   padding-bottom: 1rem;
   border-bottom: solid 1px black;
 `;
-
-const WinningCurrent = styled.div`
+const RemainingContainer = styled.div`
   flex: 1 0 0;
   border-right: solid 1px black;
 `;
-
-const WinningCurrent_Price = styled.div`
+const RemainingPrice = styled.div`
   font-size: 2rem;
   font-weight: 200;
 `;
-
-const WinnerEnd = styled.div`
+const MaxBidder = styled.div`
   flex: 1 0 0;
   border-left: solid 1px black;
 `;
-
+const MaxBiddingPrice = styled.div`
+  font-size: 2rem;
+  font-weight: 200;
+`;
 const BiddingContainer = styled.div`
   margin: 1rem;
   display: flex;
@@ -117,21 +128,22 @@ const BiddingContainer = styled.div`
   padding-bottom: 1rem;
   border-bottom: solid 1px black;
 `;
-
+const BiddingOwnerSituation = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 const BiddingInput = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   padding-bottom: 10px;
-
   input {
     margin-top: 10px;
     margin-right: 5px;
     width: 55%;
     height: 100%;
   }
-
   button {
     margin-top: 10px;
     margin-left: 5px;
@@ -140,6 +152,9 @@ const BiddingInput = styled.div`
   }
 `;
 
+/* (Start)List Part */
+/* (Start)List Part-Header */
+// List 전체를 담는 공간
 const BidListContainer = styled.div`
   flex: 15 0 0;
   margin: 1rem;
@@ -148,142 +163,92 @@ const BidListContainer = styled.div`
   border: solid 2px gainsboro;
   overflow: auto;
 `;
-
-//const BidListItemContainer = styled.div`
-//  margin: 0.5rem;
-//  padding: 0.5rem;
-//  background-color: gainsboro;
-//  display: flex;
-//  flex-direction: row;
-//  justify-content: space-between;
-//`;
-
-//const BidItemName = styled.div`
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//`;
-
-//const BidItemPrice = styled.div`
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//`;
-//const BidItemCreated = styled.div`
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//`;
-
-//const BidItemSellButton = styled.button`
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//  width: 100px;
-//  height: 40px;
-//  border-radius: 6px;
-//  text-align: center;
-//  color: #f4f4f4;
-//  border: none;
-//  background-color: #fe7e6d;
-//  font-weight: bold;
-//  cursor: pointer;
-//  padding: 0px 1.25rem;
-//  margin-right: 10px;
-//  letter-spacing: 2px;
-//  :hover {
-//    opacity: 0.7;
-//  }
-//`;
-
-const ImgDescription = styled.div`
-  margin: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const ImgDescriptionPrice = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
+// ListHeader를 담는 공간
 const BidListHeaderContainer = styled.div`
   margin: 0.5rem;
   padding: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: row;
 `;
-
-const BidHeaderOne = styled.div`
+// ListHeaderJoiners
+const BidHeaderJoiners = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 30px;
+  flex: 1 0 0;
 `;
-const BidHeaderTwo = styled.div`
+// ListHeaderDate
+const BidHeaderDate = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 50px;
+  flex: 1 0 0;
 `;
-const BidHeaderThree = styled.div`
+// ListHeaderPricePer
+const BidHeaderPrice = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 20px;
+  flex: 1 0 0;
 `;
-const BidHeaderFour = styled.div`
+// ListHeaderButtonSector
+const BidHeaderButtonSector = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-right: 40px;
+  flex: 1 0 0;
 `;
-
+/* (End)List Part-Header */
+/* (Start)List Part-Items */
+// ListItem을 담는 공간
 const BidListItemContainer = styled.div`
-  align-items: center;
-
   margin: 0.5rem;
   padding: 0.5rem;
   background-color: gainsboro;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-`;
-
-const BidItemName = styled.div`
-  display: flex;
-  justify-content: center;
   align-items: center;
-  padding-left: 30px;
-  color: black;
+  flex-direction: row;
 `;
-const BidItemCreated = styled.div`
+// ListItemJoiner
+const BidItemJoiner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   color: black;
-  //padding-left: 50px;
+  flex: 1 0 0;
 `;
+// ListItemDate
+const BidItemDate = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  flex: 1 0 0;
+`;
+// ListItemPrice
 const BidItemPrice = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   color: black;
-
-  //display: flex;
-  //justify-content: center;
-  //align-items: center;
-  //padding-left: 20px;
+  flex: 1 0 0;
 `;
-const BidItemJoinButton = styled.div`
+// BidButtonContainer
+const BidButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex: 1 0 0;
+`;
+// ListItemUpdateButton
+const BidItemUpdateButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
+  width: 80px;
   height: 40px;
   border-radius: 6px;
   text-align: center;
@@ -293,19 +258,39 @@ const BidItemJoinButton = styled.div`
   font-weight: bold;
   cursor: pointer;
   padding: 0px 1.25rem;
-  margin-right: 10px;
   letter-spacing: 2px;
   color: black;
   :hover {
     opacity: 0.7;
   }
 `;
-
+// ListItemDeleteButton
+const BidItemDeleteButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 40px;
+  border-radius: 6px;
+  text-align: center;
+  color: #f4f4f4;
+  border: none;
+  background-color: #fe7e6d;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px 1.25rem;
+  letter-spacing: 2px;
+  color: black;
+  :hover {
+    opacity: 0.7;
+  }
+`;
+// ListItemDeleteButton
 const BidItemSellButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
+  width: 80px;
   height: 40px;
   border-radius: 6px;
   text-align: center;
@@ -315,42 +300,58 @@ const BidItemSellButton = styled.button`
   font-weight: bold;
   cursor: pointer;
   padding: 0px 1.25rem;
-  margin-right: 10px;
   letter-spacing: 2px;
   color: black;
   :hover {
     opacity: 0.7;
   }
 `;
+/* (End)List Part-Items */
+/* (End)List Part */
+/* (End)RightSide */
 
-function MultiAuction(
-  {
-    /* clickedItemGroupList */
-  }
-) {
-  //console.log("NANAN", clickedItemGroupList);
+function MultiAuction() {
   let navigate = useNavigate();
+  // user: accessToken, coin, id, master, userAddress
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
+  // id: multiauctiondatas findAll
   const id = useStore((state) => state.id);
+  // clickedItem: clicked-nft Info(created_at, description, id, imgURI, name, price, tokenId, tokenURI, user=tokenOwnerAddress)
   const clickedItem = useClickedItem((state) => state.clickedItem);
-  const [sign, setSign] = useSign((state) => [state.sign, state.setSign]);
-  const setId = useStore((state) => state.setId);
+  //const [sign, setSign] = useSign((state) => [state.sign, state.setSign]);
+  //const setId = useStore((state) => state.setId);
 
+  // clickedItemGroupList: multiauctiondatas findAll
   const clickedItemGroupList = useClickedItemGroupList(
     (state) => state.clickedItemGroupList
   );
-
-  //const { fetchClickedItem } = useClickedItemBidList();
+  //console.log("test-clickedItemGroupList",clickedItemGroupList)
   const { fetchClickedItemGroup } = useClickedItemGroupList();
+  const bidState = useBidState((state) => state.bidState);
+  const { fetchBidState } = useBidState();
 
+  //??
   const [clickedBidList, setClickedBidList] = useState();
-  // const [bid, setBid] = useState(); // Auction
-  const [joinerCnt, setJoinerCnt] = useState();
+  const [bid, setBid] = useState();
   const [bidMessage, setBidMessage] = useState();
+
+  useEffect(() => {
+    fetchClickedItemGroup();
+    const currentAddress = window.web3.currentProvider.selectedAddress;
+    const metadata = {
+      tokenId: id,
+      currentAddress: currentAddress,
+    };
+    fetchBidState(metadata);
+  }, []);
 
   // modal
   const [checkBidToModal, setCheckBidToModal] = useState(true);
   const [checkSellModal, setCheckSellModal] = useState(true);
+  const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
+    state.modalSubmitData,
+    state.setModalSubmitData,
+  ]);
   const onClickModal = (e) => {
     console.log(e);
     setCheckBidToModal((prev) => !prev);
@@ -361,98 +362,122 @@ function MultiAuction(
   };
   // modal
 
-  //const max = clickFetchList[0]?.biddingList?.reduce(function (prev, current) {
-  //  return prev?.bidPrice > current?.bidPrice ? prev : current;
-  //}); //returns object
-  //const maxBidAddress =
-  //  max?.bidAddress?.slice(0, 6) + "..." + max?.bidAddress?.slice(-5);
-
-  const onClickGrouping = async () => {
+  const onClickMultiBidding = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
     const metadata = {
       tokenId: id,
       tokenOwnerAddress: clickedItem.user,
-      joinerCnt: joinerCnt,
+      bid: bid,
       currentAddress: currentAddress,
-      priceper1: clickedItem?.price / joinerCnt,
-      signature: sign,
+      //signature: sign,
     };
-    const submitDataGroup = await submitGroup(metadata);
-    console.log(submitDataGroup);
+    const submitMultiBidData = await submitMultiBid(metadata);
+    console.log('submitMultiBidData', submitMultiBidData);
     window.location.assign('http://localhost:3000');
+
+    setBid('');
   };
 
   const onChangeBid = (e) => {
     console.log(e.target.value);
-    setJoinerCnt(e.target.value);
+    setBid(e.target.value);
   };
 
-  const onClickToSell = (e) => {
-    onSellModal();
-    console.log(e);
-    submitSell();
-  };
+  //const AlreadyBid = async () => {
+  //  const currentAddress = window.web3.currentProvider.selectedAddress;
+  //  const metadata = {
+  //    tokenId: id,
+  //    currentAddress: currentAddress,
+  //  };
+  //  const submitAlreadyBidData = await submitAlreadyBid(metadata);
+  //  console.log("submitAlreadyBidData", submitAlreadyBidData);
+  //  //window.location.assign('http://localhost:3000');
+  //  //setBid('');
+  //};
 
-  const onClickToJoin = async (e) => {
-    console.log('e', e);
-    const currentAddress = window.web3.currentProvider.selectedAddress;
+  const onClickToSell = async () => {
+    //onSellModal();
+    // console.log(clickFetchList);
     const metadata = {
-      GroupInfo: e,
-      currentAddress: currentAddress,
+      tokenId: id,
+      tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
+      bidAddressNPrice: clickFetchGroupList[0]?.multiAuctionAddressList,
+      //bidPrice: e.bidPrice,
+      type: 'multi',
     };
-    console.log('metadata', metadata);
-    const submitDataAddJoinerGroup = await submitAddJoinerGroup(metadata);
+    console.log('onClickToSell-multi-metadata', metadata);
+    //setModalSubmitData(metadata);
+    await submitSell(metadata);
   };
 
-  //console.log("clicked!", clickedItem.user, "user!", user.userAddress);
-  console.log(clickedItemGroupList);
-  console.log(clickedItemGroupList[0]);
+  //const onClickToJoin = async (e) => {
+  //  console.log("e", e);
+  //  const currentAddress = window.web3.currentProvider.selectedAddress;
+  //  const metadata = {
+  //    GroupInfo: e,
+  //    currentAddress: currentAddress,
+  //  };
+  //  console.log("metadata", metadata);
+  //  const submitDataAddJoinerGroup = await submitAddJoinerGroup(metadata);
+  //  window.location.assign('http://localhost:3000');
+  //}
 
+  console.log('clickedItemGroupList', clickedItemGroupList);
   const clickFetchGroupList = clickedItemGroupList.filter(
     (data) => data.tokenId === Number(id)
   );
+  console.log('clickFetchGroupList', clickFetchGroupList);
 
-  useEffect(() => {
-    //fetchClickedItem();
-    fetchClickedItemGroup();
-    //const currentAddress = window.web3.currentProvider.selectedAddress;
-    //console.log(currentAddress)
-    //setUser(currentAddress);
-    //console.log(user)
-  }, []);
+  //const [totalBid, setTotalBid] = useState();
+  const TotalBid = clickFetchGroupList[0]?.multiAuctionAddressList?.reduce(
+    (prev, current) => {
+      console.log(prev.bidPrice, current.bidPrice);
+      return prev.bidPrice + current.bidPrice;
+    }
+  );
+  //setTotalBid(TotalBid)
+  //console.log("totalBid", totalBid)
 
-  console.log('로그인주소', user.userAddress);
+  const max = clickFetchGroupList[0]?.multiAuctionAddressList?.reduce(function (
+    prev,
+    current
+  ) {
+    return prev?.bidPrice > current?.bidPrice ? prev : current;
+  }); //returns object
+  console.log('max', max);
+  const maxBidAddress =
+    max?.multiAuctionAddress?.slice(0, 6) +
+    '...' +
+    max?.multiAuctionAddress?.slice(-5);
 
   return (
     <TotalPage>
-      {!checkBidToModal ? (
+      {/*!checkBidToModal ? (
         <ModalComponent bidMessage={bidMessage} onClickModal={onClickModal} />
       ) : !checkSellModal ? (
         <ModalSubmit onSellModal={onSellModal} />
-      ) : null}
+      ) : null*/}
       {/* <ModalComponent onClickModal={onClickModal} /> */}
-      <PageTitle>공동 구매</PageTitle>
-      <AuctionNFT>
-        <ImgNFT>
-          <NftPreviewImg>
+      <PageTitle>MultiAuction</PageTitle>
+      <MultiAuctionPage>
+        <PreViewNFT>
+          <PreViewNFTImg>
             <img src={clickedItem?.imgURI} alt="preview-img" />
-          </NftPreviewImg>
-          <ImgDescription>
-            <div>
-              <h2>{clickedItem?.description}</h2>
-            </div>
-            <ImgDescriptionPrice>
+          </PreViewNFTImg>
+          <PreViewNFTInfo>
+            <PreViewNFTInfoName>{clickedItem?.description}</PreViewNFTInfoName>
+            <PreViewNFTInfoPrice>
               <i className="fab fa-btc"></i>
               <h2>{clickedItem?.price}</h2>
-            </ImgDescriptionPrice>
-          </ImgDescription>
-        </ImgNFT>
-        <ProfileNFT>
-          <InfoNFT>
-            <div>
+            </PreViewNFTInfoPrice>
+          </PreViewNFTInfo>
+        </PreViewNFT>
+        <MultiAuctionInfo>
+          <NFTInfo>
+            <NFTDate>
               <span>상품등록 시간: </span>
               <span>{clickedItem?.created_at}</span>
-            </div>
+            </NFTDate>
             <NameIPFSMetadata>
               {clickedItem?.name}
               <a href={clickedItem?.imgURI} target="_blank" rel="noreferrer">
@@ -464,54 +489,60 @@ function MultiAuction(
                 metadata
               </a>
             </NameIPFSMetadata>
-          </InfoNFT>
-          <BidRltContainer>
-            <WinningCurrent>
-              {true ? <div>최대 모금 금액</div> : <div>Current bid</div>}
-              <WinningCurrent_Price>
-                <i className="fas fa-bars"></i>
-                {/*max?.bidPrice ? max?.bidPrice : */ '모금된 금액이 없습니다.'}
-              </WinningCurrent_Price>
-            </WinningCurrent>
-            <WinnerEnd>
-              {true ? <div>최대 모금 그룹</div> : <div>Ends in</div>}
+          </NFTInfo>
+          <MultiAuctionRltContainer>
+            <RemainingContainer>
+              {true ? <div>Remaining Bid</div> : <div>Current bid</div>}
+              <RemainingPrice>
+                <i className="fab fa-btc"></i>
+                {clickedItem?.price - TotalBid}
+              </RemainingPrice>
+            </RemainingContainer>
+            <MaxBidder>
+              {true ? <div>MaxBidder</div> : <div>Ends in</div>}
               {true ? (
-                <WinningCurrent_Price>
-                  {
-                    /*max?.bidAddress
+                <MaxBiddingPrice>
+                  {max?.multiAuctionAddress
                     ? maxBidAddress
-                    : */ '공동구매 그룹을 만들어 주세요!'
-                  }
-                </WinningCurrent_Price>
+                    : '참여자가 없습니다.'}
+                </MaxBiddingPrice>
               ) : (
-                <WinningCurrent_Price>2h 21m 50s</WinningCurrent_Price>
+                <MaxBiddingPrice>2h 21m 50s</MaxBiddingPrice>
               )}
-            </WinnerEnd>
-          </BidRltContainer>
+            </MaxBidder>
+          </MultiAuctionRltContainer>
           {clickedItem.user !== user.userAddress ? (
             <BiddingContainer>
-              <label>함께 구매를 원하는 인원을 설정하세요!</label>
+              {/* AlreadyBid ? (1) : (0) */}
+              <label>원하는 가격을 입력하세요!</label>
               <BiddingInput>
                 <input
                   type="text"
-                  placeholder="참여인원"
-                  value={joinerCnt}
+                  placeholder="ETH"
+                  value={bid}
                   onChange={(e) => onChangeBid(e)}
                 ></input>
-                <button onClick={onClickGrouping}>공동구매 그룹 생성</button>
+                <button onClick={onClickMultiBidding}>Bid</button>
               </BiddingInput>
             </BiddingContainer>
           ) : (
-            <BiddingContainer>본인의 NFT 입니다.</BiddingContainer>
+            <BiddingContainer>
+              <BiddingOwnerSituation>
+                본인의 NFT 입니다.
+                <BidItemSellButton onClick={() => onClickToSell()}>
+                  판매
+                </BidItemSellButton>
+              </BiddingOwnerSituation>
+            </BiddingContainer>
           )}
           <BidListContainer>
             <BidListHeaderContainer>
-              <BidHeaderOne>그룹 생성자</BidHeaderOne>
-              <BidHeaderTwo>그룹 생성 날짜</BidHeaderTwo>
-              <BidHeaderThree>1인당 금액({})</BidHeaderThree>
-              <BidHeaderFour>비고</BidHeaderFour>
+              <BidHeaderJoiners>참가자</BidHeaderJoiners>
+              <BidHeaderDate>생성날짜</BidHeaderDate>
+              <BidHeaderPrice>참가금액</BidHeaderPrice>
+              <BidHeaderButtonSector>비고</BidHeaderButtonSector>
             </BidListHeaderContainer>
-            {clickFetchGroupList?.map((el) => {
+            {clickFetchGroupList[0]?.multiAuctionAddressList?.map((el) => {
               let rDate = null;
               if (el?.created_at) {
                 let date = el?.created_at.split('T');
@@ -523,30 +554,36 @@ function MultiAuction(
                 rDate = result1 + ' ' + newtime2.join(':');
               }
               const newUserAddress =
-                el?.GroupAddressList[0].GroupAddress?.slice(0, 6) +
+                el?.multiAuctionAddress?.slice(0, 6) +
                 '...' +
-                el?.GroupAddressList[0].GroupAddress?.slice(-5);
+                el?.multiAuctionAddress?.slice(-5);
               return (
                 <BidListItemContainer key={el?._id}>
-                  <BidItemName>{newUserAddress}</BidItemName>
-                  <BidItemCreated>{rDate}</BidItemCreated>
-                  <BidItemPrice>{el?.GroupPricePer1}</BidItemPrice>
-                  {clickedItemGroupList?.tokenOwnerAddress !==
-                  user.userAddress ? (
-                    <BidItemJoinButton onClick={() => onClickToJoin(el)}>
-                      참여
-                    </BidItemJoinButton>
+                  <BidItemJoiner>{newUserAddress}</BidItemJoiner>
+                  <BidItemDate>{rDate}</BidItemDate>
+                  <BidItemPrice>{el?.bidPrice}</BidItemPrice>
+                  {el?.multiAuctionAddress !=
+                  clickFetchGroupList[0].tokenOwnerAddress ? (
+                    <BidButtonContainer>
+                      <BidItemUpdateButton /*onClick={() => onClickToJoin(el)}*/
+                      >
+                        수정
+                      </BidItemUpdateButton>
+                      <BidItemDeleteButton>취소</BidItemDeleteButton>
+                    </BidButtonContainer>
                   ) : (
-                    <BidItemSellButton onClick={() => onClickToSell(el)}>
-                      판매
-                    </BidItemSellButton>
+                    <BidButtonContainer>
+                      <BidItemSellButton onClick={() => onClickToSell(el)}>
+                        판매
+                      </BidItemSellButton>
+                    </BidButtonContainer>
                   )}
                 </BidListItemContainer>
               );
             })}
           </BidListContainer>
-        </ProfileNFT>
-      </AuctionNFT>
+        </MultiAuctionInfo>
+      </MultiAuctionPage>
     </TotalPage>
   );
 }

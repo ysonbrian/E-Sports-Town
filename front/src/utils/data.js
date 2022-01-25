@@ -32,10 +32,10 @@ export const submitBid = async (metadata) => {
   return data;
 };
 
-export const submitGroup = async (metadata) => {
-  console.log(metadata);
+export const submitMultiBid = async (metadata) => {
+  console.log("metadata", metadata);
   const { data } = await Axios.post(
-    `${API_URL}/auction/${metadata.tokenId}/Grouping`,
+    `${API_URL}/auction/${metadata.tokenId}/MultiBidding`,
     {
       metadata,
     }
@@ -44,17 +44,29 @@ export const submitGroup = async (metadata) => {
   return data;
 };
 
-export const submitAddJoinerGroup = async (metadata) => {
-  console.log(metadata);
-  const { data } = await Axios.put(
-    `${API_URL}/auction/${metadata.tokenId}/AddJoinerGrouping`,
-    {
-      metadata,
-    }
-  );
-  console.log('data??', data);
-  return data;
-};
+//export const submitAlreadyBid = async (metadata) => {
+//  console.log("submitAlreadyBidmetadata", metadata);
+//  const { data } = await Axios.post(
+//    `${API_URL}/auction/${metadata.tokenId}/AlreadyBid`,
+//    {
+//      metadata,
+//    }
+//  );
+//  console.log('data??', data);
+//  return data;
+//};
+
+//export const submitAddJoinerGroup = async (metadata) => {
+//  console.log(metadata);
+//  const { data } = await Axios.put(
+//    `${API_URL}/auction/${metadata.tokenId}/AddJoinerGrouping`,
+//    {
+//      metadata,
+//    }
+//  );
+//  console.log('data??', data);
+//  return data;
+//};
 
 
 export const submitSell = async (metadata) => {

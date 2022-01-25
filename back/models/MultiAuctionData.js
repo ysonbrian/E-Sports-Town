@@ -4,13 +4,13 @@ const MultiAuctionDataSchema = new mongoose.Schema({
   id: Number,
   tokenId: Number,
   tokenOwnerAddress: String,
-  totalJoinerCnt: Number,
-  GroupAddressList: [
+  multiAuctionAddressList: [
     new mongoose.Schema({
-      GroupAddress: String,
+      multiAuctionAddress: String,
+      bidPrice: Number,
+      created_at: { type: Date, default: Date.now },
     }),
   ],
-  GroupPricePer1: Number,
   created_at: { type: Date, default: Date.now },
 });
 
