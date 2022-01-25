@@ -4,7 +4,7 @@ const { sellNft, setToken, setBidding } = require('../controllers/Mint.js');
 
 const auctionData = require('../models/AuctionData');
 const Users = require('../models/Users');
-const multiAuctionData = require('../models/MultiAuctionData');
+const MultiAuctionData = require('../models/MultiAuctionData');
 
 router.get('/click', async (req, res) => {
   try {
@@ -53,7 +53,7 @@ router.post('/:id/bidding', async (req, res) => {
 
 router.get('/multiclick', async (req, res) => {
   try {
-    const data = await multiAuctionData.find();
+    const data = await MultiAuctionData.find();
     console.log("multiclick")
     if (data) {
       console.log(data)
@@ -69,35 +69,48 @@ router.get('/multiclick', async (req, res) => {
 
 router.post('/:id/MultiBidding', async (req, res) => {
   const { tokenId, tokenOwnerAddress, bid, currentAddress } = req.body.metadata;
-
-  const newMultiAuctionData = new multiAuctionData({
-    tokenId: tokenId,
-    tokenOwnerAddress: tokenOwnerAddress,
-    totalBid: bid,
-    multiAuctionAddressList: [{multiAuctionAddress: currentAddress}],
-    GroupPricePer1: priceper1,
-  });
-
   try {
-    await newMultiAuctionData.save();
-    const groupData = await multiAuctionData.find({tokenId : tokenId});
-    console.log(groupData)
-    return res.send(groupData)
-  } catch(err) {
-    console.log(err)
+    //const user = await Users.find({ userAddress: currentAddress });
+    const MultiAuction = await MultiAuctionData.find({ tokenId: tokenId });
+    console.log("MultiAuction", MultiAuction)
+    if (MultiAuction.length === 0) {
+      const newMultiAuctionData = new MultiAuctionData({
+        tokenId: tokenId,
+        tokenOwnerAddress: tokenOwnerAddress,
+        multiAuctionAddressList: [{ multiAuctionAddress: currentAddress, bidPrice: bid }],
+      });
+      await newMultiAuctionData.save();
+    } else {
+      console.log("MultiAuction.length Not 0")
+
+      //const MultiAuction = await MultiAuctionData.findOneAndUpdate({ tokenId: tokenId });
+      const update = await MultiAuctionData.findOneAndUpdate({ tokenId: tokenId },
+        { $push: { multiAuctionAddressList: [{ multiAuctionAddress: currentAddress, bidPrice: bid }] } });
+      console.log("update", update)
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post('/:id/AlreadyBid', async (req, res) => {
+  const { tokenId, currentAddress } = req.body.metadata;
+  try {
+    console.log("AlreadyBid-tokenId", tokenId)
+    console.log("AlreadyBid-currentAddress", currentAddress)
+    //const AlrdyBid = await MultiAuctionData
+  } catch (error) {
+    console.log(error);
   }
 });
 
 
-router.put('/:id/AddJoinerGrouping', async (req, res) => {
+/*router.put('/:id/AddJoinerGrouping', async (req, res) => {
   const { GroupInfo, currentAddress } = req.body.metadata;
-
   console.log("GroupInfo :" + GroupInfo)
   console.log("currentAddress :" + currentAddress)
-
   const id = GroupInfo._id;
   console.log("id", id)
-
   try {
     //const search =
     //  await multiAuctionData.findOne({id: id}, (err, docs) => {
@@ -105,15 +118,15 @@ router.put('/:id/AddJoinerGrouping', async (req, res) => {
     //    else console.log("Result : ", docs)
     //  });
     //console.log("search",search);
-    const update = 
+    const update =
       await multiAuctionData.findByIdAndUpdate(
-        id, 
-        { $push: {GroupAddressList: [{GroupAddress: currentAddress}] }});
-        //console.log("update",update)
-  } catch(err) {
+        id,
+        { $push: { GroupAddressList: [{ GroupAddress: currentAddress }] } });
+    //console.log("update",update)
+  } catch (err) {
     console.log(err)
   }
-});
+});*/
 
 
 
