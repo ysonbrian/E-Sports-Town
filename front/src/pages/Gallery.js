@@ -6,6 +6,7 @@ import { getGalleryList } from '../utils/data';
 import mainImage from '../mainImage.jpg';
 
 const PageTitle = styled.h1`
+  padding-top: 25px;
   color: white;
   display: flex;
   justify-content: center;
