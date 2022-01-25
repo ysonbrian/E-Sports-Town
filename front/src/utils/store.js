@@ -86,7 +86,7 @@ export const useBidState = create((set) => ({
   bidState: [],
   fetchBidState: async (metadata) => {
     const { data } = await Axios.post(`${url}/auction/:id/AlreadyBid`, {metadata,});
-    //console.log(data)
+    console.log(data)
     set({ bidState: await data });
   },
 }));
@@ -95,4 +95,9 @@ export const useBidState = create((set) => ({
 export const useModalSubmitData = create((set) => ({
   modalSubmitData: [],
   setModalSubmitData: (modalSubmitData) => set({ modalSubmitData }),
+}));
+
+export const useModalUpdateData = create((set) => ({
+  modalUpdateData: [],
+  setModalUpdateData: (modalUpdateData) => set({ modalUpdateData }),
 }));

@@ -44,35 +44,18 @@ export const submitMultiBid = async (metadata) => {
   return data;
 };
 
-//export const submitAlreadyBid = async (metadata) => {
-//  console.log("submitAlreadyBidmetadata", metadata);
-//  const { data } = await Axios.post(
-//    `${API_URL}/auction/${metadata.tokenId}/AlreadyBid`,
-//    {
-//      metadata,
-//    }
-//  );
-//  console.log('data??', data);
-//  return data;
-//};
-
-//export const submitAddJoinerGroup = async (metadata) => {
-//  console.log(metadata);
-//  const { data } = await Axios.put(
-//    `${API_URL}/auction/${metadata.tokenId}/AddJoinerGrouping`,
-//    {
-//      metadata,
-//    }
-//  );
-//  console.log('data??', data);
-//  return data;
-//};
-
-
 export const submitSell = async (metadata) => {
   console.log(metadata);
   const { data } = await Axios.post(
     `${API_URL}/auction/${metadata.tokenId}/sell`,
+    { metadata }
+  );
+};
+
+export const submitUpdate = async (metadata) => {
+  console.log(metadata);
+  const { data } = await Axios.post(
+    `${API_URL}/auction/${metadata.tokenId}/Update`,
     { metadata }
   );
 };
