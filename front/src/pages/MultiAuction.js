@@ -7,7 +7,7 @@ import {
   useBidState,
   useModalSubmitData
 } from '../utils/store';
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { submitMultiBid, submitAlreadyBid, submitAddJoinerGroup, submitSell } from '../utils/data';
 import ModalComponent from '../components/Modal';
@@ -311,7 +311,7 @@ const BidItemSellButton = styled.button`
 
 
 function MultiAuction() {
-  //let navigate = useNavigate();
+  let navigate = useNavigate();
   // user: accessToken, coin, id, master, userAddress
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   // id: multiauctiondatas findAll
@@ -393,17 +393,19 @@ function MultiAuction() {
   //  //setBid('');
   //};
 
-  const onClickToSell = (e) => {
-    onSellModal();
+  const onClickToSell = async() => {
+    //onSellModal();
     // console.log(clickFetchList);
     const metadata = {
       tokenId: id,
-      tokenOwnerAddress: clickFetchGroupList[0].tokenOwnerAddress,
-      bidAddress: e.multiAuctionAddress,
-      bidPrice: e.bidPrice,
+      tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
+      bidAddressNPrice: clickFetchGroupList[0]?.multiAuctionAddressList,
+      //bidPrice: e.bidPrice,
+      type: 'multi',
     };
-    console.log(metadata);
-    setModalSubmitData(metadata);
+    console.log("onClickToSell-multi-metadata", metadata);
+    //setModalSubmitData(metadata);
+    await submitSell(metadata)
   };
 
   //const onClickToJoin = async (e) => {
@@ -524,7 +526,7 @@ function MultiAuction() {
             <BiddingContainer>
               <BiddingOwnerSituation>
                 본인의 NFT 입니다.
-                <BidItemSellButton >
+                <BidItemSellButton onClick={() => onClickToSell()}>
                   판매
                 </BidItemSellButton>
               </BiddingOwnerSituation>
