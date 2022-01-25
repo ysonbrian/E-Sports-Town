@@ -5,6 +5,7 @@ import { useStore, useMypage, useMyToken, useWeb3 } from '../utils/store';
 import mainImage from '../mainImage.jpg';
 
 const PageTitle = styled.h1`
+  padding-top: 25px;
   margin-top: 1rem;
   color: white;
 `;

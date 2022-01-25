@@ -40,6 +40,9 @@ const web3Modal = new Web3Modal({
 });
 
 const HeaderContainer = styled.div`
+  position: fixed;
+  top: 0;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   font-family: "Be Vietnam Pro", sans-serif;

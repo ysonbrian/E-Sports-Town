@@ -18,6 +18,7 @@ import {
 import ModalComponent from '../components/Modal';
 import ModalSubmit from '../components/ModalSubmit';
 import mainImage from '../mainImage.jpg';
+import Comment from '../components/Comment';
 
 const TotalPage = styled.div`
   height: 100vh;
@@ -64,11 +65,24 @@ const PreViewNFTInfo = styled.div`
   flex-direction: column;
   justify-content: center;
 `;
+const CommentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #001335;
+  height: 500px;
+  width: 100%;
+`;
+const CommentListContainer = styled.div`
+  border: 1px solid white;
+  width: 100%;
+  height: 100%;
+`;
 const PreViewNFTInfoName = styled.h2``;
 const PreViewNFTInfoPrice = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 /* (End)LeftSide */
@@ -467,10 +481,24 @@ function MultiAuction() {
           <PreViewNFTInfo>
             <PreViewNFTInfoName>{clickedItem?.description}</PreViewNFTInfoName>
             <PreViewNFTInfoPrice>
-              <i className="fab fa-btc"></i>
-              <h2>{clickedItem?.price}</h2>
+              {/*<i className="fab fa-btc"></i>*/}
+              {/*<h2>{clickedItem?.price}</h2>*/}
+              <a href={clickedItem?.imgURI} target="_blank" rel="noreferrer">
+                <i className="fas fa-layer-group"></i>
+                ipfs
+              </a>
+              <a href={clickedItem?.tokenURI} target="_blank" rel="noreferrer">
+                <i className="fas fa-server"></i>
+                metadata
+              </a>
             </PreViewNFTInfoPrice>
           </PreViewNFTInfo>
+          <CommentContainer>
+            <CommentListContainer>
+              <h1>Hi</h1>
+              <Comment />
+            </CommentListContainer>
+          </CommentContainer>
         </PreViewNFT>
         <MultiAuctionInfo>
           <NFTInfo>
@@ -563,7 +591,7 @@ function MultiAuction() {
                   <BidItemDate>{rDate}</BidItemDate>
                   <BidItemPrice>{el?.bidPrice}</BidItemPrice>
                   {el?.multiAuctionAddress !=
-                  clickFetchGroupList[0].tokenOwnerAddress ? (
+                    clickFetchGroupList[0].tokenOwnerAddress ? (
                     <BidButtonContainer>
                       <BidItemUpdateButton /*onClick={() => onClickToJoin(el)}*/
                       >
