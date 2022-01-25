@@ -50,13 +50,12 @@ router.post('/:id/bidding', async (req, res) => {
   }
 });
 
-
 router.get('/multiclick', async (req, res) => {
   try {
     const data = await MultiAuctionData.find();
-    console.log("multiclick")
+    console.log('multiclick');
     if (data) {
-      console.log(data)
+      console.log(data);
       res.json(data);
     } else {
       console.log('No data!');
@@ -66,27 +65,36 @@ router.get('/multiclick', async (req, res) => {
   }
 });
 
-
 router.post('/:id/MultiBidding', async (req, res) => {
   const { tokenId, tokenOwnerAddress, bid, currentAddress } = req.body.metadata;
   try {
     //const user = await Users.find({ userAddress: currentAddress });
     const MultiAuction = await MultiAuctionData.find({ tokenId: tokenId });
-    console.log("MultiAuction", MultiAuction)
+    console.log('MultiAuction', MultiAuction);
     if (MultiAuction.length === 0) {
       const newMultiAuctionData = new MultiAuctionData({
         tokenId: tokenId,
         tokenOwnerAddress: tokenOwnerAddress,
-        multiAuctionAddressList: [{ multiAuctionAddress: currentAddress, bidPrice: bid }],
+        multiAuctionAddressList: [
+          { multiAuctionAddress: currentAddress, bidPrice: bid },
+        ],
       });
       await newMultiAuctionData.save();
     } else {
-      console.log("MultiAuction.length Not 0")
+      console.log('MultiAuction.length Not 0');
 
       //const MultiAuction = await MultiAuctionData.findOneAndUpdate({ tokenId: tokenId });
-      const update = await MultiAuctionData.findOneAndUpdate({ tokenId: tokenId },
-        { $push: { multiAuctionAddressList: [{ multiAuctionAddress: currentAddress, bidPrice: bid }] } });
-      console.log("update", update)
+      const update = await MultiAuctionData.findOneAndUpdate(
+        { tokenId: tokenId },
+        {
+          $push: {
+            multiAuctionAddressList: [
+              { multiAuctionAddress: currentAddress, bidPrice: bid },
+            ],
+          },
+        }
+      );
+      console.log('update', update);
     }
   } catch (error) {
     console.log(error);
@@ -96,15 +104,17 @@ router.post('/:id/MultiBidding', async (req, res) => {
 router.post('/:id/AlreadyBid', async (req, res) => {
   const { tokenId, currentAddress } = req.body.metadata;
   try {
-    console.log("AlreadyBid-tokenId", tokenId)
-    console.log("AlreadyBid-currentAddress", currentAddress)
-    const AlrdyBid = await MultiAuctionData.find({ tokenId: tokenId }, {multiAuctionAddressList : [{multiAuctionAddress: currentAddress}]})
-    console.log("AlrdyBid", AlrdyBid)
+    console.log('AlreadyBid-tokenId', tokenId);
+    console.log('AlreadyBid-currentAddress', currentAddress);
+    const AlrdyBid = await MultiAuctionData.find(
+      { tokenId: tokenId },
+      { multiAuctionAddressList: [{ multiAuctionAddress: currentAddress }] }
+    );
+    console.log('AlrdyBid', AlrdyBid);
   } catch (error) {
     console.log(error);
   }
 });
-
 
 /*router.put('/:id/AddJoinerGrouping', async (req, res) => {
   const { GroupInfo, currentAddress } = req.body.metadata;
@@ -129,13 +139,16 @@ router.post('/:id/AlreadyBid', async (req, res) => {
   }
 });*/
 
-
-
 router.post('/:id/sell', async (req, res) => {
+  // 멀티시그에서 받아오는 정보를 type으로 구분해서 setMultiContract를 설정해야함
+  // 현재 밑은 단일 판매용도로만 진행됨
   console.log(req.body);
   setToken(req, res);
   setTimeout(() => {
     sellNft(req, res, req.body.metadata);
+  }, 3000);
+  setTimeout(() => {
+    setApproveForAll(req, res, req.body.metadata);
   }, 3000);
   // try {
 

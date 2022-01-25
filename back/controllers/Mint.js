@@ -259,30 +259,82 @@ module.exports = {
     const privateKey = process.env.serverAddress_PK;
     const nonce = await web3.eth.getTransactionCount(serverAccount, 'latest');
     let contract = new web3.eth.Contract(erc721Abi, process.env.nftCA);
-    contract.methods
-      .setToken(process.env.erc20CA)
-      .send({ from: serverAccount }, async (err, transactionHash) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log('setToken success!');
-        }
+    const data = contract.methods.setToken(process.env.erc20CA).encodeABI();
+
+    const tx = {
+      from: serverAccount,
+      to: process.env.nftCA,
+      nonce: nonce,
+      gas: 5000000,
+      data: data,
+    };
+
+    const signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
+    signPromise
+      .then((signedTx) => {
+        web3.eth.sendSignedTransaction(
+          signedTx.rawTransaction,
+          async function (err, hash) {
+            if (!err) {
+              console.log('setToken function successed');
+            } else {
+              console.log(err);
+            }
+          }
+        );
+      })
+      .catch((err) => {
+        console.log('Promise failed:', err);
       });
   },
 
+  // setMulti: async (req, res) => {
+  //   const serverAccount = process.env.serverAddress;
+  //   const privateKey = process.env.serverAddress_PK;
+  //   const nonce = await web3.eth.getTransactionCount(serverAccount, 'latest');
+  //   let contract = new web3.eth.Contract(erc721Abi, process.env.nftCA);
+  //   const data = contract.methods
+  //     .setMultiContract(process.env.multiCA)
+  //     .encodeABI();
+
+  //   const tx = {
+  //     from: serverAccount,
+  //     to: process.env.nftCA,
+  //     nonce: nonce,
+  //     gas: 5000000,
+  //     data: data,
+  //   };
+  //
+  //   const signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
+  //   signPromise
+  //     .then((signedTx) => {
+  //       web3.eth.sendSignedTransaction(
+  //         signedTx.rawTransaction,
+  //         async function (err, hash) {
+  //           if (!err) {
+  //             console.log('setToken function successed');
+  //           } else {
+  //             console.log(err);
+  //           }
+  //         }
+  //       );
+  //     })
+  //     .catch((err) => {
+  //       console.log('Promise failed:', err);
+  //     });
+  // },
+
   sellNft: async (req, res, metadata) => {
     // Erc721 contract에 ERC20 컨트렉트 부른후 IERC를 이용하면 transferFrom시 approve 안되는 오류발생
-    // metadata의 type이 normal이면 숫자 1 아니면 숫자 2로 설정해서 sellNFT를 실행해야함
-    const { tokenId, tokenOwnerAddress, bidAddress, type } = metadata;
+    const { tokenId, tokenOwnerAddress, bidAddress } = metadata;
     const serverAccount = process.env.serverAddress;
     const privateKey = process.env.serverAddress_PK;
     const nonce = await web3.eth.getTransactionCount(serverAccount, 'latest');
     console.log(tokenId, tokenOwnerAddress, bidAddress, metadata.bidPrice);
     const etherPrice = String(metadata.bidPrice) + '000000000000000000';
-    const finalType = type === 'normal' ? 1 : 2;
 
     const sellContract = erc721Contract.methods
-      .sellNFT(bidAddress, tokenOwnerAddress, tokenId, etherPrice, finalType)
+      .sellNFT(bidAddress, tokenOwnerAddress, tokenId, etherPrice)
       .encodeABI();
 
     const tx = {
