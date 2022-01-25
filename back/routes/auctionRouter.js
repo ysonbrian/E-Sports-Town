@@ -67,21 +67,14 @@ router.get('/multiclick', async (req, res) => {
 });
 
 
-router.post('/:id/Grouping', async (req, res) => {
-  const { tokenId, tokenOwnerAddress, joinerCnt, currentAddress, priceper1 } = req.body.metadata;
-
-  console.log("tokenId :" + tokenId)
-  console.log("tokenOwnerAddress :" + tokenOwnerAddress)
-  console.log("joinerCnt :" + joinerCnt)
-  console.log("currentAddress :" + currentAddress)
-  console.log("priceper1 :" + priceper1)
-  //console.log("signature :" + signature)
+router.post('/:id/MultiBidding', async (req, res) => {
+  const { tokenId, tokenOwnerAddress, bid, currentAddress } = req.body.metadata;
 
   const newMultiAuctionData = new multiAuctionData({
     tokenId: tokenId,
     tokenOwnerAddress: tokenOwnerAddress,
-    totalJoinerCnt: joinerCnt,
-    GroupAddressList: [{GroupAddress: currentAddress}],
+    totalBid: bid,
+    multiAuctionAddressList: [{multiAuctionAddress: currentAddress}],
     GroupPricePer1: priceper1,
   });
 
@@ -106,30 +99,20 @@ router.put('/:id/AddJoinerGrouping', async (req, res) => {
   console.log("id", id)
 
   try {
+    //const search =
+    //  await multiAuctionData.findOne({id: id}, (err, docs) => {
+    //    if(err) console.log(err);
+    //    else console.log("Result : ", docs)
+    //  });
+    //console.log("search",search);
     const update = 
       await multiAuctionData.findByIdAndUpdate(
         id, 
         { $push: {GroupAddressList: [{GroupAddress: currentAddress}] }});
+        //console.log("update",update)
   } catch(err) {
     console.log(err)
   }
-
-  //const newMultiAuctionData = new multiAuctionData({
-  //  tokenId: tokenId,
-  //  tokenOwnerAddress: tokenOwnerAddress,
-  //  totalJoinerCnt: joinerCnt,
-  //  GroupAddressList: [{GroupAddress: currentAddress}],
-  //  GroupPricePer1: priceper1,
-  //});
-
-  //try {
-  //  await newMultiAuctionData.save();
-  //  const groupData = await multiAuctionData.find({tokenId : tokenId});
-  //  console.log(groupData)
-  //  return res.send(groupData)
-  //} catch(err) {
-  //  console.log(err)
-  //}
 });
 
 
