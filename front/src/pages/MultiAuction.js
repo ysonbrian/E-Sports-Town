@@ -4,13 +4,14 @@ import {
   useClickedItem,
   //useSign,
   useClickedItemGroupList,
-  useBidState
+  useBidState,
+  useModalSubmitData
 } from '../utils/store';
 //import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { submitMultiBid, submitAlreadyBid, submitAddJoinerGroup, submitSell } from '../utils/data';
-//import ModalComponent from '../components/Modal';
-//import ModalSubmit from '../components/ModalSubmit';
+import ModalComponent from '../components/Modal';
+import ModalSubmit from '../components/ModalSubmit';
 import mainImage from '../mainImage.jpg';
 
 const TotalPage = styled.div`
@@ -124,6 +125,10 @@ const BiddingContainer = styled.div`
   padding-bottom: 1rem;
   border-bottom: solid 1px black;
 `;
+const BiddingOwnerSituation = styled.div`
+  display: flex;
+  flex-direction: row;
+`
 const BiddingInput = styled.div`
   width: 100%;
   display: flex;
@@ -341,6 +346,10 @@ function MultiAuction() {
   // modal
   const [checkBidToModal, setCheckBidToModal] = useState(true);
   const [checkSellModal, setCheckSellModal] = useState(true);
+  const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
+    state.modalSubmitData,
+    state.setModalSubmitData,
+  ]);
   const onClickModal = (e) => {
     console.log(e);
     setCheckBidToModal((prev) => !prev);
@@ -384,15 +393,18 @@ function MultiAuction() {
   //  //setBid('');
   //};
 
-  //const onClickToMultiSell = (e) => {
-  //  // type: multi 객체 추가
-  //  console.log("MultiSell-e", e)
-  //  const Owners = [];
-  //  e.GroupAddressList?.map((el) => {
-  //    Owners.push(el.GroupAddress);
-  //  })
-  //  console.log("Owners", Owners)
-  //}
+  const onClickToSell = (e) => {
+    onSellModal();
+    // console.log(clickFetchList);
+    const metadata = {
+      tokenId: id,
+      tokenOwnerAddress: clickFetchGroupList[0].tokenOwnerAddress,
+      bidAddress: e.multiAuctionAddress,
+      bidPrice: e.bidPrice,
+    };
+    console.log(metadata);
+    setModalSubmitData(metadata);
+  };
 
   //const onClickToJoin = async (e) => {
   //  console.log("e", e);
@@ -414,12 +426,13 @@ function MultiAuction() {
   );
   console.log("clickFetchGroupList", clickFetchGroupList)
 
-
+  //const [totalBid, setTotalBid] = useState();
   const TotalBid = clickFetchGroupList[0]?.multiAuctionAddressList?.reduce((prev, current) => {
     console.log(prev.bidPrice, current.bidPrice);
-    return prev.bidPrice+current.bidPrice ;
+    return prev.bidPrice + current.bidPrice;
   });
-  console.log("TotalBid", TotalBid)
+  //setTotalBid(TotalBid)
+  //console.log("totalBid", totalBid)
 
   const max = clickFetchGroupList[0]?.multiAuctionAddressList?.reduce(function (prev, current) {
     return prev?.bidPrice > current?.bidPrice ? prev : current;
@@ -427,7 +440,7 @@ function MultiAuction() {
   console.log("max", max)
   const maxBidAddress =
     max?.multiAuctionAddress?.slice(0, 6) + "..." + max?.multiAuctionAddress?.slice(-5);
-  
+
 
 
   return (
@@ -477,7 +490,7 @@ function MultiAuction() {
               {true ? <div>Remaining Bid</div> : <div>Current bid</div>}
               <RemainingPrice>
                 <i className="fab fa-btc"></i>
-                {clickedItem?.price-TotalBid}
+                {clickedItem?.price - TotalBid}
               </RemainingPrice>
             </RemainingContainer>
             <MaxBidder>
@@ -509,14 +522,19 @@ function MultiAuction() {
             </BiddingContainer>
           ) : (
             <BiddingContainer>
-              본인의 NFT 입니다.
+              <BiddingOwnerSituation>
+                본인의 NFT 입니다.
+                <BidItemSellButton >
+                  판매
+                </BidItemSellButton>
+              </BiddingOwnerSituation>
             </BiddingContainer>
           )}
           <BidListContainer>
             <BidListHeaderContainer>
               <BidHeaderJoiners>참가자</BidHeaderJoiners>
               <BidHeaderDate>생성날짜</BidHeaderDate>
-              <BidHeaderPrice>1인당 금액</BidHeaderPrice>
+              <BidHeaderPrice>참가금액</BidHeaderPrice>
               <BidHeaderButtonSector>비고</BidHeaderButtonSector>
             </BidListHeaderContainer>
             {
@@ -551,7 +569,7 @@ function MultiAuction() {
                       ) :
                       (
                         <BidButtonContainer>
-                          <BidItemSellButton /*onClick={() => onClickToMultiSell(el)}*/>
+                          <BidItemSellButton onClick={() => onClickToSell(el)}>
                             판매
                           </BidItemSellButton>
                         </BidButtonContainer>

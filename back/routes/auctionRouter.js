@@ -98,7 +98,8 @@ router.post('/:id/AlreadyBid', async (req, res) => {
   try {
     console.log("AlreadyBid-tokenId", tokenId)
     console.log("AlreadyBid-currentAddress", currentAddress)
-    //const AlrdyBid = await MultiAuctionData
+    const AlrdyBid = await MultiAuctionData.find({ tokenId: tokenId }, {multiAuctionAddressList : [{multiAuctionAddress: currentAddress}]})
+    console.log("AlrdyBid", AlrdyBid)
   } catch (error) {
     console.log(error);
   }
