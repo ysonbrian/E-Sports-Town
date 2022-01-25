@@ -321,6 +321,7 @@ function Auction({ clickedItemList }) {
       bidPrice: e.bidPrice,
       type: 'normal',
     };
+    console.log("onClickToSell-normal-metadata", metadata);
     setModalSubmitData(metadata);
   };
 
