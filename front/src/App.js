@@ -1,32 +1,32 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { useEffect, useState } from 'react';
+import './App.css';
 import {
   unstable_HistoryRouter as HistoryRouter,
   Routes,
   Route,
-} from "react-router-dom";
-import { createBrowserHistory } from "history";
-import Header from "./MenuBar/Header";
-import Home from "./pages/Home";
-import Gallery from "./pages/Gallery";
-import Minting from "./pages/Minting";
-import Mypage from "./pages/Mypage";
-import Modal from "react-modal";
+} from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import Header from './MenuBar/Header';
+import Home from './pages/Home';
+import Gallery from './pages/Gallery';
+import Minting from './pages/Minting';
+import Mypage from './pages/Mypage';
+import Modal from 'react-modal';
 import {
   useStore,
   useMypage,
   useMyToken,
   useSign,
   useClickedItemBidList,
-} from "./utils/store";
-import { getCurrentUser, login, logout, parseJwt } from "./utils/auth";
-import Auction from "./pages/Auction";
-import MultiAuction from "./pages/MultiAuction";
-import styled from "styled-components";
-import Footer from "./components/Footer";
+} from './utils/store';
+import { getCurrentUser, login, logout, parseJwt } from './utils/auth';
+import Auction from './pages/Auction';
+import MultiAuction from './pages/MultiAuction';
+import styled from 'styled-components';
+import Footer from './components/Footer';
 
-const Web3 = require("web3");
-const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+const Web3 = require('web3');
+const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
 
 function App() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
@@ -40,7 +40,7 @@ function App() {
   const { fetchMyToken } = useMyToken();
   let history = createBrowserHistory();
   history.listen((location, action) => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem('user'));
 
     if (user) {
       const decodedJwt = parseJwt(user.accessToken);
@@ -54,16 +54,16 @@ function App() {
 
   const handlePersonalSign = async () => {
     const message = [
-      "현재 보고 있는 사이트에서 로그인 권한을 위해 당신의 서명이 필요합니다.",
-      "지금 사이트의 규칙을 준수함을 약속하며 서명하기 원합니다.",
-      "로그인 부탁드립니다!",
-    ].join("\n\n");
+      '현재 보고 있는 사이트에서 로그인 권한을 위해 당신의 서명이 필요합니다.',
+      '지금 사이트의 규칙을 준수함을 약속하며 서명하기 원합니다.',
+      '로그인 부탁드립니다!',
+    ].join('\n\n');
     const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
+      method: 'eth_requestAccounts',
     });
     const account = accounts[0];
     const sign = await window.ethereum.request({
-      method: "personal_sign",
+      method: 'personal_sign',
       params: [message, account],
     });
     setSign(sign);
@@ -71,25 +71,25 @@ function App() {
   };
 
   useEffect(() => {
-    if (typeof window.ethereum !== "undefined") {
+    if (typeof window.ethereum !== 'undefined') {
       console.log(window.ethereum);
-      window.ethereum.on("accountsChanged", async (accounts) => {
-        console.log("Account changed: ", accounts);
+      window.ethereum.on('accountsChanged', async (accounts) => {
+        console.log('Account changed: ', accounts);
         await logout();
         setUser({});
         const ob = await handlePersonalSign();
         const data = await login(accounts);
         setUser(data);
-        window.location.assign("http://localhost:3000/");
-        console.log("Sign", sign);
-        console.log("Ob", ob);
+        window.location.assign('http://localhost:3000/');
+        console.log('Sign', sign);
+        console.log('Ob', ob);
         window.location.reload(false);
       });
-      window.ethereum.on("chainChanged", (chainId) => {
-        console.log("Chain ID changed: ", chainId);
+      window.ethereum.on('chainChanged', (chainId) => {
+        console.log('Chain ID changed: ', chainId);
       });
     } else {
-      console.log("Please Install MetaMask");
+      console.log('Please Install MetaMask');
     }
   }, []);
 
@@ -100,7 +100,7 @@ function App() {
       fetchMyToken(user);
       fetchClickedItem();
 
-      console.log("User logged in!", user);
+      console.log('User logged in!', user);
     }
   }, [setUser, fetchClickedItem]);
 
@@ -125,6 +125,14 @@ function App() {
     </HistoryRouter>
   );
 }
-Modal.setAppElement("#root");
+Modal.setAppElement('#root');
 
 export default App;
+
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+`;

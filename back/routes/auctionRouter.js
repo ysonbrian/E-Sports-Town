@@ -50,13 +50,12 @@ router.post('/:id/bidding', async (req, res) => {
   }
 });
 
-
 router.get('/multiclick', async (req, res) => {
   try {
     const data = await multiAuctionData.find();
-    console.log("multiclick")
+    console.log('multiclick');
     if (data) {
-      console.log(data)
+      console.log(data);
       res.json(data);
     } else {
       console.log('No data!');
@@ -66,52 +65,50 @@ router.get('/multiclick', async (req, res) => {
   }
 });
 
-
 router.post('/:id/Grouping', async (req, res) => {
-  const { tokenId, tokenOwnerAddress, joinerCnt, currentAddress, priceper1 } = req.body.metadata;
+  const { tokenId, tokenOwnerAddress, joinerCnt, currentAddress, priceper1 } =
+    req.body.metadata;
 
-  console.log("tokenId :" + tokenId)
-  console.log("tokenOwnerAddress :" + tokenOwnerAddress)
-  console.log("joinerCnt :" + joinerCnt)
-  console.log("currentAddress :" + currentAddress)
-  console.log("priceper1 :" + priceper1)
+  console.log('tokenId :' + tokenId);
+  console.log('tokenOwnerAddress :' + tokenOwnerAddress);
+  console.log('joinerCnt :' + joinerCnt);
+  console.log('currentAddress :' + currentAddress);
+  console.log('priceper1 :' + priceper1);
   //console.log("signature :" + signature)
 
   const newMultiAuctionData = new multiAuctionData({
     tokenId: tokenId,
     tokenOwnerAddress: tokenOwnerAddress,
     totalJoinerCnt: joinerCnt,
-    GroupAddressList: [{GroupAddress: currentAddress}],
+    GroupAddressList: [{ GroupAddress: currentAddress }],
     GroupPricePer1: priceper1,
   });
 
   try {
     await newMultiAuctionData.save();
-    const groupData = await multiAuctionData.find({tokenId : tokenId});
-    console.log(groupData)
-    return res.send(groupData)
-  } catch(err) {
-    console.log(err)
+    const groupData = await multiAuctionData.find({ tokenId: tokenId });
+    console.log(groupData);
+    return res.send(groupData);
+  } catch (err) {
+    console.log(err);
   }
 });
-
 
 router.put('/:id/AddJoinerGrouping', async (req, res) => {
   const { GroupInfo, currentAddress } = req.body.metadata;
 
-  console.log("GroupInfo :" + GroupInfo)
-  console.log("currentAddress :" + currentAddress)
+  console.log('GroupInfo :' + GroupInfo);
+  console.log('currentAddress :' + currentAddress);
 
   const id = GroupInfo._id;
-  console.log("id", id)
+  console.log('id', id);
 
   try {
-    const update = 
-      await multiAuctionData.findByIdAndUpdate(
-        id, 
-        { $push: {GroupAddressList: [{GroupAddress: currentAddress}] }});
-  } catch(err) {
-    console.log(err)
+    const update = await multiAuctionData.findByIdAndUpdate(id, {
+      $push: { GroupAddressList: [{ GroupAddress: currentAddress }] },
+    });
+  } catch (err) {
+    console.log(err);
   }
 
   //const newMultiAuctionData = new multiAuctionData({
@@ -132,13 +129,16 @@ router.put('/:id/AddJoinerGrouping', async (req, res) => {
   //}
 });
 
-
-
 router.post('/:id/sell', async (req, res) => {
+  // 멀티시그에서 받아오는 정보를 type으로 구분해서 setMultiContract를 설정해야함
+  // 현재 밑은 단일 판매용도로만 진행됨
   console.log(req.body);
   setToken(req, res);
   setTimeout(() => {
     sellNft(req, res, req.body.metadata);
+  }, 3000);
+  setTimeout(() => {
+    setApproveForAll(req, res, req.body.metadata);
   }, 3000);
   // try {
 

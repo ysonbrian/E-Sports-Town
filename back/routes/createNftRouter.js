@@ -22,6 +22,7 @@ router.post('/', async (req, res) => {
     price: price,
   };
   console.log(data);
+
   mintNft(req, res, data);
 
   setTimeout(() => {
