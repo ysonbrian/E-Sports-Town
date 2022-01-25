@@ -4,10 +4,11 @@ import {
   useClickedItem,
   //useSign,
   useClickedItemGroupList,
+  useBidState
 } from '../utils/store';
 //import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { submitMultiBid, /*getClickedItemBidList,*/ submitAddJoinerGroup, submitSell } from '../utils/data';
+import { submitMultiBid, submitAlreadyBid, submitAddJoinerGroup, submitSell } from '../utils/data';
 //import ModalComponent from '../components/Modal';
 //import ModalSubmit from '../components/ModalSubmit';
 import mainImage from '../mainImage.jpg';
@@ -319,11 +320,23 @@ function MultiAuction() {
   const clickedItemGroupList = useClickedItemGroupList((state) => state.clickedItemGroupList);
   //console.log("test-clickedItemGroupList",clickedItemGroupList)
   const { fetchClickedItemGroup } = useClickedItemGroupList();
+  const bidState = useBidState((state) => state.bidState);
+  const { fetchBidState } = useBidState();
 
   //??
   const [clickedBidList, setClickedBidList] = useState();
   const [bid, setBid] = useState();
   const [bidMessage, setBidMessage] = useState();
+
+  useEffect(() => {
+    fetchClickedItemGroup();
+    const currentAddress = window.web3.currentProvider.selectedAddress;
+    const metadata = {
+      tokenId: id,
+      currentAddress: currentAddress,
+    };
+    fetchBidState(metadata);
+  }, []);
 
   // modal
   const [checkBidToModal, setCheckBidToModal] = useState(true);
@@ -338,13 +351,6 @@ function MultiAuction() {
   };
   // modal
 
-
-  //const max = clickFetchList[0]?.biddingList?.reduce(function (prev, current) {
-  //  return prev?.bidPrice > current?.bidPrice ? prev : current;
-  //}); //returns object
-  //const maxBidAddress =
-  //  max?.bidAddress?.slice(0, 6) + "..." + max?.bidAddress?.slice(-5);
-
   const onClickMultiBidding = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
     const metadata = {
@@ -355,7 +361,7 @@ function MultiAuction() {
       //signature: sign,
     };
     const submitMultiBidData = await submitMultiBid(metadata);
-    console.log(submitMultiBidData);
+    console.log("submitMultiBidData", submitMultiBidData);
     window.location.assign('http://localhost:3000');
 
     setBid('');
@@ -366,42 +372,63 @@ function MultiAuction() {
     setBid(e.target.value);
   };
 
-  const onClickToMultiSell = (e) => {
-    // type: multi 객체 추가
-    console.log("MultiSell-e", e)
-    const Owners = [];
-    e.GroupAddressList?.map((el) => {
-      Owners.push(el.GroupAddress);
-    })
-    console.log("Owners", Owners)
-  }
+  //const AlreadyBid = async () => {
+  //  const currentAddress = window.web3.currentProvider.selectedAddress;
+  //  const metadata = {
+  //    tokenId: id,
+  //    currentAddress: currentAddress,
+  //  };
+  //  const submitAlreadyBidData = await submitAlreadyBid(metadata);
+  //  console.log("submitAlreadyBidData", submitAlreadyBidData);
+  //  //window.location.assign('http://localhost:3000');
+  //  //setBid('');
+  //};
 
-  const onClickToJoin = async (e) => {
-    console.log("e", e);
-    const currentAddress = window.web3.currentProvider.selectedAddress;
-    const metadata = {
-      GroupInfo: e,
-      currentAddress: currentAddress,
-    };
-    console.log("metadata", metadata);
-    const submitDataAddJoinerGroup = await submitAddJoinerGroup(metadata);
-    window.location.assign('http://localhost:3000');
-  }
+  //const onClickToMultiSell = (e) => {
+  //  // type: multi 객체 추가
+  //  console.log("MultiSell-e", e)
+  //  const Owners = [];
+  //  e.GroupAddressList?.map((el) => {
+  //    Owners.push(el.GroupAddress);
+  //  })
+  //  console.log("Owners", Owners)
+  //}
 
-  //console.log("clicked!", clickedItem.user, "user!", user.userAddress);
-  //console.log(clickedItemGroupList);
-  //console.log(clickedItemGroupList[0]);
+  //const onClickToJoin = async (e) => {
+  //  console.log("e", e);
+  //  const currentAddress = window.web3.currentProvider.selectedAddress;
+  //  const metadata = {
+  //    GroupInfo: e,
+  //    currentAddress: currentAddress,
+  //  };
+  //  console.log("metadata", metadata);
+  //  const submitDataAddJoinerGroup = await submitAddJoinerGroup(metadata);
+  //  window.location.assign('http://localhost:3000');
+  //}
 
+
+
+  console.log("clickedItemGroupList", clickedItemGroupList)
   const clickFetchGroupList = clickedItemGroupList.filter(
     (data) => data.tokenId === Number(id)
   );
+  console.log("clickFetchGroupList", clickFetchGroupList)
 
-  useEffect(() => {
-    fetchClickedItemGroup();
-  }, []);
 
-  //console.log("로그인주소", user.userAddress)
-  //console.log("clickFetchGroupList", clickFetchGroupList)
+  const TotalBid = clickFetchGroupList[0]?.multiAuctionAddressList?.reduce((prev, current) => {
+    console.log(prev.bidPrice, current.bidPrice);
+    return prev.bidPrice+current.bidPrice ;
+  });
+  console.log("TotalBid", TotalBid)
+
+  const max = clickFetchGroupList[0]?.multiAuctionAddressList?.reduce(function (prev, current) {
+    return prev?.bidPrice > current?.bidPrice ? prev : current;
+  }); //returns object
+  console.log("max", max)
+  const maxBidAddress =
+    max?.multiAuctionAddress?.slice(0, 6) + "..." + max?.multiAuctionAddress?.slice(-5);
+  
+
 
   return (
     <TotalPage>
@@ -449,17 +476,17 @@ function MultiAuction() {
             <RemainingContainer>
               {true ? <div>Remaining Bid</div> : <div>Current bid</div>}
               <RemainingPrice>
-                <i className="fas fa-bars"></i>
-                {/*max?.bidPrice ? max?.bidPrice : */"모금된 금액이 없습니다."}
+                <i className="fab fa-btc"></i>
+                {clickedItem?.price-TotalBid}
               </RemainingPrice>
             </RemainingContainer>
             <MaxBidder>
               {true ? <div>MaxBidder</div> : <div>Ends in</div>}
               {true ? (
                 <MaxBiddingPrice>
-                  {/*max?.bidAddress
+                  {max?.multiAuctionAddress
                     ? maxBidAddress
-                    : */"공동구매 그룹을 만들어 주세요!"}
+                    : "참여자가 없습니다."}
                 </MaxBiddingPrice>
               ) : (
                 <MaxBiddingPrice>2h 21m 50s</MaxBiddingPrice>
@@ -468,6 +495,7 @@ function MultiAuction() {
           </MultiAuctionRltContainer>
           {clickedItem.user !== user.userAddress ? (
             <BiddingContainer>
+              {/* AlreadyBid ? (1) : (0) */}
               <label>원하는 가격을 입력하세요!</label>
               <BiddingInput>
                 <input
@@ -479,7 +507,7 @@ function MultiAuction() {
                 <button onClick={onClickMultiBidding}>Bid</button>
               </BiddingInput>
             </BiddingContainer>
-          ) : ( // 이미 참여한 경우, 이미 bidding을 완료했습니다 추가 필요.
+          ) : (
             <BiddingContainer>
               본인의 NFT 입니다.
             </BiddingContainer>
@@ -492,7 +520,7 @@ function MultiAuction() {
               <BidHeaderButtonSector>비고</BidHeaderButtonSector>
             </BidListHeaderContainer>
             {
-              clickFetchGroupList?.map((el) => {
+              clickFetchGroupList[0]?.multiAuctionAddressList?.map((el) => {
                 let rDate = null;
                 if (el?.created_at) {
                   let date = el?.created_at.split('T');
@@ -504,16 +532,16 @@ function MultiAuction() {
                   rDate = result1 + ' ' + newtime2.join(':');
                 }
                 const newUserAddress =
-                  el?.GroupAddressList[0].GroupAddress?.slice(0, 6) + '...' + el?.GroupAddressList[0].GroupAddress?.slice(-5);
+                  el?.multiAuctionAddress?.slice(0, 6) + '...' + el?.multiAuctionAddress?.slice(-5);
                 return (
                   <BidListItemContainer key={el?._id}>
                     <BidItemJoiner>{newUserAddress}</BidItemJoiner>
                     <BidItemDate>{rDate}</BidItemDate>
-                    <BidItemPrice>{el?.GroupPricePer1}</BidItemPrice>
-                    {clickFetchGroupList[0]?.tokenOwnerAddress != user.userAddress ?
+                    <BidItemPrice>{el?.bidPrice}</BidItemPrice>
+                    {el?.multiAuctionAddress != clickFetchGroupList[0].tokenOwnerAddress ?
                       (
                         <BidButtonContainer>
-                          <BidItemUpdateButton onClick={() => onClickToJoin(el)}>
+                          <BidItemUpdateButton /*onClick={() => onClickToJoin(el)}*/>
                             수정
                           </BidItemUpdateButton>
                           <BidItemDeleteButton>
@@ -523,7 +551,7 @@ function MultiAuction() {
                       ) :
                       (
                         <BidButtonContainer>
-                          <BidItemSellButton onClick={() => onClickToMultiSell(el)}>
+                          <BidItemSellButton /*onClick={() => onClickToMultiSell(el)}*/>
                             판매
                           </BidItemSellButton>
                         </BidButtonContainer>
