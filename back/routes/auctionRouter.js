@@ -154,4 +154,21 @@ router.post('/:id/sell', async (req, res) => {
   // }
 });
 
+router.post('/:id/update', async (req, res) => {
+  console.log("update-router", req.body.metadata);
+  const { userbidInfo, updatebid } = req.body.metadata;
+
+  const tokenId = userbidInfo.tokenId;
+  console.log("update-router-tokenId", tokenId);
+  console.log("update-router-updatebid", updatebid);
+
+  try {
+    //const update = await MultiAuctionData.find(
+    //)
+    //console.log('update', update);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = router;
