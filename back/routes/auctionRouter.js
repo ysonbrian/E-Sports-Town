@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { sellNft, setToken, setBidding } = require('../controllers/Mint.js');
+const {
+  sellNft,
+  setToken,
+  setBidding,
+  sellMultiNft,
+} = require('../controllers/Mint.js');
 
 const auctionData = require('../models/AuctionData');
 const Users = require('../models/Users');
@@ -142,18 +147,41 @@ router.post('/:id/AlreadyBid', async (req, res) => {
 router.post('/:id/sell', async (req, res) => {
   // 멀티시그에서 받아오는 정보를 type으로 구분해서 setMultiContract를 설정해야함
   // 현재 밑은 단일 판매용도로만 진행됨
-  console.log(req.body);
+  console.log(req.body.metadata);
   setToken(req, res);
-  setTimeout(() => {
-    sellNft(req, res, req.body.metadata);
-  }, 3000);
-  setTimeout(() => {
-    setApproveForAll(req, res, req.body.metadata);
-  }, 3000);
-  // try {
-
-  // } catch (error) {
-  //   console.log(error);
+  if (req.body.metadata.type === 'multi') {
+    const { tokenId, tokenOwnerAddress, bidAddressNPrice, type } =
+      req.body.metadata;
+    let maxOwnerAddress;
+    let maxOwnerBidPrice = { bidPrice: 0 };
+    req.body.metadata.bidAddressNPrice.forEach((data) => {
+      if (data.bidPrice > maxOwnerBidPrice.bidPrice) {
+        maxOwnerAddress = data.multiAuctionAddress;
+        maxOwnerBidPrice = data.bidPrice;
+      }
+    });
+    const metadata = {
+      tokenId: tokenId,
+      tokenOwnerAddress: tokenOwnerAddress,
+      bidAddressNPrice: bidAddressNPrice,
+      type: type,
+      maxOwnerAddress: maxOwnerAddress,
+      maxOwnerBidPrice: maxOwnerBidPrice,
+    };
+    setTimeout(() => {
+      sellMultiNft(req, res, metadata);
+    }, 3000);
+    // setTimeout(() => {
+    // setApproveForAll(req, res, metadata.maxOwnerAddress);
+    // }, 3000);
+  }
+  // else {
+  //   setTimeout(() => {
+  //     sellNft(req, res, req.body.metadata);
+  //   }, 3000);
+  //   setTimeout(() => {
+  //     setApproveForAll(req, res, req.body.metadata.userAddress);
+  //   }, 3000);
   // }
 });
 

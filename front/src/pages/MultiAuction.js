@@ -373,7 +373,7 @@ function MultiAuction() {
     };
     const submitMultiBidData = await submitMultiBid(metadata);
     console.log('submitMultiBidData', submitMultiBidData);
-    window.location.assign('http://localhost:3000');
+    // window.location.assign('http://localhost:3000');
 
     setBid('');
   };

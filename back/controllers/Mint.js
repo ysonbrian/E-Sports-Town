@@ -231,7 +231,7 @@ module.exports = {
   setApproveForAll: async (req, res, metadata) => {
     console.log(metadata);
     const serverAccount = process.env.serverAddress;
-    const tokenOwnerAddress = metadata.userAddress;
+    const tokenOwnerAddress = metadata;
     // const contract = await erc721Contract.methods
     //   .setApprovalForAll(serverAccount, true)
     //   .encodeABI();
@@ -421,5 +421,145 @@ module.exports = {
       .catch((err) => {
         console.log('Promise failed:', err);
       });
+  },
+  sellMultiNft: async (req, res, metadata) => {
+    // Erc721 contract에 ERC20 컨트렉트 부른후 IERC를 이용하면 transferFrom시 approve 안되는 오류발생
+    // const { tokenId, tokenOwnerAddress, bidAddress } = metadata;
+    console.log(metadata);
+
+    const serverAccount = process.env.serverAddress;
+    const privateKey = process.env.serverAddress_PK;
+    const nonce = await web3.eth.getTransactionCount(serverAccount, 'latest');
+    const etherPrice = String(metadata.bidPrice) + '000000000000000000';
+    const bidAddressLength = metadata.bidAddressNPrice.length;
+    const totalBidList = metadata.bidAddressNPrice.map((el) => el.bidPrice);
+    const totalBid = metadata.bidAddressNPrice
+      .map((data) => Number(data.bidPrice))
+      .reduce((acc, cur) => acc + cur, 0);
+
+    console.log(totalBid);
+    for (let i = 0; i < bidAddressLength; i++) {
+      let contract = new web3.eth.Contract(erc20Abi, process.env.erc20CA);
+      const nonce = await web3.eth.getTransactionCount(
+        metadata.bidAddressNPrice[i].multiAuctionAddress,
+        'latest'
+      );
+      // 각 계정마다 Erc20토큰 approve 받기
+      contract.methods
+        .approve(
+          serverAccount,
+          web3.utils.toWei(
+            String(metadata.bidAddressNPrice[i].bidPrice),
+            'ether'
+          )
+        )
+        .send(
+          { from: metadata.bidAddressNPrice[i].multiAuctionAddress },
+          async (err, transactionHash) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(
+                metadata.bidAddressNPrice[i].multiAuctionAddress,
+                'bid approved success!'
+              );
+            }
+          }
+        );
+    }
+    const sellContract = erc721Contract.methods
+      .sellMultiNFT(
+        metadata.maxOwnerAddress,
+        tokenOwnerAddress,
+        tokenId,
+        totalBid,
+        totalBidList
+      )
+      .encodeABI();
+
+    // const tx = {
+    //   from: serverAccount,
+    //   to: process.env.nftCA,
+    //   nonce: nonce,
+    //   gas: 5000000,
+    //   data: sellContract,
+    // };
+
+    // const signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
+    // signPromise
+    //   .then((signedTx) => {
+    //     web3.eth.sendSignedTransaction(
+    //       signedTx.rawTransaction,
+    //       async (err, hash) => {
+    //         if (!err) {
+    //           let newErc20Contract = new web3.eth.Contract(
+    //             erc20Abi,
+    //             process.env.erc20CA
+    //           );
+    //           newErc20Contract.methods
+    //             .transferFrom(bidAddress, tokenOwnerAddress, etherPrice)
+    //             .send({ from: serverAccount }, async (err, transactionHash) => {
+    //               if (!err) {
+    //                 console.log('Transfer Token completed');
+    //                 let balance1 = await newErc20Contract.methods
+    //                   .balanceOf(bidAddress)
+    //                   .call();
+    //                 balance1 = balance1 / 1000000000000000000;
+    //                 let balance2 = await newErc20Contract.methods
+    //                   .balanceOf(tokenOwnerAddress)
+    //                   .call();
+    //                 balance2 = balance2 / 1000000000000000000;
+    //                 console.log('balance1', balance1);
+    //                 console.log('balance2', balance2);
+    //                 users
+    //                   .findOneAndUpdate(
+    //                     { userAddress: bidAddress },
+    //                     { token: balance1 }
+    //                   )
+    //                   .then((response) => {
+    //                     console.log(response, 'bidAddress 성공!');
+    //                   })
+    //                   .catch((err) => console.log('bidAddress 실패!'));
+    //                 users
+    //                   .findOneAndUpdate(
+    //                     { userAddress: tokenOwnerAddress },
+    //                     { token: balance2 }
+    //                   )
+    //                   .then((response) => {
+    //                     console.log(response, 'tokenOwnerAddress 성공!');
+    //                   })
+    //                   .catch((err) => console.log('tokenOwnerAddress 실패!'));
+
+    //                 res.send('Success!');
+    //               } else {
+    //                 console.log(err);
+    //               }
+    //             });
+    //           const filter = { tokenId: tokenId };
+    //           const update = { userAddress: bidAddress };
+    //           normalData
+    //             .findOneAndUpdate(filter, update)
+    //             .then((response) => {
+    //               console.log('updated!: ', response);
+    //             })
+    //             .catch((err) =>
+    //               console.log(err, 'NFT 어카운트 주소 이전 실패!')
+    //             );
+    //           auctionData
+    //             .findOneAndDelete({ tokenId: tokenId })
+    //             .then((response) => {
+    //               console.log('비드 데이터 삭제 성공!');
+    //             })
+    //             .catch((err) => console.log(err, '삭제 실패!'));
+    //         } else {
+    //           console.log(err);
+    //           console.log('sellNFT failed!!');
+    //         }
+    //       }
+    //     );
+    //   })
+    //   .catch((err) => {
+    //     console.log('Promise failed:', err);
+    //   });
   },
 };
