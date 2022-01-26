@@ -15,7 +15,6 @@ const Title = styled.h1`
 
 //background-image: url(${mainImage});
 const NftContainer = styled.div`
-  
   background-size: cover;
   padding: 100px;
 `;

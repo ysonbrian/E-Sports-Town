@@ -144,10 +144,14 @@ function Mypage() {
           onChange={onHandleChange}
         />
         <Profile>
-          <UserName>
-            <i className="far fa-user"></i>
-            {user?.username ? user.username : "unnamed"}
-          </UserName>
+          <label htmlFor="upload">
+            <ImgContainer>
+              <ProfilePreview src={imgSrc} />
+              <i className="far fa-user"></i>
+              {user?.username ? user.username : "unnamed"}
+            </ImgContainer>
+          </label>
+
           <PublicKey>{user?.userAddress}</PublicKey>
           <Coin>Coin : {myToken[0].token ? myToken[0].token : null}</Coin>
           <CollectionNumber>Number of NFT : {myPage.length}</CollectionNumber>

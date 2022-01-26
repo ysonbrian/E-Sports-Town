@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { FiLogIn } from "react-icons/fi";
 import { FiLogOut } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
-import logo2 from "../logo2.png";
+import logo from "../logo2.png";
 
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
@@ -117,7 +117,7 @@ function Header() {
     <HeaderContainer>
       <Logo>
         <Link to="/">
-          <img src={logo2} />
+          <img src={logo} />
         </Link>
       </Logo>
       <HeaderBar>
