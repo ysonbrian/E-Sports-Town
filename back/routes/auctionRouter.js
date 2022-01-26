@@ -116,20 +116,17 @@ router.post('/:id/AlreadyBid', async (req, res) => {
     //  { tokenId: tokenId },
     //  //{ multiAuctionAddressList: [{ multiAuctionAddress: currentAddress }] }
     //);
-    const AlrdyBid = await MultiAuctionData.find(
-      {
-        $and:
-          [
-            { tokenId: tokenId },
-            //{ multiAuctionAddressList: [ { bidPrice: { $lt: 15} } ] }
-            //{ multiAuctionAddressList: [{ multiAuctionAddress: currentAddress }] }
-          ]
-      }
-    );
+    const AlrdyBid = await MultiAuctionData.find({
+      $and: [
+        { tokenId: tokenId },
+        //{ multiAuctionAddressList: [ { bidPrice: { $lt: 15} } ] }
+        //{ multiAuctionAddressList: [{ multiAuctionAddress: currentAddress }] }
+      ],
+    });
     //console.log('AlrdyBid', AlrdyBid[0]?.multiAuctionAddressList);
     const AlrdyBidRlt = AlrdyBid[0]?.multiAuctionAddressList?.filter((el) => {
-      return (el.multiAuctionAddress === currentAddress);
-    })
+      return el.multiAuctionAddress === currentAddress;
+    });
     console.log('AlrdyBidRlt', AlrdyBidRlt);
     //const AlrdyBidRltFinal;
     //if(Array.isArray(AlrdyBidRlt) && AlrdyBidRlt.length === 0) {
@@ -139,7 +136,6 @@ router.post('/:id/AlreadyBid', async (req, res) => {
     console.log(error);
   }
 });
-
 
 router.post('/:id/sell', async (req, res) => {
   // 멀티시그에서 받아오는 정보를 type으로 구분해서 setMultiContract를 설정해야함
@@ -157,11 +153,17 @@ router.post('/:id/sell', async (req, res) => {
         maxOwnerBidPrice = data.bidPrice;
       }
     });
+    let multiAuctionList = bidAddressNPrice.map(
+      (data) => data.multiAuctionAddress
+    );
+    let multiAuctionBidList = bidAddressNPrice.map((data) => data.bidPrice);
     const metadata = {
       tokenId: tokenId,
       tokenOwnerAddress: tokenOwnerAddress,
       bidAddressNPrice: bidAddressNPrice,
       type: type,
+      multiAuctionList: multiAuctionList,
+      multiAuctionBidList: multiAuctionBidList,
       maxOwnerAddress: maxOwnerAddress,
       maxOwnerBidPrice: maxOwnerBidPrice,
     };
@@ -171,15 +173,14 @@ router.post('/:id/sell', async (req, res) => {
     // setTimeout(() => {
     // setApproveForAll(req, res, metadata.maxOwnerAddress);
     // }, 3000);
+  } else {
+    setTimeout(() => {
+      sellNft(req, res, req.body.metadata);
+    }, 3000);
+    // setTimeout(() => {
+    //   setApproveForAll(req, res, req.body.metadata.userAddress);
+    // }, 3000);
   }
-  // else {
-  //   setTimeout(() => {
-  //     sellNft(req, res, req.body.metadata);
-  //   }, 3000);
-  //   setTimeout(() => {
-  //     setApproveForAll(req, res, req.body.metadata.userAddress);
-  //   }, 3000);
-  // }
 });
 
 module.exports = router;

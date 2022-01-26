@@ -3,8 +3,6 @@ const web3 = new Web3('HTTP://127.0.0.1:7545');
 const users = require('../models/Users');
 const normalData = require('../models/NormalData');
 const auctionData = require('../models/AuctionData');
-const proData = require('../models/ProData');
-
 const multiAuctionData = require('../models/MultiAuctionData');
 
 const erc20Abi = require('../contracts/abi/Erc20Abi');
@@ -57,6 +55,7 @@ module.exports = {
               tokenURI: tokenUri,
               tokenId: tokenId,
               price: data.price,
+              type: 'normal',
             });
             newNormalData.save().then((result) => {
               console.log('Data stored in NormalData Successfully');
@@ -326,17 +325,32 @@ module.exports = {
 
   sellNft: async (req, res, metadata) => {
     // Erc721 contract에 ERC20 컨트렉트 부른후 IERC를 이용하면 transferFrom시 approve 안되는 오류발생
+    console.log(metadata);
     const { tokenId, tokenOwnerAddress, bidAddress } = metadata;
     const serverAccount = process.env.serverAddress;
     const privateKey = process.env.serverAddress_PK;
     const nonce = await web3.eth.getTransactionCount(serverAccount, 'latest');
-    console.log(tokenId, tokenOwnerAddress, bidAddress, metadata.bidPrice);
+    // console.log(tokenId, tokenOwnerAddress, bidAddress, metadata.bidPrice);
     const etherPrice = String(metadata.bidPrice) + '000000000000000000';
-
+    let { multiOwners } = await normalData.findOne({ tokenId: tokenId });
+    console.log('multiOwners', multiOwners);
+    if (multiOwners.length !== 0) {
+      let multiAddressList = multiOwners.map((data) => data.userAddress);
+      let multiBidList = multiOwners.map((data) => data.bidPrice);
+      let respond = erc721Contract.methods
+        .setMultiSigUsers(multiAddressList, multiBidList, tokenId)
+        .send({ from: serverAccount }, async (err, tx) => {
+          if (!err) {
+            console.log('MultiSigUsers deleted sucessfully!');
+          } else {
+            console.log('MultiSig delete failed!');
+          }
+        });
+    }
     const sellContract = erc721Contract.methods
       .sellNFT(bidAddress, tokenOwnerAddress, tokenId, etherPrice)
       .encodeABI();
-
+    erc721Contract.methods.deleteOwners();
     const tx = {
       from: serverAccount,
       to: process.env.nftCA,
@@ -344,7 +358,6 @@ module.exports = {
       gas: 5000000,
       data: sellContract,
     };
-
     const signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
     signPromise
       .then((signedTx) => {
@@ -389,7 +402,6 @@ module.exports = {
                         console.log(response, 'tokenOwnerAddress 성공!');
                       })
                       .catch((err) => console.log('tokenOwnerAddress 실패!'));
-
                     res.send('Success!');
                   } else {
                     console.log(err);
@@ -424,16 +436,26 @@ module.exports = {
   },
   sellMultiNft: async (req, res, metadata) => {
     // Erc721 contract에 ERC20 컨트렉트 부른후 IERC를 이용하면 transferFrom시 approve 안되는 오류발생
-    // const { tokenId, tokenOwnerAddress, bidAddress } = metadata;
+    const {
+      tokenId,
+      tokenOwnerAddress,
+      bidAddressNPrice,
+      type,
+      multiAuctionList,
+      multiAuctionBidList,
+      maxOwnerAddress,
+      maxOwnerBidPrice,
+    } = metadata;
     console.log(metadata);
 
     const serverAccount = process.env.serverAddress;
     const privateKey = process.env.serverAddress_PK;
     const nonce = await web3.eth.getTransactionCount(serverAccount, 'latest');
-    const etherPrice = String(metadata.bidPrice) + '000000000000000000';
-    const bidAddressLength = metadata.bidAddressNPrice.length;
-    const totalBidList = metadata.bidAddressNPrice.map((el) => el.bidPrice);
-    const totalBid = metadata.bidAddressNPrice
+    const bidAddressLength = bidAddressNPrice.length;
+    const totalBidList = bidAddressNPrice.map((el) => el.bidPrice);
+    multiAuctionBidList.forEach((el) => web3.utils.toWei(String(el), 'ether'));
+    console.log('multiAuctionBidList', multiAuctionBidList);
+    const totalBid = bidAddressNPrice
       .map((data) => Number(data.bidPrice))
       .reduce((acc, cur) => acc + cur, 0);
 
@@ -467,16 +489,16 @@ module.exports = {
           }
         );
     }
-    const sellContract = erc721Contract.methods
-      .sellMultiNFT(
-        metadata.maxOwnerAddress,
-        tokenOwnerAddress,
-        tokenId,
-        totalBid,
-        totalBidList
-      )
-      .encodeABI();
-
+    // const sellContract = erc721Contract.methods
+    //   .sellMultiNFT(
+    //     metadata.maxOwnerAddress,
+    //     tokenOwnerAddress,
+    //     tokenId,
+    //     totalBid,
+    //     totalBidList
+    //   )
+    //   .encodeABI();
+    // console.log(sellContract);
     // const tx = {
     //   from: serverAccount,
     //   to: process.env.nftCA,
