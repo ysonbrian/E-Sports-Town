@@ -4,7 +4,6 @@ import { create } from "ipfs-http-client";
 import { useStore } from "../utils/store";
 import { submitNFT } from "../utils/data";
 import styled from "styled-components";
-import mainImage from "../mainImage.jpg";
 
 const Title = styled.h1`
   padding-bottom: 3rem;
@@ -14,8 +13,9 @@ const Title = styled.h1`
   font-size: 50px;
 `;
 
+//background-image: url(${mainImage});
 const NftContainer = styled.div`
-  background-image: url(${mainImage});
+  
   background-size: cover;
   padding: 100px;
 `;

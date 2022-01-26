@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import CardMyPage from "../components/CardMyPage";
 import styled from "styled-components";
 import { useStore, useMypage, useMyToken, useWeb3 } from "../utils/store";
-import mainImage from "../MainImage.jpg";
 
 const PageTitle = styled.h1`
   padding-top: 25px;
@@ -10,6 +9,7 @@ const PageTitle = styled.h1`
   color: white;
 `;
 
+//background-image: url(${mainImage});
 const Profile_container = styled.div`
   flex: 1 0 0;
   display: flex;
@@ -17,7 +17,7 @@ const Profile_container = styled.div`
   align-items: center;
   flex-direction: column;
   color: white;
-  background-image: url(${mainImage});
+  
   background-size: cover;
 `;
 
@@ -103,6 +103,8 @@ const NoData = styled.div`
 const Coin = styled.div`
   margin: 10px;
 `;
+
+const UserName = styled.div``
 
 function Mypage() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);

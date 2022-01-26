@@ -3,7 +3,6 @@ import CardTemplate from "../components/CardTemplate";
 import styled from "styled-components";
 import { useGallery } from "../utils/store";
 import { getGalleryList } from "../utils/data";
-import mainImage from "../MainImage.jpg";
 
 const PageTitle = styled.h1`
   padding-top: 25px;
@@ -12,9 +11,10 @@ const PageTitle = styled.h1`
   justify-content: center;
 `;
 
+//background-image: url(${mainImage});
 const GalleryContainer = styled.div`
   height: 100%;
-  background-image: url(${mainImage});
+  
   background-size: cover;
 `;
 
