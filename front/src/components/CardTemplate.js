@@ -4,26 +4,27 @@ import { useStore, useClickedItem } from "../utils/store";
 import styled from "styled-components";
 
 const CardContainer = styled.div`
-  border: solid 3px #5800ff;
+  border: solid 1px gray;
   border-radius: 1rem;
+  padding-bottom: 1rem;
   width: 300px;
   height: 450px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #5800ff;
+  background-color: rgba(255, 255, 255, 0.2);
   color: white;
   :hover {
-    background-color: #e0ffff;
+    background-color: rgba(255, 255, 255, 0.7);
     color: black;
     border: #e0ffff;
-    transform: scale(1.1);
+    transform: scale(1);
+    transition: 0.5s;
     cursor: pointer;
   }
 `;
 
 const CardImage = styled.div`
-  border: solid 1px #041562;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -89,20 +90,22 @@ const SubmitButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 70px;
-  height: 40px;
+  width: 700px;
+  height: 30px;
   border-radius: 8px;
   text-align: center;
   color: #f4f4f4;
   border: none;
-  background-color: #5800ff;
-  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.2);
+  font-weight: light;
+  font-size: 12px;
   cursor: pointer;
-  padding: 0px 1.25rem;
+  padding: 0px;
   margin-right: 10px;
   letter-spacing: 2px;
   :hover {
-    background-color: #e900ff;
+    background-color: black;
+    transition: 0.5s;
   }
 `;
 
