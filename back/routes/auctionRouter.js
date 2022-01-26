@@ -60,7 +60,7 @@ router.get('/multiclick', async (req, res) => {
     const data = await MultiAuctionData.find();
     console.log('multiclick');
     if (data) {
-      console.log(data);
+      //console.log(data);
       res.json(data);
     } else {
       console.log('No data!');
@@ -75,7 +75,7 @@ router.post('/:id/MultiBidding', async (req, res) => {
   try {
     //const user = await Users.find({ userAddress: currentAddress });
     const MultiAuction = await MultiAuctionData.find({ tokenId: tokenId });
-    console.log('MultiAuction', MultiAuction);
+    //console.log('MultiAuction', MultiAuction);
     if (MultiAuction.length === 0) {
       const newMultiAuctionData = new MultiAuctionData({
         tokenId: tokenId,
@@ -111,38 +111,35 @@ router.post('/:id/AlreadyBid', async (req, res) => {
   try {
     console.log('AlreadyBid-tokenId', tokenId);
     console.log('AlreadyBid-currentAddress', currentAddress);
+    //{ $and: [ { "writer": "Velopert" }, { "likes": { $lt: 10 } } ] }
+    //const AlrdyBid = await MultiAuctionData.find(
+    //  { tokenId: tokenId },
+    //  //{ multiAuctionAddressList: [{ multiAuctionAddress: currentAddress }] }
+    //);
     const AlrdyBid = await MultiAuctionData.find(
-      { tokenId: tokenId },
-      { multiAuctionAddressList: [{ multiAuctionAddress: currentAddress }] }
+      {
+        $and:
+          [
+            { tokenId: tokenId },
+            //{ multiAuctionAddressList: [ { bidPrice: { $lt: 15} } ] }
+            //{ multiAuctionAddressList: [{ multiAuctionAddress: currentAddress }] }
+          ]
+      }
     );
-    console.log('AlrdyBid', AlrdyBid);
+    //console.log('AlrdyBid', AlrdyBid[0]?.multiAuctionAddressList);
+    const AlrdyBidRlt = AlrdyBid[0]?.multiAuctionAddressList?.filter((el) => {
+      return (el.multiAuctionAddress === currentAddress);
+    })
+    console.log('AlrdyBidRlt', AlrdyBidRlt);
+    //const AlrdyBidRltFinal;
+    //if(Array.isArray(AlrdyBidRlt) && AlrdyBidRlt.length === 0) {
+    //}
+    res.send(AlrdyBidRlt);
   } catch (error) {
     console.log(error);
   }
 });
 
-/*router.put('/:id/AddJoinerGrouping', async (req, res) => {
-  const { GroupInfo, currentAddress } = req.body.metadata;
-  console.log("GroupInfo :" + GroupInfo)
-  console.log("currentAddress :" + currentAddress)
-  const id = GroupInfo._id;
-  console.log("id", id)
-  try {
-    //const search =
-    //  await multiAuctionData.findOne({id: id}, (err, docs) => {
-    //    if(err) console.log(err);
-    //    else console.log("Result : ", docs)
-    //  });
-    //console.log("search",search);
-    const update =
-      await multiAuctionData.findByIdAndUpdate(
-        id,
-        { $push: { GroupAddressList: [{ GroupAddress: currentAddress }] } });
-    //console.log("update",update)
-  } catch (err) {
-    console.log(err)
-  }
-});*/
 
 router.post('/:id/sell', async (req, res) => {
   // 멀티시그에서 받아오는 정보를 type으로 구분해서 setMultiContract를 설정해야함

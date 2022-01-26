@@ -23,7 +23,6 @@ const TotalPage = styled.div`
   background-image: url(${mainImage});
   background-size: cover;
 `;
-
 const PageTitle = styled.h1`
   display: flex;
   justify-content: center;
@@ -34,22 +33,23 @@ const PageTitle = styled.h1`
   display: flex;
   justify-content: center;
 `;
-
 const AuctionNFT = styled.div`
   flex: 2 0 0;
   display: flex;
   flex-direction: row;
 `;
-
+/* (Start)LeftSide */
 const ImgNFT = styled.div`
   flex: 1 0 0;
+  //border: solid yellow 2px;
   display: flex;
   flex-direction: column;
   margin: 1rem;
   align-items: center;
 `;
-
 const NftPreviewImg = styled.div`
+  flex: 4 0 0;
+  //border: solid red 2px;
   width: 300px;
   height: 300px;
   img {
@@ -57,28 +57,13 @@ const NftPreviewImg = styled.div`
     height: 295px;
   }
 `;
-
-const ProfileNFT = styled.div`
-  flex: 2 0 0;
-  display: flex;
-  flex-direction: column;
-  margin: 1rem;
-`;
-
-const InfoNFT = styled.div`
+const ImgDescription = styled.div`
   flex: 1 0 0;
-  margin: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding-bottom: 1rem;
-  border-bottom: solid 1px black;
-`;
-
-const NameIPFSMetadata = styled.h2`
-  width: 100%;
+  //border: solid brown 2px;
+  padding: 1rem;
   display: flex;
   flex-direction: row;
+  width: 100%;
   justify-content: space-around;
   a {
     text-decoration: none;
@@ -90,45 +75,103 @@ const NameIPFSMetadata = styled.h2`
     opacity: 0.7;
   }
 `;
-
-const BidRltContainer = styled.div`
-  flex: 2 0 0;
-  margin: 1rem;
+const CommentContainer = styled.div`
+  flex: 6 0 0;
+  //border: solid greenyellow 2px;
   display: flex;
-  flex-direction: row;
-  padding-bottom: 1rem;
-  border-bottom: solid 1px black;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #001335;
+  height: 500px;
+  width: 100%;
 `;
-
-const WinningCurrent = styled.div`
-  flex: 1 0 0;
-  border-right: solid 1px black;
+const CommentListContainer = styled.div`
+  border: 1px solid white;
+  width: 100%;
+  height: 100%;
 `;
+/* (End)LeftSide */
 
-const WinningCurrent_Price = styled.div`
-  font-size: 2rem;
-  font-weight: 200;
-`;
-
-const WinnerEnd = styled.div`
-  flex: 1 0 0;
-  border-left: solid 1px black;
-`;
-
-const BiddingContainer = styled.div`
+/* (Start)RightSide */
+const ProfileNFT = styled.div`
+  flex: 2 0 0;
+  //border: solid green 2px;
+  display: flex;
+  flex-direction: column;
   margin: 1rem;
+`;
+const InfoNFT = styled.div`
+  flex: 2 0 0;
+  //border: solid greenyellow 2px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding-bottom: 1rem;
-  border-bottom: solid 1px black;
+  border-bottom: solid 3px white;
 `;
-
+const CreatedInfo = styled.div`
+  border-bottom: solid 1px white;
+`
+const NameIPFSMetadata = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+const NamePriceContainerNFT = styled.div`
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: row;
+  margin-top: 0.5rem;
+  justify-content: space-between;
+  h2 {
+    margin-right: 10rem;
+  }
+`
+const DescriptionContainerNFT = styled.div`
+  margin-top: 0.5rem;
+  flex: 2 0 0;
+`
+const BidRltContainer = styled.div`
+  flex: 1 0 0;
+  //border: solid brown 2px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 1rem;
+  border-bottom: solid 3px white;
+`;
+const WinningCurrent = styled.div`
+  flex: 1 0 0;
+  border-right: solid 1.5px white;
+`;
+const WinnerTitle = styled.div`
+  padding-left: 1rem;
+`
+const WinningCurrent_Price = styled.div`
+  padding-left: 1rem;
+  font-size: 2rem;
+  font-weight: 200;
+`;
+const WinnerEnd = styled.div`
+  flex: 1 0 0;
+  border-left: solid 1.5px white;
+`;
+const BiddingContainer = styled.div`
+  flex: 1 0 0;
+  //border: solid yellow 2px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-bottom: 1rem;
+  border-bottom: solid 1px white;
+`;
 const BiddingInput = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   padding-bottom: 10px;
   input {
     margin-top: 10px;
@@ -143,67 +186,13 @@ const BiddingInput = styled.div`
     height: 100%;
   }
 `;
-
 const BidListContainer = styled.div`
-  flex: 15 0 0;
-  margin-top: 50px;
+  flex: 6 0 0;
   display: flex;
   flex-direction: column;
   border: solid 2px gainsboro;
   overflow: auto;
 `;
-
-const BidListItemContainer = styled.div`
-  margin: 0.5rem;
-  padding: 0.5rem;
-  background-color: #3d2c8d;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const BidItemName = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const BidItemPrice = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const BidItemCreated = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const BidItemSellButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-  height: 40px;
-  border-radius: 6px;
-  text-align: center;
-  color: #f4f4f4;
-  border: none;
-  background-color: #fe7e6d;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 0px 1.25rem;
-  margin-right: 10px;
-  letter-spacing: 2px;
-  :hover {
-    opacity: 0.7;
-  }
-`;
-
-const ImgDescription = styled.div`
-  margin: 20px;
-`;
-
 const BidListHeaderContainer = styled.div`
   margin: 0.5rem;
   padding: 0.5rem;
@@ -211,7 +200,6 @@ const BidListHeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
-
 const BidHeaderOne = styled.div`
   display: flex;
   justify-content: center;
@@ -236,22 +224,58 @@ const BidHeaderFour = styled.div`
   align-items: center;
   padding-right: 20px;
 `;
-
-const CommentContainer = styled.div`
+const BidListItemContainer = styled.div`
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background-color: #3d2c8d;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
-  background-color: #001335;
-  height: 500px;
-  width: 100%;
-
-  /* height: 100vh; */
+  height: 3.5rem;
 `;
-
-const CommentListContainer = styled.div`
-  border: 1px solid white;
-  width: 100%;
-  height: 100%;
+const BidItemName = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const BidItemCreated = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const BidItemPrice = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const BidItemSellButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 40px;
+  border-radius: 6px;
+  text-align: center;
+  color: #f4f4f4;
+  border: none;
+  background-color: #fe7e6d;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px 1.25rem;
+  margin-right: 10px;
+  letter-spacing: 2px;
+  :hover {
+    opacity: 0.7;
+  }
+`;
+const BidItemlabel = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: none;
+  font-weight: bold;
+  letter-spacing: 2px;
 `;
 
 function Auction({ clickedItemList }) {
@@ -341,7 +365,7 @@ function Auction({ clickedItemList }) {
     setModalSubmitData(metadata);
   };
 
-  // console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
+  console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
 
   useEffect(() => {
     fetchClickedItem();
@@ -363,7 +387,15 @@ function Auction({ clickedItemList }) {
               <img src={clickedItem?.imgURI} alt="preview-img" />
             </NftPreviewImg>
             <ImgDescription>
-              <h2>{clickedItem?.description}</h2>
+              {/*<h2>{clickedItem?.description}</h2>*/}
+              <a href={clickedItem?.imgURI} target="_blank" rel="noreferrer">
+                <i className="fas fa-layer-group"></i>
+                ipfs
+              </a>
+              <a href={clickedItem?.tokenURI} target="_blank" rel="noreferrer">
+                <i className="fas fa-server"></i>
+                metadata
+              </a>
             </ImgDescription>
             <CommentContainer>
               <CommentListContainer>
@@ -374,41 +406,36 @@ function Auction({ clickedItemList }) {
           </ImgNFT>
           <ProfileNFT>
             <InfoNFT>
-              <div>
+              <CreatedInfo>
                 <span>상품등록 시간: </span>
                 <span>{clickedItem?.created_at}</span>
-              </div>
+                <span> | 현재 로그인 계정: {user.userAddress}</span>
+              </CreatedInfo>
               <NameIPFSMetadata>
-                {clickedItem?.name}
-                <a href={clickedItem?.imgURI} target="_blank" rel="noreferrer">
-                  <i className="fas fa-layer-group"></i>
-                  ipfs
-                </a>
-                <a
-                  href={clickedItem?.tokenURI}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fas fa-server"></i>
-                  metadata
-                </a>
+                <NamePriceContainerNFT>
+                  <h2>Name: {clickedItem?.name}</h2>
+                  <h2><i className="fab fa-btc"></i> {clickedItem?.price}</h2>
+                </NamePriceContainerNFT>
+                <DescriptionContainerNFT>
+                  <h3>Description: {clickedItem?.description}</h3>
+                </DescriptionContainerNFT>
               </NameIPFSMetadata>
             </InfoNFT>
             <BidRltContainer>
               <WinningCurrent>
-                {true ? <div>현재 최고가</div> : <div>Current bid</div>}
+                {true ? <WinnerTitle>현재 최고가</WinnerTitle> : <WinnerTitle>Current bid</WinnerTitle>}
                 <WinningCurrent_Price>
-                  <i className="fas fa-bars"></i>
-                  {max?.bidPrice ? max?.bidPrice : '제시 금액이 없습니다.'}
+                  <h3><i className="fas fa-bars"></i>
+                    {max?.bidPrice ? max?.bidPrice : '제시 금액이 없습니다.'}</h3>
                 </WinningCurrent_Price>
               </WinningCurrent>
               <WinnerEnd>
-                {true ? <div>최고가 제시 유저</div> : <div>Ends in</div>}
+                {true ? <WinnerTitle>최고가 제시 유저</WinnerTitle> : <WinnerTitle>Ends in</WinnerTitle>}
                 {true ? (
                   <WinningCurrent_Price>
-                    {max?.bidAddress
+                    <h3>{max?.bidAddress
                       ? maxBidAddress
-                      : '최고가를 기록 해보세요!'}
+                      : '최고가를 기록 해보세요!'}</h3>
                   </WinningCurrent_Price>
                 ) : (
                   <WinningCurrent_Price>2h 21m 50s</WinningCurrent_Price>
@@ -429,7 +456,7 @@ function Auction({ clickedItemList }) {
                 </BiddingInput>
               </BiddingContainer>
             ) : (
-              <BiddingContainer>원하는 가격을 결정 하세요!</BiddingContainer>
+              <BiddingContainer>본인의 NFT 입니다.</BiddingContainer>
             )}
             <BidListContainer>
               <BidListHeaderContainer>
@@ -461,12 +488,14 @@ function Auction({ clickedItemList }) {
                     <BidItemCreated>{rDate}</BidItemCreated>
                     <BidItemPrice>{el?.bidPrice}</BidItemPrice>
                     {clickFetchList[0]?.tokenOwnerAddress ===
-                    user.userAddress ? (
+                      user.userAddress ? (
                       <BidItemSellButton onClick={() => onClickToSell(el)}>
                         판매
                       </BidItemSellButton>
                     ) : (
-                      <div>입찰 완료</div>
+                      <BidItemlabel>
+                        입찰 완료
+                      </BidItemlabel>
                     )}
                   </BidListItemContainer>
                 );
