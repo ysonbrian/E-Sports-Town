@@ -103,9 +103,8 @@ function Header() {
 
     console.log("accounts!!!!!:" + accounts);
     const account = await login(accounts);
-    setUser("account.data:" + account.data);
-    navigate("/");
-    window.location.reload(false);
+    setUser(account);
+    window.location.assign('http://localhost:3000');
   };
 
   async function disconnectWallet() {
