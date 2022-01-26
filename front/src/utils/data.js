@@ -53,9 +53,10 @@ export const submitSell = async (metadata) => {
 };
 
 export const submitUpdate = async (metadata) => {
-  console.log(metadata);
+  console.log("submitUpdate",metadata);
   const { data } = await Axios.post(
-    `${API_URL}/auction/${metadata.tokenId}/Update`,
+    //`${API_URL}/auction/${metadata.tokenId}/Update`,
+    `${API_URL}/auction/Update`,
     { metadata }
   );
 };
