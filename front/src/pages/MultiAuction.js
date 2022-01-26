@@ -19,6 +19,7 @@ import ModalComponent from "../components/Modal";
 import ModalSubmit from "../components/ModalSubmit";
 import ModalUpdate from "../components/ModalUpdate";
 import Comment from "../components/Comment";
+import auct from "../auct.jpeg";
 
 //background-image: url(${mainImage});
 const TotalPage = styled.div`
@@ -27,18 +28,16 @@ const TotalPage = styled.div`
   display: flex;
   flex-direction: column;
   color: white;
-
+  background-image: url(${auct});
   background-size: cover;
 `;
 const PageTitle = styled.h1`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  margin-top: 1rem;
+  margin: 2rem 0;
   color: white;
   display: flex;
   justify-content: center;
+  font-size: 5rem;
+  color: white;
 `;
 const MultiAuctionPage = styled.div`
   flex: 2 0 0;
@@ -543,7 +542,7 @@ function MultiAuction() {
       ) : !checkUpdateModal ? (
         <ModalUpdate onUpdateModal={onUpdateModal} />
       ) : null}
-      <PageTitle>MultiAuction</PageTitle>
+      <PageTitle>Multi-Auction</PageTitle>
       <MultiAuctionPage>
         <PreViewNFT>
           <PreViewNFTImg>

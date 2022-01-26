@@ -1,9 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import mimo_1 from "../../mimo_yj.png";
-import mimo_2 from "../../mimo_2.png";
-import mimo_3 from "../../mimo_3.png";
-import mimo_4 from "../../mimo_4.png";
 import members from "../../members.png";
 
 const TeamContainer = styled.div`

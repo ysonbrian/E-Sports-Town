@@ -12,25 +12,24 @@ import { useModalSubmitData } from "../utils/store";
 import ModalComponent from "../components/Modal";
 import ModalSubmit from "../components/ModalSubmit";
 import Comment from "../components/Comment";
+import auct from "../auct.jpeg";
 
-/*background-image: url(${mainImage});*/
 const TotalPage = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   color: white;
-  background-size: cover;
+  background-image: url(${auct});
+  background-size: 100% 100%;
 `;
 const PageTitle = styled.h1`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  margin-top: 1rem;
+  margin: 2rem 0;
   color: white;
   display: flex;
   justify-content: center;
+  font-size: 5rem;
+  color: white;
 `;
 const AuctionNFT = styled.div`
   flex: 2 0 0;

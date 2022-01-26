@@ -1,49 +1,47 @@
 import React from "react";
 import styled from "styled-components";
+import back from "../../back.png";
 import game1 from "../../game1.gif";
-import mottoback from "../../mottoback.jpeg";
+import logo_text from "../../logo_text.png";
 
 const Mottos = styled.div`
   display: flex;
   height: 1000px;
   width: 100%;
   flex-direction: column;
-  background-image: url(${mottoback});
-  background-size: 100% 110%;
+  margin-bottom: 100px;
 `;
 
 const MottoContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding-top: 200px;
 `;
 
 const MottoImg1 = styled.div`
+  margin-top: 152px;
   img {
-    width: 1000px;
-    height: 500px;
+    width: 1300px;
+    height: 98%;
   }
+  position: relative;
 `;
 
-const MottoContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
+const MottoImg2 = styled.div`
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  position: absolute;
 `;
 
-const MottoTitle = styled.h1`
-  font-size: 5em;
-  line-height: 1em;
-`;
-
-const MottoText = styled.h4`
-  font-style: normal;
-  font-weight: 500;
-  line-height: 3em;
-  letter-spacing: 0;
-  text-align: center;
-  font-size: 18px;
+const MottoImg3 = styled.div`
+  margin-top: 150px;
+  margin-left: 300px;
+  img {
+    width: 80%;
+    height: 80%;
+  }
+  position: absolute;
 `;
 
 function Motto() {
@@ -53,13 +51,13 @@ function Motto() {
         <MottoImg1>
           <img src={game1} />
         </MottoImg1>
+        <MottoImg2>
+          <img src={back} />
+        </MottoImg2>
+        <MottoImg3>
+          <img src={logo_text} />
+        </MottoImg3>
       </MottoContainer>
-      <MottoContent>
-        <MottoTitle>Choose and Imagine</MottoTitle>
-        <MottoText>
-          <p>당신의 NFT 카드를 선택하세요. 놀라운 경험을 하게 될 것 입니다.</p>
-        </MottoText>
-      </MottoContent>{" "}
     </Mottos>
   );
 }

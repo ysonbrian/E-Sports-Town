@@ -4,7 +4,6 @@ import Team from "../components/HomeComponents/Team";
 import Partner from "../components/HomeComponents/Partner";
 import Motto from "../components/HomeComponents/Motto";
 import Info from "../components/HomeComponents/Info";
-import BestNft from "../components/HomeComponents/BestNft";
 import Signature from "../components/HomeComponents/Signature";
 
 const HomeContainer = styled.div`
@@ -20,7 +19,6 @@ function Home() {
     <HomeContainer>
       <Motto />
       <Info />
-      <BestNft />
       <Signature />
       <Team />
       <Partner />

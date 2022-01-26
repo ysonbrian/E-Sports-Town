@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { FiLogIn } from "react-icons/fi";
 import { FiLogOut } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
-import logo from "../logo2.png";
+import logo from "../logo.png";
 
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
@@ -76,7 +76,7 @@ const HeaderBar = styled.ul`
     cursor: pointer;
   }
   a:hover {
-    color: #e900ff;
+    color: red;
   }
 `;
 
@@ -104,7 +104,7 @@ function Header() {
     console.log("accounts!!!!!:" + accounts);
     const account = await login(accounts);
     setUser(account);
-    window.location.assign('http://localhost:3000');
+    window.location.assign("http://localhost:3000");
   };
 
   async function disconnectWallet() {
