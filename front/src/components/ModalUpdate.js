@@ -125,8 +125,12 @@ const ModalComponent = ({ onUpdateModal }) => {
   //const onSellButton = async () => {
   const onUpdateButton = async (bid) => {
     //await submitSell(modalSubmitData);
+    const metadata = {
+      userbidInfo: modalUpdateData,
+      updatedbid: bid
+    }
     
-    await submitUpdate(modalUpdateData);
+    await submitUpdate(metadata);
     //onSellModal(true);
     onUpdateModal(true);
     setOpen(false);

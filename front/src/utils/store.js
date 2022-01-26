@@ -86,8 +86,11 @@ export const useBidState = create((set) => ({
   bidState: [],
   fetchBidState: async (metadata) => {
     const { data } = await Axios.post(`${url}/auction/:id/AlreadyBid`, {metadata,});
-    console.log(data)
+    console.log("fetchBidState-data", data)
     set({ bidState: await data });
+    console.log('test-bidState-data', data);
+    console.log('test-bidState-data-length', data.length);
+    console.log('test-bidState-data-isArray', Array.isArray(data));
   },
 }));
 
