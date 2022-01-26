@@ -416,7 +416,9 @@ function MultiAuction() {
   // MultiAuctionData내 tokenId에 현재 로그인 계정 있는지
   const { fetchBidState } = useBidState();
   // bid한 적이 없으면 빈배열, 있으면, 객체(bidPrice, multiAuctionAddress, created_at, _id)를 담은 배열 리턴
-  console.log('test-bidState', bidState);
+  //console.log('test-bidState', bidState);
+  //console.log('test-bidState-length', bidState.length);
+  //console.log('test-bidState-isArray', Array.isArray(bidState));
 
   /*
     ToDoList
@@ -449,7 +451,14 @@ function MultiAuction() {
   const onClickUpdate = (e) => {
     onUpdateModal();
     console.log("onClickUpdate", e);
-    setModalUpdateData(e);
+    const metadata = {
+      tokenId: id,
+      tokenOwnerAddress: clickFetchGroupList[0].tokenOwnerAddress,
+      bidAddress: e.multiAuctionAddress,
+      bidPrice: e.bidPrice,
+    };
+    console.log("onClickUpdate-metadata_test", metadata);
+    setModalUpdateData(metadata);
     console.log("modalUpdateData", modalUpdateData);
     setCheckUpdateModal(false);
   }
@@ -628,10 +637,10 @@ function MultiAuction() {
           </MultiAuctionRltContainer>
           {clickedItem.user !== user.userAddress ? (
             <BiddingContainer>
-              {Array.isArray(bidState) && bidState.length === 0 ?
+              {bidState.length === 0 ?
                 (<label>원하는 가격을 입력하세요!</label>) :
                 (<label>이미 참가한 상태입니다!</label>)}
-              {Array.isArray(bidState) && bidState.length === 0 ?
+              {bidState.length === 0 ?
                 (<BiddingInput>
                   <input
                     type="text"
