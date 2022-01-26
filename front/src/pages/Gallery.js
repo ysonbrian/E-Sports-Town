@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import CardTemplate from '../components/CardTemplate';
-import styled from 'styled-components';
-import { useGallery } from '../utils/store';
-import { getGalleryList } from '../utils/data';
-import mainImage from '../mainImage.jpg';
+import React, { useEffect } from "react";
+import CardTemplate from "../components/CardTemplate";
+import styled from "styled-components";
+import { useGallery } from "../utils/store";
+import { getGalleryList } from "../utils/data";
+import mainImage from "../MainImage.jpg";
 
 const PageTitle = styled.h1`
   color: white;
@@ -18,12 +18,11 @@ const GalleryContainer = styled.div`
 `;
 
 const ListContainer = styled.div`
-  padding: 3rem;
   width: 100%;
   height: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  justify-items: center;
+  grid-gap: 10px;
 `;
 
 const ListItem = styled.div`

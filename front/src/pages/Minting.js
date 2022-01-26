@@ -57,6 +57,7 @@ const NftPreviewImg = styled.div`
   img {
     width: 500px;
     height: 50px;
+    padding: 1px 3px 3px 1px;
     border-radius: 40px;
   }
   :hover {

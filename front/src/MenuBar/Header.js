@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { FiLogIn } from "react-icons/fi";
 import { FiLogOut } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
-import logo from "../logo.png";
+import logo2 from "../logo2.png";
 
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
@@ -55,8 +55,8 @@ const Logo = styled.div`
   gap: 10px;
 
   img {
-    width: 188px;
-    height: 100px;
+    width: 180px;
+    height: 80px;
   }
 `;
 
@@ -115,7 +115,7 @@ function Header() {
     <HeaderContainer>
       <Logo>
         <Link to="/">
-          <img src={logo} />
+          <img src={logo2} />
         </Link>
       </Logo>
       <HeaderBar>
