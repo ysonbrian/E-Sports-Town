@@ -4,7 +4,7 @@ import { create } from "ipfs-http-client";
 import { useStore } from "../utils/store";
 import { submitNFT } from "../utils/data";
 import styled from "styled-components";
-import mainImage from "../mainImage.jpg";
+import mainImage from "../MainImage.jpg";
 
 const Title = styled.h1`
   padding-bottom: 3rem;

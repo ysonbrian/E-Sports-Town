@@ -46,7 +46,7 @@ const Text = styled.p`
 function BestNft(props) {
   return (
     <>
-      <Title>E-Twon:U-Pick</Title>
+      <Title>E-SPORTS TOWN</Title>
       <CardContainer>
         <Card>
           <img src={card1} />

@@ -19,7 +19,7 @@ const CardContainer = styled.div`
     color: black;
     border: #e0ffff;
     transform: scale(1);
-    transition: 0.5s;
+    transition-duration: 0.1s;
     cursor: pointer;
   }
 `;
@@ -105,7 +105,7 @@ const SubmitButton = styled.button`
   letter-spacing: 2px;
   :hover {
     background-color: black;
-    transition: 0.5s;
+    transition-duration: 0.8s;
   }
 `;
 

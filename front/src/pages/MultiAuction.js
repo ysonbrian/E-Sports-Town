@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   useStore,
   useClickedItem,
   useClickedItemGroupList,
   useBidState,
   useModalSubmitData,
-  useModalUpdateData
-} from '../utils/store';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+  useModalUpdateData,
+} from "../utils/store";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import {
   submitMultiBid,
   submitAlreadyBid,
   submitAddJoinerGroup,
   submitSell,
-} from '../utils/data';
-import ModalComponent from '../components/Modal';
-import ModalSubmit from '../components/ModalSubmit';
-import ModalUpdate from '../components/ModalUpdate';
-import mainImage from '../mainImage.jpg';
-import Comment from '../components/Comment';
+} from "../utils/data";
+import ModalComponent from "../components/Modal";
+import ModalSubmit from "../components/ModalSubmit";
+import ModalUpdate from "../components/ModalUpdate";
+import mainImage from "../MainImage.jpg";
+import Comment from "../components/Comment";
 
 const TotalPage = styled.div`
   height: 100%;
@@ -116,7 +116,7 @@ const NFTInfo = styled.div`
 `;
 const NFTDate = styled.div`
   border-bottom: solid 1px white;
-`
+`;
 const NFTUserInputData = styled.div`
   width: 100%;
   display: flex;
@@ -131,11 +131,11 @@ const NamePriceContainer = styled.div`
   h2 {
     margin-right: 10rem;
   }
-`
+`;
 const DescriptionContainer = styled.div`
   margin-top: 0.5rem;
   flex: 2 0 0;
-`
+`;
 const MultiAuctionRltContainer = styled.div`
   flex: 1 0 0;
   //border: solid brown 2px;
@@ -151,7 +151,7 @@ const RemainingContainer = styled.div`
 `;
 const RltTitle = styled.div`
   padding-left: 1rem;
-`
+`;
 const RemainingPrice = styled.div`
   padding-left: 1rem;
   font-size: 2rem;
@@ -363,18 +363,18 @@ function MultiAuction() {
   let navigate = useNavigate();
   // user: accessToken, coin, id, master, userAddress
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
-  console.log("test-user", user)
-  // id: tokenId 
+  console.log("test-user", user);
+  // id: tokenId
   const id = useStore((state) => state.id);
-  console.log("test-id", id)
+  console.log("test-id", id);
   // clickedItem: clicked-nft Info(created_at, description, id, imgURI, name, price, tokenId, tokenURI, user=tokenOwnerAddress)
   const clickedItem = useClickedItem((state) => state.clickedItem);
-  console.log("test-clickedItem", clickedItem)
+  console.log("test-clickedItem", clickedItem);
   // clickedItemGroupList: multiauctiondatas findAll
   const clickedItemGroupList = useClickedItemGroupList(
     (state) => state.clickedItemGroupList
   );
-  console.log("test-clickedItemGroupList", clickedItemGroupList)
+  console.log("test-clickedItemGroupList", clickedItemGroupList);
   // Axios.get(`${url}/auction/multiclick`);
   // MultiAuctionData(MultiAuction 참가 정보-모든 토큰에 대해서)내 데이터를 clickedItemGroupList에 업데이트
   const { fetchClickedItemGroup } = useClickedItemGroupList();
@@ -383,20 +383,23 @@ function MultiAuction() {
   const clickFetchGroupList = clickedItemGroupList.filter(
     (data) => data.tokenId === Number(id)
   );
-  console.log('test-clickFetchGroupList', clickFetchGroupList);
+  console.log("test-clickFetchGroupList", clickFetchGroupList);
 
-  console.log("Remaining-Bid-test", clickFetchGroupList[0]?.multiAuctionAddressList);
-  const TotalBidArray = clickFetchGroupList[0]?.multiAuctionAddressList?.map((el) => {
-    return el.bidPrice;
-  });
-  console.log("TotalBidArray", TotalBidArray);
-  const TotalBid = TotalBidArray?.reduce(
-    (prev, current) => {
-      console.log("current", current);
-      console.log("prev", prev);
-      return (prev + current);
-    }, 0
+  console.log(
+    "Remaining-Bid-test",
+    clickFetchGroupList[0]?.multiAuctionAddressList
   );
+  const TotalBidArray = clickFetchGroupList[0]?.multiAuctionAddressList?.map(
+    (el) => {
+      return el.bidPrice;
+    }
+  );
+  console.log("TotalBidArray", TotalBidArray);
+  const TotalBid = TotalBidArray?.reduce((prev, current) => {
+    console.log("current", current);
+    console.log("prev", prev);
+    return prev + current;
+  }, 0);
   console.log("TotalBid", TotalBid);
 
   const max = clickFetchGroupList[0]?.multiAuctionAddressList?.reduce(function (
@@ -407,7 +410,7 @@ function MultiAuction() {
   }); //returns object
   const maxBidAddress =
     max?.multiAuctionAddress?.slice(0, 6) +
-    '...' +
+    "..." +
     max?.multiAuctionAddress?.slice(-5);
 
   // bitState, 이미 bit 했는지 확인하기
@@ -443,7 +446,7 @@ function MultiAuction() {
     state.modalUpdateData,
     state.setModalUpdateData,
   ]);
-  
+
   const onUpdateModal = () => {
     setCheckUpdateModal((prev) => !prev);
   };
@@ -461,21 +464,12 @@ function MultiAuction() {
     setModalUpdateData(metadata);
     console.log("modalUpdateData", modalUpdateData);
     setCheckUpdateModal(false);
-  }
-
-
-
-
-
-
-
+  };
 
   //??
   const [clickedBidList, setClickedBidList] = useState();
 
   const [bidMessage, setBidMessage] = useState();
-
-
 
   // modal
   //const [checkBidToModal, setCheckBidToModal] = useState(true);
@@ -493,31 +487,6 @@ function MultiAuction() {
     setCheckSellModal((prev) => !prev);
   };
   // modal
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const onChangeBid = (e) => {
     console.log(e.target.value);
@@ -545,10 +514,10 @@ function MultiAuction() {
       //signature: sign,
     };
     const submitMultiBidData = await submitMultiBid(metadata);
-    console.log('submitMultiBidData', submitMultiBidData);
-    window.location.assign('http://localhost:3000');
+    console.log("submitMultiBidData", submitMultiBidData);
+    window.location.assign("http://localhost:3000");
 
-    setBid('');
+    setBid("");
   };
 
   const onClickToSell = async () => {
@@ -559,9 +528,9 @@ function MultiAuction() {
       tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
       bidAddressNPrice: clickFetchGroupList[0]?.multiAuctionAddressList,
       //bidPrice: e.bidPrice,
-      type: 'multi',
+      type: "multi",
     };
-    console.log('onClickToSell-multi-metadata', metadata);
+    console.log("onClickToSell-multi-metadata", metadata);
     //setModalSubmitData(metadata);
     await submitSell(metadata);
   };
@@ -573,7 +542,8 @@ function MultiAuction() {
       ) : !checkSellModal ? (
         <ModalSubmit onSellModal={onSellModal} />
       ) : !checkUpdateModal ? (
-        <ModalUpdate onUpdateModal={onUpdateModal}/>) : null}
+        <ModalUpdate onUpdateModal={onUpdateModal} />
+      ) : null}
       <PageTitle>MultiAuction</PageTitle>
       <MultiAuctionPage>
         <PreViewNFT>
@@ -607,7 +577,9 @@ function MultiAuction() {
             <NFTUserInputData>
               <NamePriceContainer>
                 <h2>Name: {clickedItem?.name}</h2>
-                <h2><i className="fab fa-btc"></i> {clickedItem?.price}</h2>
+                <h2>
+                  <i className="fab fa-btc"></i> {clickedItem?.price}
+                </h2>
               </NamePriceContainer>
               <DescriptionContainer>
                 <h3>Description: {clickedItem?.description}</h3>
@@ -616,19 +588,31 @@ function MultiAuction() {
           </NFTInfo>
           <MultiAuctionRltContainer>
             <RemainingContainer>
-              {true ? <RltTitle>Remaining Bid</RltTitle> : <RltTitle>Current bid</RltTitle>}
+              {true ? (
+                <RltTitle>Remaining Bid</RltTitle>
+              ) : (
+                <RltTitle>Current bid</RltTitle>
+              )}
               <RemainingPrice>
-                <h3><i className="fab fa-btc"></i>
-                  {clickedItem?.price - TotalBid}</h3>
+                <h3>
+                  <i className="fab fa-btc"></i>
+                  {clickedItem?.price - TotalBid}
+                </h3>
               </RemainingPrice>
             </RemainingContainer>
             <MaxBidder>
-              {true ? <RltTitle>MaxBidder</RltTitle> : <RltTitle>Ends in</RltTitle>}
+              {true ? (
+                <RltTitle>MaxBidder</RltTitle>
+              ) : (
+                <RltTitle>Ends in</RltTitle>
+              )}
               {true ? (
                 <MaxBiddingPrice>
-                  <h3>{max?.multiAuctionAddress
-                    ? maxBidAddress
-                    : '참여자가 없습니다.'}</h3>
+                  <h3>
+                    {max?.multiAuctionAddress
+                      ? maxBidAddress
+                      : "참여자가 없습니다."}
+                  </h3>
                 </MaxBiddingPrice>
               ) : (
                 <MaxBiddingPrice>2h 21m 50s</MaxBiddingPrice>
@@ -637,11 +621,13 @@ function MultiAuction() {
           </MultiAuctionRltContainer>
           {clickedItem.user !== user.userAddress ? (
             <BiddingContainer>
-              {bidState.length === 0 ?
-                (<label>원하는 가격을 입력하세요!</label>) :
-                (<label>이미 참가한 상태입니다!</label>)}
-              {bidState.length === 0 ?
-                (<BiddingInput>
+              {bidState.length === 0 ? (
+                <label>원하는 가격을 입력하세요!</label>
+              ) : (
+                <label>이미 참가한 상태입니다!</label>
+              )}
+              {bidState.length === 0 ? (
+                <BiddingInput>
                   <input
                     type="text"
                     placeholder="ETH"
@@ -649,7 +635,10 @@ function MultiAuction() {
                     onChange={(e) => onChangeBid(e)}
                   ></input>
                   <button onClick={onClickMultiBidding}>Bid</button>
-                </BiddingInput>) : <></>}
+                </BiddingInput>
+              ) : (
+                <></>
+              )}
             </BiddingContainer>
           ) : (
             <BiddingContainer>
@@ -671,17 +660,17 @@ function MultiAuction() {
             {clickFetchGroupList[0]?.multiAuctionAddressList?.map((el) => {
               let rDate = null;
               if (el?.created_at) {
-                let date = el?.created_at.split('T');
-                let newDate = date[0]?.split('-');
-                let newtime = date[1]?.split('.');
-                let newtime2 = newtime[0]?.split(':');
+                let date = el?.created_at.split("T");
+                let newDate = date[0]?.split("-");
+                let newtime = date[1]?.split(".");
+                let newtime2 = newtime[0]?.split(":");
                 let result = [...newDate, ...newtime2];
-                let result1 = result.slice(0, 3).join('-');
-                rDate = result1 + ' ' + newtime2.join(':');
+                let result1 = result.slice(0, 3).join("-");
+                rDate = result1 + " " + newtime2.join(":");
               }
               const newUserAddress =
                 el?.multiAuctionAddress?.slice(0, 6) +
-                '...' +
+                "..." +
                 el?.multiAuctionAddress?.slice(-5);
               return (
                 <BidListItemContainer key={el?._id}>
@@ -696,8 +685,7 @@ function MultiAuction() {
                       <BidItemDeleteButton>취소</BidItemDeleteButton>
                     </BidButtonContainer>
                   ) : (
-                    <BidButtonContainer>
-                    </BidButtonContainer>
+                    <BidButtonContainer></BidButtonContainer>
                   )}
                 </BidListItemContainer>
               );
@@ -705,7 +693,7 @@ function MultiAuction() {
           </BidListContainer>
         </MultiAuctionInfo>
       </MultiAuctionPage>
-    </TotalPage >
+    </TotalPage>
   );
 }
 

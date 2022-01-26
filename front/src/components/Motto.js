@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import test from '../test.gif';
-import mainImage from '../mainImage.jpg';
+import React from "react";
+import styled from "styled-components";
+import test from "../test.gif";
+import mainImage from "../mainImage.jpg";
 
 const MottoContainer = styled.div`
   display: flex;
