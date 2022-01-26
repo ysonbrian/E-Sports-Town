@@ -459,7 +459,6 @@ function MultiAuction() {
     };
     console.log("onClickUpdate-metadata_test", metadata);
     setModalUpdateData(metadata);
-    console.log("modalUpdateData", modalUpdateData);
     setCheckUpdateModal(false);
   }
 
