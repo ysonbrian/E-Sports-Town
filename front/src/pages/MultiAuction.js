@@ -18,16 +18,16 @@ import {
 import ModalComponent from '../components/Modal';
 import ModalSubmit from '../components/ModalSubmit';
 import ModalUpdate from '../components/ModalUpdate';
-import mainImage from '../mainImage.jpg';
 import Comment from '../components/Comment';
 
+//background-image: url(${mainImage});
 const TotalPage = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   color: white;
-  background-image: url(${mainImage});
+  
   background-size: cover;
 `;
 const PageTitle = styled.h1`
@@ -459,7 +459,6 @@ function MultiAuction() {
     };
     console.log("onClickUpdate-metadata_test", metadata);
     setModalUpdateData(metadata);
-    console.log("modalUpdateData", modalUpdateData);
     setCheckUpdateModal(false);
   }
 

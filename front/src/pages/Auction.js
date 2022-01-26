@@ -11,16 +11,15 @@ import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
 import { useModalSubmitData } from '../utils/store';
 import ModalComponent from '../components/Modal';
 import ModalSubmit from '../components/ModalSubmit';
-import mainImage from '../mainImage.jpg';
 import Comment from '../components/Comment';
 
+/*background-image: url(${mainImage});*/
 const TotalPage = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   color: white;
-  background-image: url(${mainImage});
   background-size: cover;
 `;
 const PageTitle = styled.h1`

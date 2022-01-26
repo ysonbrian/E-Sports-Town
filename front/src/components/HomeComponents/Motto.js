@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import game1 from "../../game1.gif";
-import mainImage from "../../MainImage.jpg";
 import mottoback from "../../mottoback.jpeg";
 
 const Mottos = styled.div`
