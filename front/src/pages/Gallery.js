@@ -5,17 +5,17 @@ import { useGallery } from "../utils/store";
 import { getGalleryList } from "../utils/data";
 import back4 from "../back4.jpeg";
 
+const GalleryContainer = styled.div`
+  height: 100%;
+  background-image: url(${back4});
+  background-size: 100% 100%;
+`;
+
 const PageTitle = styled.h1`
   padding-top: 25px;
   color: white;
   display: flex;
   justify-content: center;
-`;
-
-const GalleryContainer = styled.div`
-  height: 100%;
-  background-image: url(${back4});
-  background-size: 100% 100%;
 `;
 
 const ListContainer = styled.div`
