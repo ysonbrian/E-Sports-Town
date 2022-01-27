@@ -12,6 +12,7 @@ const HomeContainer = styled.div`
   height: 100%;
   width: 100%;
   color: white;
+  padding: 1rem;
 `;
 
 function Home() {

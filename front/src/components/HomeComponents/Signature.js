@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import icon1 from "../../icon1.png";
-import icon2 from "../../icon2.png";
-import icon3 from "../../icon3.png";
+import icon1 from "../../Signature-icon1.png";
+import icon2 from "../../Signature-icon2.png";
+import icon3 from "../../Signature-icon3.png";
 import cardback from "../../cardback.png";
 
 const BackSignature = styled.div`
@@ -54,6 +54,7 @@ const ContentTitle = styled.h2`
 
 const Text = styled.p`
   padding: 10px;
+  font-size: 0.75rem;
 `;
 
 function Signature() {
@@ -64,30 +65,38 @@ function Signature() {
         <CardContainer>
           <Card>
             <img src={icon1} />
-            <ContentTitle>E-Sport에 진심입니다.</ContentTitle>
+            <ContentTitle>NFT 경매</ContentTitle>
             <Text>
-              매주마다 투표시스템을 통해 최고의 인기 작품 3개를 선정하여
-              메인페이지에 노출되도록 합니다.
+              유저들의 경매참여를 통해 NFT의 가격이 결정됩니다.
+              <br></br>
+              <br></br>
+              경매에 참여하여 원하는 금액에 NFT를 구매하세요!
+              <br></br>
+              페이커, 임요한  등 세계적인 선수들의 빛나는 순간을 영원한 나의 것으로 소유할 수 있습니다.
             </Text>
           </Card>
           <Card>
             <img src={icon2} />
-            <ContentTitle>유일한 것을 좋아합니다.</ContentTitle>{" "}
+            <ContentTitle>NFT 공동소유</ContentTitle>{" "}
             <Text>
-              E-Sport의 거대한 산업규모에서 나만의 콜렉션은 수집하는 걸 즐기는
-              게이머들에게 매력적으로 다가갈 것 입니다.
+              DAO 형태로 다수의 유저들이 NFT를 공동 소유 및 판매할 수 있습니다.
+              <br></br>
+              <br></br>
+              공동구매(Multi-Auction)을 통해 모두가 NFT를 소유하는 세계를 지향합니다.
             </Text>
           </Card>
 
           <Card>
             <img src={icon3} />{" "}
-            <ContentTitle>"찰나"에 집착합니다.</ContentTitle>{" "}
+            <ContentTitle>자유로운 커뮤니케이션</ContentTitle>{" "}
             <Text>
-              명장면을 통해 오프라인 스포츠 경기와 같은 짜릿함을 선사합니다.
-              <p>
-                이러한 짜릿함은 나만의 것으로 남기고 싶은 소유욕으로 나타날 것
-                입니다.
-              </p>
+              NFT 거래시,
+              <br></br>
+              의사결정을 나눌 수 있는 채팅(커뮤티케이션) 공간을 DAO형태로 제공함으로
+              유저들 간 불필요한 에너지 소비를 예방하며 건강한 사용자 경험을 제공합니다.
+              <br></br>
+              <br></br>
+              구매/판매자 간의 직접적인 소통을 통해 원활한 거래가 이뤄집니다.
             </Text>
           </Card>
         </CardContainer>

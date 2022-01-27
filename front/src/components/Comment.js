@@ -14,9 +14,9 @@ const CreateContainer = styled.div`
   align-items: center;
   flex-direction: column;
   height: 100%;
-  padding: 10px;
-  margin: 20px;
-  width: 30%;
+  //padding: 10px;
+  //margin: 20px;
+  width: 100%;
 `;
 const CreateTitleInput = styled.input`
   width: 100%;
@@ -117,13 +117,13 @@ const Comment = () => {
     <CreateContainer>
       <form onSubmit={(e) => onSubmitWriting(e)}>
         {/* <CreateTitleInput type="text" placeholder="제목" /> */}
-        <br />
+        {/*<br />*/}
         <CreateTextArea
           placeholder="당신의 이야기를 적어보세요..."
           rows="80"
           cols="80"
         />
-        <br />
+        {/*<br />*/}
 
         <CreateButtonContainer>
           <CreateBackButton>
