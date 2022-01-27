@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { create } from "ipfs-http-client";
-import { useStore } from "../utils/store";
-import { submitNFT } from "../utils/data";
-import styled from "styled-components";
-import back3 from "../back3.png";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { create } from 'ipfs-http-client';
+import { useStore } from '../utils/store';
+import { submitNFT } from '../utils/data';
+import styled from 'styled-components';
+import back3 from '../back3.png';
 
 const Title = styled.h1`
   color: white;
@@ -67,7 +67,7 @@ const NftPreviewImg = styled.div`
 `;
 
 const PreviewImageCloseButton = styled.button`
-  color: gray;
+  color: #1b1a1a;
   outline: none;
   border: none;
   position: absolute;
@@ -77,6 +77,9 @@ const PreviewImageCloseButton = styled.button`
   font-size: 20px;
   :hover {
     color: rgb(127, 117, 117);
+    span {
+      opacity: 0.7;
+    }
   }
 `;
 
@@ -141,14 +144,14 @@ const SubmitButton = styled.button`
 function Minting() {
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
-  const [selected, setSelected] = useState("");
-  const [files, setFiles] = useState("");
-  const [imgSrc, setImgSrc] = useState("");
+  const [selected, setSelected] = useState('');
+  const [files, setFiles] = useState('');
+  const [imgSrc, setImgSrc] = useState('');
 
   const ipfs = create({
-    host: "ipfs.infura.io",
+    host: 'ipfs.infura.io',
     port: 5001,
-    protocol: "https",
+    protocol: 'https',
   });
 
   const onHandleChange = (event) => {
@@ -182,14 +185,14 @@ function Minting() {
       imgURI: metadata.imgURI,
     };
     const data = await submitNFT(result);
-    setSelected("");
-    navigate("/");
+    setSelected('');
+    navigate('/');
     window.location.reload(false);
     // window.location.assign('http://localhost:3000');
   };
 
   const onClickXButton = () => {
-    setImgSrc("");
+    setImgSrc('');
   };
 
   return (
@@ -201,9 +204,11 @@ function Minting() {
           <NftUploader>
             <NftPreviewImg>
               {imgSrc && <img src={imgSrc} alt="preview-img" />}
-              <PreviewImageCloseButton onClick={onClickXButton}>
-                X
-              </PreviewImageCloseButton>
+              {imgSrc && (
+                <PreviewImageCloseButton onClick={onClickXButton}>
+                  <span>X</span>
+                </PreviewImageCloseButton>
+              )}
             </NftPreviewImg>
           </NftUploader>
         </label>

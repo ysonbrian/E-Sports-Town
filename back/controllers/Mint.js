@@ -504,6 +504,7 @@ module.exports = {
             console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
           });
       }
+      res.send('Success');
     } else {
       // 토큰 주인이 단일 지분일때
       let newErc20Contract = new web3.eth.Contract(
@@ -876,6 +877,7 @@ module.exports = {
           .catch((error) => {
             console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
           });
+        res.send('Success');
       }
       // 단일 토큰이 다중 비드한테 팔 때
       // 토큰이 다중지분이 아닐때
@@ -1007,6 +1009,7 @@ module.exports = {
         .catch((error) => {
           console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
         });
+      res.send('Success');
     }
   },
 };
