@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Web3 from 'web3';
-import { useStore, useWeb3 } from '../utils/store';
-import { login, logout } from '../utils/auth';
-import styled from 'styled-components';
-import { FiLogIn } from 'react-icons/fi';
-import { FiLogOut } from 'react-icons/fi';
-import { CgProfile } from 'react-icons/cg';
-import logo from '../logo.png';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Web3 from "web3";
+import { useStore, useWeb3, useProfileImg } from "../utils/store";
+import { login, logout } from "../utils/auth";
+import styled from "styled-components";
+import { FiLogIn } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
+import { CgProfile } from "react-icons/cg";
+import logo from "../logo.png";
 
-import Web3Modal from 'web3modal';
-import { ethers } from 'ethers';
-import Fortmatic from 'fortmatic';
-import Portis from '@portis/web3';
+import Web3Modal from "web3modal";
+import { ethers } from "ethers";
+import Fortmatic from "fortmatic";
+import Portis from "@portis/web3";
 
 const providerOptions = {
   /* See Provider Options Section */
@@ -99,8 +99,15 @@ const HeaderMypage = styled.div`
   padding: 1rem;
 `;
 
+const HeaderProfile = styled.img`
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+`
+
 function Header() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
+  const [profileImg, setProfileImg] = useProfileImg((state) => [state.profileImg, state.setProfileImg]);
   let navigate = useNavigate();
 
   const connectWallet = async () => {
@@ -125,11 +132,15 @@ function Header() {
     await web3Modal.clearCachedProvider();
     logout();
     setUser({});
+    setProfileImg({});
   }
 
   const newUserAddress =
-    user?.userAddress?.slice(0, 6) + '...' + user?.userAddress?.slice(-5);
-
+    user?.userAddress?.slice(0, 6) +
+    "..." +
+    user?.userAddress?.slice(-5);
+  
+  console.log("profileImg", profileImg);
   return (
     <HeaderContainer>
       <Logo>
@@ -149,8 +160,10 @@ function Header() {
 
               <Link to="/mypage">
                 <HeaderMypage>
-                  <CgProfile size="25" />
-                  <CurrentAccount>{newUserAddress}</CurrentAccount>
+                  { profileImg ? <HeaderProfile src={profileImg} size="25"/> : <CgProfile size="25" /> }
+                  <CurrentAccount>
+                    {newUserAddress}
+                  </CurrentAccount>
                 </HeaderMypage>
               </Link>
             </>

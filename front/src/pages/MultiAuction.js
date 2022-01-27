@@ -4,6 +4,7 @@ import {
   useClickedItem,
   useClickedItemGroupList,
   useBidState,
+  useModalOwnerData,
   useModalSubmitData,
   useModalUpdateData,
   useModalDeleteData,
@@ -19,6 +20,7 @@ import {
   submitDelete,
 } from '../utils/data';
 import ModalComponent from '../components/Modal';
+import ModalOwner from '../components/ModalOwner';
 import ModalSubmit from '../components/ModalSubmit';
 import ModalUpdate from '../components/ModalUpdate';
 import ModalDelete from '../components/ModalDelete';
@@ -135,7 +137,6 @@ const NamePriceContainer = styled.div`
   justify-content: space-between;
   h2 {
     margin-right: 10rem;
-    border: dotted 1px yellow;
   }
 `;
 const DescriptionContainer = styled.div`
@@ -434,9 +435,15 @@ function MultiAuction() {
   const [bidMessage, setBidMessage] = useState();
 
   const [checkBidToModal, setCheckBidToModal] = useState(true);
+
+  const [checkOwnerModal, setCheckOwnerModal] = useState(true);
   const [checkSellModal, setCheckSellModal] = useState(true);
   const [checkUpdateModal, setCheckUpdateModal] = useState(true);
   const [checkDeleteModal, setCheckDeleteModal] = useState(true);
+  const [modalOwnerData, setModalOwnerData] = useModalOwnerData((state) => [
+    state.modalOwnerData,
+    state.setModalOwnerData,
+  ]);
   const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
     state.modalSubmitData,
     state.setModalSubmitData,
@@ -456,6 +463,10 @@ function MultiAuction() {
     setCheckBidToModal((prev) => !prev);
   };
 
+  const onOwnerModal = () => {
+    setCheckOwnerModal((prev) => !prev);
+  };
+
   const onSellModal = () => {
     setCheckSellModal((prev) => !prev);
   };
@@ -467,6 +478,17 @@ function MultiAuction() {
   const onDeleteModal = () => {
     setCheckDeleteModal((prev) => !prev);
   };
+
+  const onClickOwner = async () => {
+    onOwnerModal();
+    //const metadata = {
+    //  tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
+    //};
+    const metadata = [];
+    metadata.push(clickFetchGroupList[0]?.tokenOwnerAddress);
+    console.log("onClickToSell-multi-metadata", metadata);
+    setModalOwnerData(metadata);
+  }
 
   //const onClickToSell = async () => {
   //  //onSellModal();
@@ -564,6 +586,8 @@ function MultiAuction() {
     <TotalPage>
       {!checkBidToModal ? (
         <ModalComponent bidMessage={bidMessage} onClickModal={onClickModal} />
+      ) : !checkOwnerModal ? (
+        <ModalOwner onOwnerModal={onOwnerModal}/>
       ) : !checkSellModal ? (
         <ModalSubmit onSellModal={onSellModal} />
       ) : !checkUpdateModal ? (
@@ -605,7 +629,7 @@ function MultiAuction() {
                 <h2>
                   <i className="fab fa-btc"></i> {clickedItem?.price}
                 </h2>
-                <h2>공동소유자 목록</h2>
+                <h2 onClick={onClickOwner}>소유자 보기</h2>
               </NamePriceContainer>
               <DescriptionContainer>
                 <h3>Description: {clickedItem?.description}</h3>
