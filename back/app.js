@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
-const masterRouter = require('./routes/masterRouter');
 const normalRouter = require('./routes/normalRouter');
 const auctionRouter = require('./routes/auctionRouter');
 const createNftRouter = require('./routes/createNftRouter');
@@ -30,7 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 // Routes
-app.use('/master', masterRouter);
 app.use('/normal', normalRouter);
 app.use('/auction', auctionRouter);
 app.use('/mint', createNftRouter);

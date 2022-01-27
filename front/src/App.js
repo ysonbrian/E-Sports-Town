@@ -83,7 +83,6 @@ function App() {
         window.location.assign('http://localhost:3000/');
         console.log('Sign', sign);
         console.log('Ob', ob);
-        window.location.reload(false);
       });
       window.ethereum.on('chainChanged', (chainId) => {
         console.log('Chain ID changed: ', chainId);

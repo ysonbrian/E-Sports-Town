@@ -10,6 +10,14 @@ const NormalDataSchema = mongoose.Schema(
     tokenURI: String,
     tokenId: String,
     imgURI: String,
+    type: String,
+    multiAuctionAddressList: [
+      new mongoose.Schema({
+        multiAuctionAddress: String,
+        bidPrice: Number,
+        created_at: { type: Date, default: Date.now },
+      }),
+    ],
     created_at: { type: Date, default: Date.now },
   },
   { collection: 'normaldata' }

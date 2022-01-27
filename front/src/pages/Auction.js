@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   useStore,
   useClickedItem,
   useSign,
   useClickedItemBidList,
-} from "../utils/store";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { submitBid, getClickedItemBidList, submitSell } from "../utils/data";
-import { useModalSubmitData } from "../utils/store";
-import ModalComponent from "../components/Modal";
-import ModalSubmit from "../components/ModalSubmit";
-import Comment from "../components/Comment";
-import auct from "../auct.jpeg";
+} from '../utils/store';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
+import { useModalSubmitData } from '../utils/store';
+import ModalComponent from '../components/Modal';
+import ModalSubmit from '../components/ModalSubmit';
+import Comment from '../components/Comment';
+import auct from '../auct.jpeg';
 
 const TotalPage = styled.div`
   height: 100%;
@@ -318,7 +318,7 @@ function Auction({ clickedItemList }) {
   }); //returns object
 
   const maxBidAddress =
-    max?.bidAddress?.slice(0, 6) + "..." + max?.bidAddress?.slice(-5);
+    max?.bidAddress?.slice(0, 6) + '...' + max?.bidAddress?.slice(-5);
 
   const onClickBidding = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
@@ -332,21 +332,21 @@ function Auction({ clickedItemList }) {
     const submitData = await submitBid(metadata);
 
     if (
-      submitData.message === "lowerThanMax" ||
-      submitData.message === "NoMoney"
+      submitData.message === 'lowerThanMax' ||
+      submitData.message === 'NoMoney'
     ) {
-      console.log("after submitData.message!!", submitData.message);
+      console.log('after submitData.message!!', submitData.message);
       setBidMessage(submitData.message);
       setCheckBidToModal(false);
     } else {
-      console.log("AFTER submitData.message!!", submitData.message);
+      console.log('AFTER submitData.message!!', submitData.message);
       setBidMessage(submitData.message);
       setCheckBidToModal(true);
       // navigate('/');
-      window.location.assign("http://localhost:3000");
+      window.location.assign('http://localhost:3000');
       // window.location.reload(false);
     }
-    setBid("");
+    setBid('');
   };
 
   const onChangeBid = (e) => {
@@ -361,13 +361,14 @@ function Auction({ clickedItemList }) {
       tokenOwnerAddress: clickFetchList[0].tokenOwnerAddress,
       bidAddress: e.bidAddress,
       bidPrice: e.bidPrice,
-      type: "normal",
+      price: clickedItem.price,
+      type: 'normal',
     };
-    console.log("onClickToSell-normal-metadata", metadata);
+    console.log('onClickToSell-normal-metadata', metadata);
     setModalSubmitData(metadata);
   };
 
-  console.log("clicked!", clickedItem.user, "user!", user.userAddress);
+  console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
 
   useEffect(() => {
     fetchClickedItem();
@@ -434,7 +435,7 @@ function Auction({ clickedItemList }) {
                 <WinningCurrent_Price>
                   <h3>
                     <i className="fas fa-bars"></i>
-                    {max?.bidPrice ? max?.bidPrice : "제시 금액이 없습니다."}
+                    {max?.bidPrice ? max?.bidPrice : '제시 금액이 없습니다.'}
                   </h3>
                 </WinningCurrent_Price>
               </WinningCurrent>
@@ -449,7 +450,7 @@ function Auction({ clickedItemList }) {
                     <h3>
                       {max?.bidAddress
                         ? maxBidAddress
-                        : "최고가를 기록 해보세요!"}
+                        : '최고가를 기록 해보세요!'}
                     </h3>
                   </WinningCurrent_Price>
                 ) : (
@@ -483,18 +484,18 @@ function Auction({ clickedItemList }) {
               {clickFetchList[0]?.biddingList?.map((el) => {
                 let rDate = null;
                 if (el?.created_at) {
-                  let date = el?.created_at.split("T");
+                  let date = el?.created_at.split('T');
 
-                  let newDate = date[0]?.split("-");
-                  let newtime = date[1]?.split(".");
-                  let newtime2 = newtime[0]?.split(":");
+                  let newDate = date[0]?.split('-');
+                  let newtime = date[1]?.split('.');
+                  let newtime2 = newtime[0]?.split(':');
                   let result = [...newDate, ...newtime2];
-                  let result1 = result.slice(0, 3).join("-");
-                  rDate = result1 + " " + newtime2.join(":");
+                  let result1 = result.slice(0, 3).join('-');
+                  rDate = result1 + ' ' + newtime2.join(':');
                 }
                 const newUserAddress =
                   el?.bidAddress?.slice(0, 6) +
-                  "..." +
+                  '...' +
                   el?.bidAddress?.slice(-5);
 
                 return (

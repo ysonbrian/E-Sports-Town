@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import CardTemplate from "../components/CardTemplate";
-import styled from "styled-components";
-import { useGallery } from "../utils/store";
-import { getGalleryList } from "../utils/data";
-import back4 from "../back4.jpeg";
+import React, { useEffect } from 'react';
+import CardTemplate from '../components/CardTemplate';
+import styled from 'styled-components';
+import { useGallery } from '../utils/store';
+import { getGalleryList } from '../utils/data';
+import back4 from '../back4.jpeg';
 
 const PageTitle = styled.h1`
   padding-top: 25px;
@@ -27,6 +27,9 @@ const ListContainer = styled.div`
 `;
 
 const ListItem = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 1rem;
   padding: 1rem;
 `;

@@ -1,7 +1,7 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useStore, useClickedItem } from "../utils/store";
-import styled from "styled-components";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useStore, useClickedItem } from '../utils/store';
+import styled from 'styled-components';
 
 const CardContainer = styled.div`
   border: solid 1px gray;
@@ -14,13 +14,26 @@ const CardContainer = styled.div`
   align-items: center;
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
+  box-shadow: rgb(0 0 0 / 4%) 0px 4px 16px 0px;
+  transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s,
+    background-color 0.25s ease-in;
   :hover {
-    background-color: rgba(255, 255, 255, 0.7);
+    /* background-color: rgba(255, 255, 255, 0.7);
     color: black;
     border: #e0ffff;
     transform: scale(1);
     transition-duration: 0.1s;
+    cursor: pointer; */
+    color: black;
+    background-color: rgba(255, 255, 255, 0.7);
+    transition: background-color 0.25s ease-in, 0.3s linear, color 0.3s ease-in;
     cursor: pointer;
+    box-shadow: 0px 0px 5px rgb(102, 100, 100);
+    overflow: hidden;
+    transform: translateY(-6px);
+    button {
+      color: black;
+    }
   }
 `;
 
@@ -69,21 +82,31 @@ const CardMore = styled.div`
   margin-bottom: 2px;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Price = styled.div`
+  display: flex;
   flex: 1 0 0;
+  gap: 5px;
 `;
 
 const Date = styled.div`
+  display: flex;
   flex: 1 0 0;
+  gap: 5px;
+  margin-left: 30px;
 `;
 
 const ButtonContainer = styled.div`
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+  margin-top: 10px;
+  padding: 0 10px;
+  gap: 10px;
 `;
 
 const SubmitButton = styled.button`
@@ -101,11 +124,12 @@ const SubmitButton = styled.button`
   font-size: 12px;
   cursor: pointer;
   padding: 0px;
-  margin-right: 10px;
   letter-spacing: 2px;
+  box-shadow: rgb(0 0 0 / 4%) 0px 4px 16px 0px;
+  transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
   :hover {
-    background-color: black;
-    transition-duration: 0.8s;
+    background-color: #f4f4f4;
+    cursor: pointer;
   }
 `;
 
@@ -124,7 +148,7 @@ function CardTemplate({
   const selId = useStore((state) => state.id);
   const setId = useStore((state) => state.setId);
   const { setClickedItem } = useClickedItem();
-  const newUserAddress = user.slice(0, 6) + "..." + user.slice(-5);
+  const newUserAddress = user.slice(0, 6) + '...' + user.slice(-5);
   const goToAuction = (id) => {
     const data = {
       id: id,
@@ -155,22 +179,22 @@ function CardTemplate({
       price: price,
       created_at: rDate,
     };
-    console.log("selId : " + selId);
-    console.log("CT id : " + id);
+    console.log('selId : ' + selId);
+    console.log('CT id : ' + id);
     setId(tokenId);
     setClickedItem(data);
     navigate(`/multiauction/${tokenId}`);
     // zustand id 저장, auction page에서 id에 대한 입찰 페이지
   };
 
-  const date = created_at.split("T");
+  const date = created_at.split('T');
   let rDate = null;
   if (date) {
-    const newDate = date[0]?.split("-");
-    const newtime = date[1]?.split(".");
-    const newtime2 = newtime[0]?.split(":");
+    const newDate = date[0]?.split('-');
+    const newtime = date[1]?.split('.');
+    const newtime2 = newtime[0]?.split(':');
     const result = [...newDate, ...newtime2];
-    const result1 = result.slice(0, 3).join("-");
+    const result1 = result.slice(0, 3).join('-');
     rDate = result1;
   }
 

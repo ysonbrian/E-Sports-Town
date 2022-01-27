@@ -116,7 +116,7 @@ const ModalComponent = ({ onSellModal }) => {
   };
 
   const onSellButton = async () => {
-    console.log("onSellButton-modalSubmitData", modalSubmitData);
+    console.log('onSellButton-modalSubmitData', modalSubmitData);
     await submitSell(modalSubmitData);
     onSellModal(true);
     setOpen(false);
