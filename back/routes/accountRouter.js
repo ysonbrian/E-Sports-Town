@@ -15,6 +15,12 @@ router.post('/login', async (req, res, next) => {
     token: 0,
   };
   const account = req.body.account[0].toLowerCase();
+  // const data = {
+  //   userAddress: req.body.account[0],
+  //   master: 'false',
+  //   token: 0,
+  // };
+  // const account = req.body.account[0];
 
   try {
     const isValid = await Users.findOne({ userAddress: account });

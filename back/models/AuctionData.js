@@ -12,6 +12,7 @@ const AuctionDataSchema = new mongoose.Schema(
         created_at: { type: Date, default: Date.now },
       }),
     ],
+    type: String,
     created_at: { type: Date, default: Date.now },
   },
   { collection: 'auctiondata' }

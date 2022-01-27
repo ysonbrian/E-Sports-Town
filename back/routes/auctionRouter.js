@@ -5,9 +5,12 @@ const {
   setToken,
   setBidding,
   sellMultiNft,
+  setMultiBidding,
+  setApproveForAll,
 } = require('../controllers/Mint.js');
 
 const auctionData = require('../models/AuctionData');
+const normalData = require('../models/NormalData');
 const Users = require('../models/Users');
 const MultiAuctionData = require('../models/MultiAuctionData');
 
@@ -73,7 +76,8 @@ router.get('/multiclick', async (req, res) => {
 router.post('/:id/MultiBidding', async (req, res) => {
   const { tokenId, tokenOwnerAddress, bid, currentAddress } = req.body.metadata;
   try {
-    //const user = await Users.find({ userAddress: currentAddress });
+    setMultiBidding(req, res, req.body.metadata);
+    const user = await Users.find({ userAddress: currentAddress });
     const MultiAuction = await MultiAuctionData.find({ tokenId: tokenId });
     //console.log('MultiAuction', MultiAuction);
     if (MultiAuction.length === 0) {
@@ -87,7 +91,6 @@ router.post('/:id/MultiBidding', async (req, res) => {
       await newMultiAuctionData.save();
     } else {
       console.log('MultiAuction.length Not 0');
-
       //const MultiAuction = await MultiAuctionData.findOneAndUpdate({ tokenId: tokenId });
       const update = await MultiAuctionData.findOneAndUpdate(
         { tokenId: tokenId },
@@ -140,46 +143,51 @@ router.post('/:id/AlreadyBid', async (req, res) => {
 router.post('/:id/sell', async (req, res) => {
   // 멀티시그에서 받아오는 정보를 type으로 구분해서 setMultiContract를 설정해야함
   // 현재 밑은 단일 판매용도로만 진행됨
-  console.log(req.body.metadata);
+  const data = await normalData.findOne({ tokenId: req.body.metadata.tokenId });
   setToken(req, res);
   if (req.body.metadata.type === 'multi') {
-    const { tokenId, tokenOwnerAddress, bidAddressNPrice, type } =
+    // 다중 비드와 다중 지분
+    console.log('다중비드 시작!');
+    const { tokenId, tokenOwnerAddress, bidAddressNPrice, type, price } =
       req.body.metadata;
     let maxOwnerAddress;
     let maxOwnerBidPrice = { bidPrice: 0 };
-    req.body.metadata.bidAddressNPrice.forEach((data) => {
+
+    // max값 빼내는 용도
+    let tempbidAddressNPrice = bidAddressNPrice;
+    tempbidAddressNPrice.forEach((data) => {
       if (data.bidPrice > maxOwnerBidPrice.bidPrice) {
         maxOwnerAddress = data.multiAuctionAddress;
         maxOwnerBidPrice = data.bidPrice;
       }
     });
-    let multiAuctionList = bidAddressNPrice.map(
+    let multiAuctionList = tempbidAddressNPrice.map(
       (data) => data.multiAuctionAddress
     );
-    let multiAuctionBidList = bidAddressNPrice.map((data) => data.bidPrice);
+    let multiAuctionBidList = tempbidAddressNPrice.map((data) => data.bidPrice);
     const metadata = {
       tokenId: tokenId,
       tokenOwnerAddress: tokenOwnerAddress,
       bidAddressNPrice: bidAddressNPrice,
       type: type,
+      price: price,
       multiAuctionList: multiAuctionList,
       multiAuctionBidList: multiAuctionBidList,
       maxOwnerAddress: maxOwnerAddress,
       maxOwnerBidPrice: maxOwnerBidPrice,
     };
+
     setTimeout(() => {
       sellMultiNft(req, res, metadata);
-    }, 3000);
-    // setTimeout(() => {
-    // setApproveForAll(req, res, metadata.maxOwnerAddress);
-    // }, 3000);
+    }, 2000);
   } else {
+    // 단일 비드리스트 입력받을 시
+    console.log('단일비드 시작!');
+    sellNft(req, res, req.body.metadata);
+
     setTimeout(() => {
       sellNft(req, res, req.body.metadata);
-    }, 3000);
-    // setTimeout(() => {
-    //   setApproveForAll(req, res, req.body.metadata.userAddress);
-    // }, 3000);
+    }, 2000);
   }
 });
 

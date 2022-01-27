@@ -112,7 +112,7 @@ const InfoNFT = styled.div`
 `;
 const CreatedInfo = styled.div`
   border-bottom: solid 1px white;
-`
+`;
 const NameIPFSMetadata = styled.div`
   width: 100%;
   display: flex;
@@ -127,11 +127,11 @@ const NamePriceContainerNFT = styled.div`
   h2 {
     margin-right: 10rem;
   }
-`
+`;
 const DescriptionContainerNFT = styled.div`
   margin-top: 0.5rem;
   flex: 2 0 0;
-`
+`;
 const BidRltContainer = styled.div`
   flex: 1 0 0;
   //border: solid brown 2px;
@@ -147,7 +147,7 @@ const WinningCurrent = styled.div`
 `;
 const WinnerTitle = styled.div`
   padding-left: 1rem;
-`
+`;
 const WinningCurrent_Price = styled.div`
   padding-left: 1rem;
   font-size: 2rem;
@@ -359,9 +359,10 @@ function Auction({ clickedItemList }) {
       tokenOwnerAddress: clickFetchList[0].tokenOwnerAddress,
       bidAddress: e.bidAddress,
       bidPrice: e.bidPrice,
+      price: clickedItem.price,
       type: 'normal',
     };
-    console.log("onClickToSell-normal-metadata", metadata);
+    console.log('onClickToSell-normal-metadata', metadata);
     setModalSubmitData(metadata);
   };
 
@@ -414,7 +415,9 @@ function Auction({ clickedItemList }) {
               <NameIPFSMetadata>
                 <NamePriceContainerNFT>
                   <h2>Name: {clickedItem?.name}</h2>
-                  <h2><i className="fab fa-btc"></i> {clickedItem?.price}</h2>
+                  <h2>
+                    <i className="fab fa-btc"></i> {clickedItem?.price}
+                  </h2>
                 </NamePriceContainerNFT>
                 <DescriptionContainerNFT>
                   <h3>Description: {clickedItem?.description}</h3>
@@ -423,19 +426,31 @@ function Auction({ clickedItemList }) {
             </InfoNFT>
             <BidRltContainer>
               <WinningCurrent>
-                {true ? <WinnerTitle>현재 최고가</WinnerTitle> : <WinnerTitle>Current bid</WinnerTitle>}
+                {true ? (
+                  <WinnerTitle>현재 최고가</WinnerTitle>
+                ) : (
+                  <WinnerTitle>Current bid</WinnerTitle>
+                )}
                 <WinningCurrent_Price>
-                  <h3><i className="fas fa-bars"></i>
-                    {max?.bidPrice ? max?.bidPrice : '제시 금액이 없습니다.'}</h3>
+                  <h3>
+                    <i className="fas fa-bars"></i>
+                    {max?.bidPrice ? max?.bidPrice : '제시 금액이 없습니다.'}
+                  </h3>
                 </WinningCurrent_Price>
               </WinningCurrent>
               <WinnerEnd>
-                {true ? <WinnerTitle>최고가 제시 유저</WinnerTitle> : <WinnerTitle>Ends in</WinnerTitle>}
+                {true ? (
+                  <WinnerTitle>최고가 제시 유저</WinnerTitle>
+                ) : (
+                  <WinnerTitle>Ends in</WinnerTitle>
+                )}
                 {true ? (
                   <WinningCurrent_Price>
-                    <h3>{max?.bidAddress
-                      ? maxBidAddress
-                      : '최고가를 기록 해보세요!'}</h3>
+                    <h3>
+                      {max?.bidAddress
+                        ? maxBidAddress
+                        : '최고가를 기록 해보세요!'}
+                    </h3>
                   </WinningCurrent_Price>
                 ) : (
                   <WinningCurrent_Price>2h 21m 50s</WinningCurrent_Price>
@@ -488,14 +503,12 @@ function Auction({ clickedItemList }) {
                     <BidItemCreated>{rDate}</BidItemCreated>
                     <BidItemPrice>{el?.bidPrice}</BidItemPrice>
                     {clickFetchList[0]?.tokenOwnerAddress ===
-                      user.userAddress ? (
+                    user.userAddress ? (
                       <BidItemSellButton onClick={() => onClickToSell(el)}>
                         판매
                       </BidItemSellButton>
                     ) : (
-                      <BidItemlabel>
-                        입찰 완료
-                      </BidItemlabel>
+                      <BidItemlabel>입찰 완료</BidItemlabel>
                     )}
                   </BidListItemContainer>
                 );
