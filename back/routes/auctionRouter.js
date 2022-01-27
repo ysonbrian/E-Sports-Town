@@ -96,6 +96,7 @@ router.post('/:id/MultiBidding', async (req, res) => {
       );
       console.log('update', update);
     }
+    res.send("success")
   } catch (error) {
     console.log(error);
   }
@@ -156,19 +157,95 @@ router.post('/:id/sell', async (req, res) => {
 
 router.post('/:id/update', async (req, res) => {
   console.log("update-router", req.body.metadata);
-  const { userbidInfo, updatebid } = req.body.metadata;
+  const { userbidInfo, updatedbid } = req.body.metadata;
 
   const tokenId = userbidInfo.tokenId;
-  console.log("update-router-tokenId", tokenId);
-  console.log("update-router-updatebid", updatebid);
-
+  const tokenOwnerAddress = userbidInfo.tokenOwnerAddress;
+  const bidAddress = userbidInfo.bidAddress;
+  const bidPrice = userbidInfo.bidPrice;
+  //console.log("update-router-tokenId", tokenId);
+  //console.log("update-router-tokenOwnerAddress", tokenOwnerAddress);
+  //console.log("update-router-bidAddress", bidAddress);
+  //console.log("update-router-bidPrice", bidPrice);
+  //console.log("update-router-updatebid", updatedbid);
   try {
-    //const update = await MultiAuctionData.find(
+
+    //const findToken = await MultiAuctionData.find(
+    //  {tokenId: tokenId}
+    //)
+    //console.log('update-findToken', findToken);
+    //const update = await MultiAuctionData.findByIdAndUpdate(
+    //  { tokenId, multiAuctionAddressList: [{ multiAuctionAddress: bidAddress }] },
+    //  { multiAuctionAddressList: [{ bidPrice: updatedbid }] } 
     //)
     //console.log('update', update);
+    //const updateRlt = await MultiAuctionData.updateOne(
+
+
+    //const updateFindOneRlt = await MultiAuctionData.findOne( { tokenId, 'multiAuctionAddressList.bidPrice': 10 } )
+    let updateFindOneRlt = await MultiAuctionData.findOne({ tokenId: tokenId });
+    //console.log('updateFindOneRlt', updateFindOneRlt);
+    //console.log('updateFindOneRlt-len', updateFindOneRlt?.multiAuctionAddressList?.length);
+    //console.log('multiAuctionAddress', updateFindOneRlt?.multiAuctionAddressList[0]?.multiAuctionAddress);
+    //console.log('bidPrice', updateFindOneRlt?.multiAuctionAddressList[0]?.bidPrice);
+    //console.log('updatedbid', updatedbid);
+    for (let i = 0; i < updateFindOneRlt?.multiAuctionAddressList?.length; i++) {
+      if (updateFindOneRlt?.multiAuctionAddressList[i]?.multiAuctionAddress === bidAddress) {
+        //updateFindOneRlt?.multiAuctionAddressList[i][bidPrice] = parseInt(updatedbid);
+        //console.log('multiAuctionAddress-for', updateFindOneRlt?.multiAuctionAddressList[i]?.multiAuctionAddress);
+        updateFindOneRlt.multiAuctionAddressList[i].bidPrice = updatedbid;
+      }
+    }
+    //console.log('updateFindOneRlt', updateFindOneRlt);
+    ////updateRlt.tokenId = 111;
+    //const updateFindOneFilterRlt = updateFindOneRlt?.multiAuctionAddressList?.filter((el) => {
+    //  return el.multiAuctionAddress === bidAddress;
+    //})
+    //console.log('updateFindOneFilterRlt', updateFindOneFilterRlt);
+    //updateFindOneFilterRlt.bidPrice = updatedbid;
+
+    await updateFindOneRlt.save();
+    res.send("success")
   } catch (error) {
     console.log(error);
   }
 });
+
+
+
+router.post('/:id/delete', async (req, res) => {
+  console.log("delete-router", req.body.metadata);
+  const { tokenId, tokenOwnerAddress, bidAddress, bidPrice } = req.body.metadata;
+
+  console.log("delete-router-tokenId", tokenId);
+  console.log("delete-router-tokenOwnerAddress", tokenOwnerAddress);
+  console.log("delete-router-bidAddress", bidAddress);
+  console.log("delete-router-bidPrice", bidPrice);
+  try {
+    // findOne save 형태는 데이터 갱신만 되는 걸로 보임, 지운 상태로 저장은 안됨.
+    //const deleteRlt = await MultiAuctionData.findOne({ tokenId: tokenId });
+    //console.log('deleteRlt', deleteRlt);
+    //for (let i = 0; i < deleteRlt?.multiAuctionAddressList?.length; i++) {
+    //  if (deleteRlt?.multiAuctionAddressList[i]?.multiAuctionAddress === bidAddress) {
+    //    //updateFindOneRlt?.multiAuctionAddressList[i][bidPrice] = parseInt(updatedbid);
+    //    //console.log('multiAuctionAddress-for', updateFindOneRlt?.multiAuctionAddressList[i]?.multiAuctionAddress);
+    //    deleteRlt.multiAuctionAddressList.splice(i,1);
+    //  }
+    //}
+    //console.log('after-deleteRlt', deleteRlt);
+    //await deleteRlt.save();
+
+    const deleteRlt = await MultiAuctionData.findOneAndUpdate(
+      {tokenId: tokenId},
+      {"$pull":{"multiAuctionAddressList": {"multiAuctionAddress": bidAddress}}},
+      {safe: true, multi:true})
+
+    res.send("success")
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
 
 module.exports = router;
