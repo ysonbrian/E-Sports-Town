@@ -4,20 +4,23 @@ import { create } from "ipfs-http-client";
 import { useStore } from "../utils/store";
 import { submitNFT } from "../utils/data";
 import styled from "styled-components";
+import back3 from "../back3.png";
 
 const Title = styled.h1`
-  padding-bottom: 3rem;
+  color: white;
+  margin: 3rem 0;
   color: white;
   display: flex;
   justify-content: center;
-  font-size: 50px;
+  font-size: 5rem;
 `;
 
-//background-image: url(${mainImage});
 const NftContainer = styled.div`
-  
   background-size: cover;
   padding: 100px;
+  background-image: url(${back3});
+  background-size: 95% 95%;
+  background-repeat: no-repeat;
 `;
 
 const NftEnrollContainer = styled.div`
@@ -86,11 +89,11 @@ const InputInfoContainer = styled.div`
   width: 300px;
   gap: 10px;
   letter-spacing: 2px;
-  color: black;
+  color: white;
 `;
 
 const InputTitle = styled.h1`
-  color: black;
+  color: white;
   align-items: center;
 `;
 
@@ -123,16 +126,17 @@ const SubmitButton = styled.button`
   height: 80px;
   border-radius: 8px;
   text-align: center;
-  color: #f4f4f4;
+  color: white;
   border: none;
-  background-color: #5800ff;
+  background-color: red;
   font-weight: bold;
   cursor: pointer;
   padding: 0px 1.25rem;
   margin-top: 50px;
   letter-spacing: 2px;
   :hover {
-    background-color: #e900ff;
+    background-color: white;
+    color: black;
   }
 `;
 

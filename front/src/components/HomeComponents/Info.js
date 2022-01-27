@@ -21,6 +21,7 @@ const InfoText = styled.div`
   color: white;
   text-align: center;
   margin-bottom: 50px;
+  margin-top: 130px;
   padding: 50px;
   background-color: rgba(255, 255, 255, 0.3);
 `;

@@ -12,11 +12,20 @@ const BackSignature = styled.div`
   justify-content: space-between;
 `;
 
+const SignatureTitle = styled.h1`
+  margin: 3rem 0;
+  color: white;
+  display: flex;
+  justify-content: center;
+  font-size: 5rem;
+  color: red;
+`;
+
 const CardContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: nowrap;
-  margin-top: 400px;
+  margin-top: 300px;
 `;
 
 const Card = styled.div`
@@ -47,10 +56,11 @@ const Text = styled.p`
   padding: 10px;
 `;
 
-function Signature(props) {
+function Signature() {
   return (
     <>
       <BackSignature>
+        <SignatureTitle>Signature</SignatureTitle>
         <CardContainer>
           <Card>
             <img src={icon1} />
