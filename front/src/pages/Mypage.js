@@ -44,7 +44,6 @@ const ListContainer = styled.div`
 
 const ListItem = styled.div`
   margin: 1rem;
-  background-color: #5800ff;
   border: none;
   border-radius: 1rem;
   width: 300px;

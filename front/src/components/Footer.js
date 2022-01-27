@@ -47,7 +47,7 @@ const Footer = () => {
         </li>
       </FooterList>
       <br />
-      <Corp> ©2022 E-Town : U-Pick </Corp>
+      <Corp> ©2022 E-SPORTS TOWN </Corp>
       <div></div>
     </FooterContainer>
   );

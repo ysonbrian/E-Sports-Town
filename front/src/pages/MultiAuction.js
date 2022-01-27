@@ -33,15 +33,13 @@ const TotalPage = styled.div`
   flex-direction: column;
   color: white;
   background-image: url(${auct});
-  background-size: cover;
+  background-size: 100% 100%;
 `;
 const PageTitle = styled.h1`
-  margin: 2rem 0;
+  margin-top: 1rem;
   color: white;
   display: flex;
   justify-content: center;
-  font-size: 5rem;
-  color: white;
 `;
 const MultiAuctionPage = styled.div`
   flex: 2 0 0;
@@ -97,6 +95,10 @@ const CommentListContainer = styled.div`
   border: 1px solid white;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 /* (End)LeftSide */
 
@@ -133,6 +135,7 @@ const NamePriceContainer = styled.div`
   justify-content: space-between;
   h2 {
     margin-right: 10rem;
+    border: dotted 1px yellow;
   }
 `;
 const DescriptionContainer = styled.div`
@@ -426,17 +429,6 @@ function MultiAuction() {
   //console.log('test-bidState-length', bidState.length);
   //console.log('test-bidState-isArray', Array.isArray(bidState));
 
-  /*
-    ToDoList
-    1. 판매 버튼 모달 처리
-    XX2. 본인 계정에 대해서 수정 취소 나오게
-    3. 수정시 디비 업데이트
-    4. 취소시 디비 삭제
-    5. 소유한 코인 이상 참가금액 참여 불가
-    6. Remaining Bid 이상 참여 못함.
-    7. Guest 모드
-  */
-
   // modal
   const [clickedBidList, setClickedBidList] = useState();
   const [bidMessage, setBidMessage] = useState();
@@ -476,6 +468,36 @@ function MultiAuction() {
     setCheckDeleteModal((prev) => !prev);
   };
 
+  //const onClickToSell = async () => {
+  //  //onSellModal();
+  //  // console.log(clickFetchList);
+  //  const metadata = {
+  //    tokenId: id,
+  //    tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
+  //    bidAddressNPrice: clickFetchGroupList[0]?.multiAuctionAddressList,
+  //    //bidPrice: e.bidPrice,
+  //    type: "multi",
+  //  };
+  //  console.log("onClickToSell-multi-metadata", metadata);
+  //  //setModalSubmitData(metadata);
+  //  await submitSell(metadata);
+  //};
+
+  const onClickToSell = async () => {
+    onSellModal();
+    // console.log(clickFetchList);
+    const metadata = {
+      tokenId: id,
+      tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
+      bidAddressNPrice: clickFetchGroupList[0]?.multiAuctionAddressList,
+      //bidPrice: e.bidPrice,
+      type: "multi",
+    };
+    console.log("onClickToSell-multi-metadata", metadata);
+    setModalSubmitData(metadata);
+    //await submitSell(metadata);
+  };
+
   const onClickUpdate = (e) => {
     onUpdateModal();
     console.log("onClickUpdate", e);
@@ -503,8 +525,6 @@ function MultiAuction() {
     setModalDeleteData(metadata);
     //setCheckUpdateModal(false);
   }
-
-
 
   const onChangeBid = (e) => {
     console.log(e.target.value);
@@ -539,21 +559,6 @@ function MultiAuction() {
     setBid("");
   };
 
-  const onClickToSell = async () => {
-    //onSellModal();
-    // console.log(clickFetchList);
-    const metadata = {
-      tokenId: id,
-      tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
-      bidAddressNPrice: clickFetchGroupList[0]?.multiAuctionAddressList,
-      //bidPrice: e.bidPrice,
-      type: "multi",
-    };
-    console.log("onClickToSell-multi-metadata", metadata);
-    //setModalSubmitData(metadata);
-    await submitSell(metadata);
-  };
-
   return (
     <TotalPage>
       {!checkBidToModal ? (
@@ -583,7 +588,6 @@ function MultiAuction() {
           </PreViewNFTInfo>
           <CommentContainer>
             <CommentListContainer>
-              <h1>Hi</h1>
               <Comment />
             </CommentListContainer>
           </CommentContainer>
@@ -593,7 +597,6 @@ function MultiAuction() {
             <NFTDate>
               <span>상품등록 시간: </span>
               <span>{clickedItem?.created_at}</span>
-              <span> | 현재 로그인 계정: {user.userAddress}</span>
             </NFTDate>
             <NFTUserInputData>
               <NamePriceContainer>
@@ -601,6 +604,7 @@ function MultiAuction() {
                 <h2>
                   <i className="fab fa-btc"></i> {clickedItem?.price}
                 </h2>
+                <h2>공동소유자 목록</h2>
               </NamePriceContainer>
               <DescriptionContainer>
                 <h3>Description: {clickedItem?.description}</h3>

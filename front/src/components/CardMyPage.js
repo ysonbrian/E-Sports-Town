@@ -22,7 +22,7 @@ const CardContainer = styled.div`
     transition-duration: 0.1s;
     cursor: pointer;
   }
-`
+`;
 
 const CardImage = styled.div`
   display: flex;

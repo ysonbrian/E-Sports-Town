@@ -8,11 +8,9 @@ import back3 from "../back3.png";
 
 const Title = styled.h1`
   color: white;
-  margin: 3rem 0;
-  color: white;
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
-  font-size: 5rem;
 `;
 
 const NftContainer = styled.div`

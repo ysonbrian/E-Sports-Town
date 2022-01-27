@@ -24,11 +24,11 @@ const TotalPage = styled.div`
   background-size: 100% 100%;
 `;
 const PageTitle = styled.h1`
-  margin: 2rem 0;
+  margin-top: 1rem;
   color: white;
   display: flex;
   justify-content: center;
-  font-size: 5rem;
+  //font-size: 5rem;
   color: white;
 `;
 const AuctionNFT = styled.div`
@@ -87,6 +87,10 @@ const CommentListContainer = styled.div`
   border: 1px solid white;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 /* (End)LeftSide */
 
@@ -397,7 +401,6 @@ function Auction({ clickedItemList }) {
             </ImgDescription>
             <CommentContainer>
               <CommentListContainer>
-                <h1>Hi</h1>
                 <Comment />
               </CommentListContainer>
             </CommentContainer>
@@ -407,7 +410,6 @@ function Auction({ clickedItemList }) {
               <CreatedInfo>
                 <span>상품등록 시간: </span>
                 <span>{clickedItem?.created_at}</span>
-                <span> | 현재 로그인 계정: {user.userAddress}</span>
               </CreatedInfo>
               <NameIPFSMetadata>
                 <NamePriceContainerNFT>
@@ -415,6 +417,7 @@ function Auction({ clickedItemList }) {
                   <h2>
                     <i className="fab fa-btc"></i> {clickedItem?.price}
                   </h2>
+                  <h2></h2>
                 </NamePriceContainerNFT>
                 <DescriptionContainerNFT>
                   <h3>Description: {clickedItem?.description}</h3>

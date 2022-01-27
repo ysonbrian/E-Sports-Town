@@ -69,7 +69,7 @@ function Partner() {
           </PartnerImg>
           <PartnerInfo>
             <div>
-              'E-Town : U-Pick' 블록체인 선두기업들과 협력하고 있습니다.
+              'E-SPORTS TOWN' 블록체인 선두기업들과 협력하고 있습니다.
             </div>
             <div>
               함께 건강한 블록체인 생태계를 만들어갈 분들은 언제나 환영입니다.
