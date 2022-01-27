@@ -104,3 +104,8 @@ export const useModalUpdateData = create((set) => ({
   modalUpdateData: [],
   setModalUpdateData: (modalUpdateData) => set({ modalUpdateData }),
 }));
+
+export const useModalDeleteData = create((set) => ({
+  modalDeleteData: [],
+  setModalDeleteData: (modalDeleteData) => set({ modalDeleteData }),
+}));

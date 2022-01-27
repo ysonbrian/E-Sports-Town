@@ -5,7 +5,8 @@ import {
   useClickedItemGroupList,
   useBidState,
   useModalSubmitData,
-  useModalUpdateData
+  useModalUpdateData,
+  useModalDeleteData,
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -14,10 +15,13 @@ import {
   submitAlreadyBid,
   submitAddJoinerGroup,
   submitSell,
+  submitUpdate,
+  submitDelete,
 } from '../utils/data';
 import ModalComponent from '../components/Modal';
 import ModalSubmit from '../components/ModalSubmit';
 import ModalUpdate from '../components/ModalUpdate';
+import ModalDelete from '../components/ModalDelete';
 import Comment from '../components/Comment';
 
 //background-image: url(${mainImage});
@@ -432,9 +436,13 @@ function MultiAuction() {
   */
 
   // modal
+  const [clickedBidList, setClickedBidList] = useState();
+  const [bidMessage, setBidMessage] = useState();
+
   const [checkBidToModal, setCheckBidToModal] = useState(true);
   const [checkSellModal, setCheckSellModal] = useState(true);
   const [checkUpdateModal, setCheckUpdateModal] = useState(true);
+  const [checkDeleteModal, setCheckDeleteModal] = useState(true);
   const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
     state.modalSubmitData,
     state.setModalSubmitData,
@@ -443,9 +451,26 @@ function MultiAuction() {
     state.modalUpdateData,
     state.setModalUpdateData,
   ]);
+  const [modalDeleteData, setModalDeleteData] = useModalDeleteData((state) => [
+    state.modalDeleteData,
+    state.setModalDeleteData,
+  ]);
   
+  const onClickModal = (e) => {
+    console.log(e);
+    setCheckBidToModal((prev) => !prev);
+  };
+
+  const onSellModal = () => {
+    setCheckSellModal((prev) => !prev);
+  };
+
   const onUpdateModal = () => {
     setCheckUpdateModal((prev) => !prev);
+  };
+
+  const onDeleteModal = () => {
+    setCheckDeleteModal((prev) => !prev);
   };
 
   const onClickUpdate = (e) => {
@@ -459,53 +484,22 @@ function MultiAuction() {
     };
     console.log("onClickUpdate-metadata_test", metadata);
     setModalUpdateData(metadata);
-    setCheckUpdateModal(false);
+    //setCheckUpdateModal(false);
   }
 
-
-
-
-
-
-
-
-  //??
-  const [clickedBidList, setClickedBidList] = useState();
-
-  const [bidMessage, setBidMessage] = useState();
-
-
-
-  // modal
-  //const [checkBidToModal, setCheckBidToModal] = useState(true);
-  //const [checkSellModal, setCheckSellModal] = useState(true);
-  //const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
-  //  state.modalSubmitData,
-  //  state.setModalSubmitData,
-  //]);
-  const onClickModal = (e) => {
-    console.log(e);
-    setCheckBidToModal((prev) => !prev);
-  };
-
-  const onSellModal = () => {
-    setCheckSellModal((prev) => !prev);
-  };
-  // modal
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  const onClickDelete = (e) => {
+    onDeleteModal();
+    console.log("onClickDelete", e);
+    const metadata = {
+      tokenId: id,
+      tokenOwnerAddress: clickFetchGroupList[0].tokenOwnerAddress,
+      bidAddress: e.multiAuctionAddress,
+      bidPrice: e.bidPrice,
+    };
+    //console.log("onClickDelete-metadata_test", metadata);
+    setModalDeleteData(metadata);
+    //setCheckUpdateModal(false);
+  }
 
 
 
@@ -545,7 +539,9 @@ function MultiAuction() {
     };
     const submitMultiBidData = await submitMultiBid(metadata);
     console.log('submitMultiBidData', submitMultiBidData);
+    //navigate('/');
     window.location.assign('http://localhost:3000');
+    //window.location.reload(false);
 
     setBid('');
   };
@@ -572,7 +568,10 @@ function MultiAuction() {
       ) : !checkSellModal ? (
         <ModalSubmit onSellModal={onSellModal} />
       ) : !checkUpdateModal ? (
-        <ModalUpdate onUpdateModal={onUpdateModal}/>) : null}
+        <ModalUpdate onUpdateModal={onUpdateModal} />
+      ) : !checkDeleteModal ? (
+        <ModalDelete onDeleteModal={onDeleteModal} /> 
+      ) : null}
       <PageTitle>MultiAuction</PageTitle>
       <MultiAuctionPage>
         <PreViewNFT>
@@ -692,7 +691,9 @@ function MultiAuction() {
                       <BidItemUpdateButton onClick={() => onClickUpdate(el)}>
                         수정
                       </BidItemUpdateButton>
-                      <BidItemDeleteButton>취소</BidItemDeleteButton>
+                      <BidItemDeleteButton onClick={() => onClickDelete(el)}>
+                        취소
+                      </BidItemDeleteButton>
                     </BidButtonContainer>
                   ) : (
                     <BidButtonContainer>

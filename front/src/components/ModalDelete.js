@@ -4,10 +4,10 @@ import { useState } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 //import { submitSell } from '../utils/data';
-import { submitUpdate } from '../utils/data';
-import modify from '../modify.png'
+import { submitDelete } from '../utils/data';
+import deleteicon from '../icon-delete.png'
 
-import { useModalUpdateData } from '../utils/store';
+import { useModalDeleteData } from '../utils/store';
 
 const ModalAllContainer = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const ModalImageContainer = styled.div`
   align-items: center;
   width: 250px;
   height: 250px;
-  background-image: url(${modify});
+  background-image: url(${deleteicon});
   background-size: cover;
 `;
 
@@ -49,8 +49,7 @@ const ModalInfoContainer = styled.div`
   padding: 10px;
   margin-bottom: 10px;
 `;
-const ModalChangeEth = styled.input`
-`
+
 const ModalInfo = styled.span`
   font-weight: 600;
 `;
@@ -102,12 +101,12 @@ const ModalCancelButton = styled.button`
   }
 `;
 
-const ModalComponent = ({ onUpdateModal }) => {
+const ModalComponent = ({ onDeleteModal }) => {
   let navigate = useNavigate();
   const [open, setOpen] = useState(true);
-  const [modalUpdateData, setModalUpdateData] = useModalUpdateData((state) => [
-    state.modalUpdateData,
-    state.setModalUpdateData,
+  const [modalDeleteData, setModalDeleteData] = useModalDeleteData((state) => [
+    state.modalDeleteData,
+    state.setModalDeleteData,
   ]);
 
   const customStyles = {
@@ -123,18 +122,17 @@ const ModalComponent = ({ onUpdateModal }) => {
   };
 
   //const onSellButton = async () => {
-  const onUpdateButton = async (bid) => {
+  const onDeleteButton = async () => {
     //await submitSell(modalSubmitData);
-    const metadata = {
-      userbidInfo: modalUpdateData,
-      updatedbid: bid
-    }
+    //const metadata = {
+    //  userbidInfo: modalDeleteData,
+    //}
     
-    await submitUpdate(metadata);
+    await submitDelete(modalDeleteData);
     //onSellModal(true);
-    console.log("after-submit-update")
+    console.log("after-submit-Delete")
     
-    onUpdateModal(true);
+    onDeleteModal(true);
     setOpen(false);
     //navigate('/');
     //window.location.reload(false);
@@ -143,12 +141,8 @@ const ModalComponent = ({ onUpdateModal }) => {
 
   const onCloseButton = () => {
     //onSellModal(true);
-    onUpdateModal(true);
+    onDeleteModal(true);
     setOpen(false);
-  };
-  const [bid, setBid] = useState();
-  const onChangeBid = (e) => {
-    setBid(e.target.value);
   };
 
   return (
@@ -161,21 +155,15 @@ const ModalComponent = ({ onUpdateModal }) => {
       >
         <ModalAllContainer>
           <ModalHeaderContainer>
-            <ModalHeader>수정</ModalHeader>
+            <ModalHeader>삭제</ModalHeader>
           </ModalHeaderContainer>
           <ModalImageContainer>
           </ModalImageContainer>
           <ModalInfoContainer>
-            <ModalChangeEth
-              type="text"
-              placeholder="ETH"
-              value={bid}
-              onChange={(e) => onChangeBid(e)}
-            ></ModalChangeEth>
-            <ModalInfo>참가금액을 수정 하시겠습니까?</ModalInfo>
+            <ModalInfo>참가금액을 삭제 하시겠습니까?</ModalInfo>
           </ModalInfoContainer>
           <ModalButtonContainer>
-            <ModalConfirmButton onClick={() => onUpdateButton(bid)}>수정</ModalConfirmButton>
+            <ModalConfirmButton onClick={onDeleteButton}>삭제</ModalConfirmButton>
             <ModalCancelButton onClick={onCloseButton}>취소</ModalCancelButton>
           </ModalButtonContainer>
         </ModalAllContainer>
