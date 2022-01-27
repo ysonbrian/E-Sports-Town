@@ -163,32 +163,10 @@ router.post('/:id/update', async (req, res) => {
   const tokenOwnerAddress = userbidInfo.tokenOwnerAddress;
   const bidAddress = userbidInfo.bidAddress;
   const bidPrice = userbidInfo.bidPrice;
-  //console.log("update-router-tokenId", tokenId);
-  //console.log("update-router-tokenOwnerAddress", tokenOwnerAddress);
-  //console.log("update-router-bidAddress", bidAddress);
-  //console.log("update-router-bidPrice", bidPrice);
-  //console.log("update-router-updatebid", updatedbid);
+
   try {
-
-    //const findToken = await MultiAuctionData.find(
-    //  {tokenId: tokenId}
-    //)
-    //console.log('update-findToken', findToken);
-    //const update = await MultiAuctionData.findByIdAndUpdate(
-    //  { tokenId, multiAuctionAddressList: [{ multiAuctionAddress: bidAddress }] },
-    //  { multiAuctionAddressList: [{ bidPrice: updatedbid }] } 
-    //)
-    //console.log('update', update);
-    //const updateRlt = await MultiAuctionData.updateOne(
-
-
-    //const updateFindOneRlt = await MultiAuctionData.findOne( { tokenId, 'multiAuctionAddressList.bidPrice': 10 } )
     let updateFindOneRlt = await MultiAuctionData.findOne({ tokenId: tokenId });
-    //console.log('updateFindOneRlt', updateFindOneRlt);
-    //console.log('updateFindOneRlt-len', updateFindOneRlt?.multiAuctionAddressList?.length);
-    //console.log('multiAuctionAddress', updateFindOneRlt?.multiAuctionAddressList[0]?.multiAuctionAddress);
-    //console.log('bidPrice', updateFindOneRlt?.multiAuctionAddressList[0]?.bidPrice);
-    //console.log('updatedbid', updatedbid);
+    
     for (let i = 0; i < updateFindOneRlt?.multiAuctionAddressList?.length; i++) {
       if (updateFindOneRlt?.multiAuctionAddressList[i]?.multiAuctionAddress === bidAddress) {
         //updateFindOneRlt?.multiAuctionAddressList[i][bidPrice] = parseInt(updatedbid);
@@ -196,13 +174,6 @@ router.post('/:id/update', async (req, res) => {
         updateFindOneRlt.multiAuctionAddressList[i].bidPrice = updatedbid;
       }
     }
-    //console.log('updateFindOneRlt', updateFindOneRlt);
-    ////updateRlt.tokenId = 111;
-    //const updateFindOneFilterRlt = updateFindOneRlt?.multiAuctionAddressList?.filter((el) => {
-    //  return el.multiAuctionAddress === bidAddress;
-    //})
-    //console.log('updateFindOneFilterRlt', updateFindOneFilterRlt);
-    //updateFindOneFilterRlt.bidPrice = updatedbid;
 
     await updateFindOneRlt.save();
     res.send("success")

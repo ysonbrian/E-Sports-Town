@@ -6,7 +6,7 @@ const FooterContainer = styled.footer`
   display: grid;
   place-items: center;
   margin-top: auto;
-  padding: 50px 0;
+  padding: 20px 0;
   font-size: 15px;
   color: white;
   text-align: center;
@@ -28,6 +28,10 @@ const FooterList = styled.ul`
   }
 `;
 
+const Corp = styled.div`
+  font-size: 15px;
+`
+
 const Footer = () => {
   return (
     <FooterContainer>
@@ -38,12 +42,12 @@ const Footer = () => {
             target="_blank"
             rel="noreferrer"
           >
-            <FaGithub size="30px" />
+            <FaGithub size="40px" />
           </a>
         </li>
       </FooterList>
       <br />
-      <div> ©2022 E-Town : U-Pick </div>
+      <Corp> ©2022 E-Town : U-Pick </Corp>
       <div></div>
     </FooterContainer>
   );

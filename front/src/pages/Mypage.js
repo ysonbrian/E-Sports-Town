@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import CardMyPage from "../components/CardMyPage";
 import styled from "styled-components";
 import { useStore, useMypage, useMyToken, useWeb3 } from "../utils/store";
+import back2 from "../back2.png";
+import CardMyPage from "../components/CardMyPage";
 
 const PageTitle = styled.h1`
   padding-top: 25px;
@@ -16,6 +17,7 @@ const Profile_container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-image: url(${back2});
   color: white;
   
   background-size: cover;
