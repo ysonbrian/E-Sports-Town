@@ -94,6 +94,10 @@ export const useBidState = create((set) => ({
   },
 }));
 
+export const useModalOwnerData = create((set) => ({
+  modalOwnerData: [],
+  setModalOwnerData: (modalOwnerData) => set({ modalOwnerData }),
+}));
 
 export const useModalSubmitData = create((set) => ({
   modalSubmitData: [],
@@ -108,4 +112,10 @@ export const useModalUpdateData = create((set) => ({
 export const useModalDeleteData = create((set) => ({
   modalDeleteData: [],
   setModalDeleteData: (modalDeleteData) => set({ modalDeleteData }),
+}));
+
+
+export const useProfileImg = create((set) => ({
+  profileImg: '',
+  setProfileImg: (profileImg) => set({profileImg}),
 }));

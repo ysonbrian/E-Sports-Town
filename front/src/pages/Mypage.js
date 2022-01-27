@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useStore, useMypage, useMyToken, useWeb3 } from "../utils/store";
+import { useStore, useMypage, useMyToken, useWeb3, useProfileImg } from "../utils/store";
 import back2 from "../back2.png";
 import CardMyPage from "../components/CardMyPage";
 
 const PageTitle = styled.h1`
   padding-top: 25px;
-  margin-top: 1rem;
   color: white;
 `;
 
@@ -113,6 +112,7 @@ function Mypage() {
   const myToken = useMyToken((state) => state.myToken);
   const [files, setFiles] = useState("");
   const [imgSrc, setImgSrc] = useState("");
+  const [profileImg, setProfileImg] = useProfileImg((state) => [state.profileImg, state.setProfileImg]);
   // const [web3, setWeb3] = useWeb3((state) => [state.web3, state.setWeb3]);
   const { fetchMyPage } = useMypage();
   useEffect(() => {
@@ -128,60 +128,63 @@ function Mypage() {
     fileReader.readAsDataURL(file);
     // fileReader.readAsText(e.target.files[0], 'UTF');
     fileReader.onload = (e) => {
-      setImgSrc(e.target.result);
+      setProfileImg(e.target.result);
+      //setImgSrc(e.target.result);
     };
   };
 
-  // console.log(web3.eth.getBalance());
-  console.log(myPage);
+  console.log("imgSrc", imgSrc);
+  console.log("profileImg", profileImg);
+  console.log("myPage", myPage);
   return (
-    <>
-      <Profile_container>
-        <PageTitle>Mypage</PageTitle>
-        <InputImage
-          id="upload"
-          type="file"
-          name="upload"
-          onChange={onHandleChange}
-        />
-        <Profile>
-          <label htmlFor="upload">
-            <ImgContainer>
-              <ProfilePreview src={imgSrc} />
-              <i className="far fa-user"></i>
-              {user?.username ? user.username : "unnamed"}
-            </ImgContainer>
-          </label>
+    <Profile_container>
+      <PageTitle>Mypage</PageTitle>
+      <InputImage
+        id="upload"
+        type="file"
+        name="upload"
+        onChange={onHandleChange}
+      />
+      <Profile>
+        <label htmlFor="upload">
+          <ImgContainer>
+            <ProfilePreview>
+              {profileImg && <img src={profileImg} alt="preview-img"/>}
+              {/*imgSrc && <img src={imgSrc} alt="preview-img"/>*/}
+            </ProfilePreview>
+            {/*<i className="far fa-user"></i>*/}
+            {/*user?.username ? user.username : "unnamed"*/}
+          </ImgContainer>
+        </label>
 
-          <PublicKey>{user?.userAddress}</PublicKey>
-          <Coin>Coin : {myToken[0].token ? myToken[0].token : null}</Coin>
-          <CollectionNumber>Number of NFT : {myPage.length}</CollectionNumber>
-        </Profile>
-        <PageTitle>NFT List</PageTitle>
-        {myPage.length !== 0 ? (
-          <ListContainer>
-            {myPage?.map((el) => {
-              return (
-                <ListItem key={el?._id}>
-                  <CardMyPage
-                    id={el?.id}
-                    imgURI={el?.imgURI}
-                    user={el?.userAddress}
-                    description={el?.description}
-                    price={el?.price}
-                    created_at={el?.created_at}
-                  />
-                </ListItem>
-              );
-            })}
-          </ListContainer>
-        ) : (
-          <NoData>
-            <h1>NFT 상품이 없습니다</h1>
-          </NoData>
-        )}
-      </Profile_container>
-    </>
+        <PublicKey>{user?.userAddress}</PublicKey>
+        <Coin>Coin : {myToken[0].token ? myToken[0].token : null}</Coin>
+        <CollectionNumber>Number of NFT : {myPage.length}</CollectionNumber>
+      </Profile>
+      <PageTitle>NFT List</PageTitle>
+      {myPage.length !== 0 ? (
+        <ListContainer>
+          {myPage?.map((el) => {
+            return (
+              <ListItem key={el?._id}>
+                <CardMyPage
+                  id={el?.id}
+                  imgURI={el?.imgURI}
+                  user={el?.userAddress}
+                  description={el?.description}
+                  price={el?.price}
+                  created_at={el?.created_at}
+                />
+              </ListItem>
+            );
+          })}
+        </ListContainer>
+      ) : (
+        <NoData>
+          <h1>NFT 상품이 없습니다</h1>
+        </NoData>
+      )}
+    </Profile_container>
   );
 }
 

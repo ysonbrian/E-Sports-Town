@@ -6,33 +6,38 @@ import { submitNFT } from '../utils/data';
 import styled from 'styled-components';
 import back3 from '../back3.png';
 
-const Title = styled.h1`
-  color: white;
-  margin-top: 1rem;
+const NftContainer = styled.div`
+  //padding: 0 100px 100px 100px;
+  background-image: url(${back3});
+  background-size: 100% 100%;
+  //background-repeat: no-repeat;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 `;
 
-const NftContainer = styled.div`
-  background-size: cover;
-  padding: 100px;
-  background-image: url(${back3});
-  background-size: 95% 95%;
-  background-repeat: no-repeat;
+const Title = styled.h1`
+  margin: 1.5rem;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const NftEnrollContainer = styled.div`
   display: flex;
   border: solid 1px gray;
   border-radius: 50px;
-  margin: auto;
+  margin: 2rem;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
   width: 80%;
   height: 40%;
   background-color: rgba(255, 255, 255, 0.2);
-  padding-bottom: 1rem;
+  //padding-bottom: 1rem;
+  padding: 1rem;
   position: relative;
 `;
 
@@ -198,7 +203,6 @@ function Minting() {
   return (
     <NftContainer>
       <Title>Create New Item</Title>
-
       <NftEnrollContainer>
         <label htmlFor="upload">
           <NftUploader>
