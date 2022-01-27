@@ -58,8 +58,8 @@ const Logo = styled.div`
   gap: 10px;
 
   img {
-    width: 188px;
-    height: 100px;
+    width: 180px;
+    height: 80px;
   }
 `;
 
@@ -76,7 +76,7 @@ const HeaderBar = styled.ul`
     cursor: pointer;
   }
   a:hover {
-    color: #e900ff;
+    color: red;
   }
 `;
 
@@ -84,6 +84,18 @@ const HeaderIsLogin = styled.div`
   display: flex;
   margin-right: 5px;
   align-items: center;
+`;
+
+const CurrentAccount = styled.div`
+  color: white;
+`;
+
+const HeaderMypage = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 `;
 
 function Header() {
@@ -114,6 +126,9 @@ function Header() {
     setUser({});
   }
 
+  const newUserAddress =
+    user?.userAddress?.slice(0, 6) + '...' + user?.userAddress?.slice(-5);
+
   return (
     <HeaderContainer>
       <Logo>
@@ -132,9 +147,10 @@ function Header() {
               </Link>
 
               <Link to="/mypage">
-                <div className="header_Mypage">
+                <HeaderMypage>
                   <CgProfile size="25" />
-                </div>
+                  <CurrentAccount>{newUserAddress}</CurrentAccount>
+                </HeaderMypage>
               </Link>
             </>
           ) : (

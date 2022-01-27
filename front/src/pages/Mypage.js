@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import CardMyPage from '../components/CardMyPage';
-import styled from 'styled-components';
-import { useStore, useMypage, useMyToken, useWeb3 } from '../utils/store';
-import mainImage from '../mainImage.jpg';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { useStore, useMypage, useMyToken, useWeb3 } from "../utils/store";
+import back2 from "../back2.png";
+import CardMyPage from "../components/CardMyPage";
 
 const PageTitle = styled.h1`
   padding-top: 25px;
@@ -10,14 +10,16 @@ const PageTitle = styled.h1`
   color: white;
 `;
 
+//background-image: url(${mainImage});
 const Profile_container = styled.div`
   flex: 1 0 0;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-image: url(${back2});
   color: white;
-  background-image: url(${mainImage});
+  
   background-size: cover;
 `;
 
@@ -25,6 +27,10 @@ const Profile = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const InputImage = styled.input`
+  display: none;
 `;
 
 const ListContainer = styled.div`
@@ -38,7 +44,6 @@ const ListContainer = styled.div`
 
 const ListItem = styled.div`
   margin: 1rem;
-  background-color: #5800ff;
   border: none;
   border-radius: 1rem;
   width: 300px;
@@ -49,7 +54,13 @@ const ListItem = styled.div`
   color: white;
 `;
 
-const UserName = styled.div`
+const ImgContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ProfilePreview = styled.div`
   margin: 2rem;
   border: solid 2px gainsboro;
   width: 150px;
@@ -60,7 +71,15 @@ const UserName = styled.div`
   justify-content: center;
   border-radius: 5rem;
   font-size: 1.5rem;
-
+  img {
+    width: 150px;
+    height: 150px;
+    padding: 1px 3px 3px 1px;
+    border-radius: 5rem;
+  }
+  :hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
   i {
     font-size: 5rem;
   }
@@ -86,10 +105,14 @@ const Coin = styled.div`
   margin: 10px;
 `;
 
+const UserName = styled.div``
+
 function Mypage() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const myPage = useMypage((state) => state.mypage);
   const myToken = useMyToken((state) => state.myToken);
+  const [files, setFiles] = useState("");
+  const [imgSrc, setImgSrc] = useState("");
   // const [web3, setWeb3] = useWeb3((state) => [state.web3, state.setWeb3]);
   const { fetchMyPage } = useMypage();
   useEffect(() => {
@@ -97,17 +120,39 @@ function Mypage() {
     fetchMyPage(user);
   }, []);
 
+  const onHandleChange = (event) => {
+    event.preventDefault();
+    setFiles(event.target.files[0]);
+    let fileReader = new FileReader();
+    let file = event.target.files[0];
+    fileReader.readAsDataURL(file);
+    // fileReader.readAsText(e.target.files[0], 'UTF');
+    fileReader.onload = (e) => {
+      setImgSrc(e.target.result);
+    };
+  };
+
   // console.log(web3.eth.getBalance());
   console.log(myPage);
   return (
     <>
       <Profile_container>
         <PageTitle>Mypage</PageTitle>
+        <InputImage
+          id="upload"
+          type="file"
+          name="upload"
+          onChange={onHandleChange}
+        />
         <Profile>
-          <UserName>
-            <i className="far fa-user"></i>
-            {user?.username ? user.username : 'unnamed'}
-          </UserName>
+          <label htmlFor="upload">
+            <ImgContainer>
+              <ProfilePreview src={imgSrc} />
+              <i className="far fa-user"></i>
+              {user?.username ? user.username : "unnamed"}
+            </ImgContainer>
+          </label>
+
           <PublicKey>{user?.userAddress}</PublicKey>
           <Coin>Coin : {myToken[0].token ? myToken[0].token : null}</Coin>
           <CollectionNumber>Number of NFT : {myPage.length}</CollectionNumber>

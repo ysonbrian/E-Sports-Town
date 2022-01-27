@@ -4,31 +4,33 @@ import { useStore, useClickedItem } from '../utils/store';
 import styled from 'styled-components';
 
 const CardContainer = styled.div`
-  border: solid 3px #5800FF;
+  border: solid 1px gray;
   border-radius: 1rem;
+  padding-bottom: 1rem;
   width: 300px;
   height: 450px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #5800FF;
-  color: white;;
-  border-radius: 1rem;
-  width: 300px;
-  height: 450px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  :hover {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: black;
+    border: #e0ffff;
+    transform: scale(1);
+    transition-duration: 0.1s;
+    cursor: pointer;
+  }
+`;
 
 const CardImage = styled.div`
-  border: solid 1px gray;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 280px;
-  height: 280px;
+  width: 270px;
+  height: 270px;
   margin: 1rem;
 
   img {

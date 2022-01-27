@@ -88,9 +88,9 @@ export const useBidState = create((set) => ({
     const { data } = await Axios.post(`${url}/auction/:id/AlreadyBid`, {metadata,});
     console.log("fetchBidState-data", data)
     set({ bidState: await data });
-    console.log('test-bidState-data', data);
-    console.log('test-bidState-data-length', data.length);
-    console.log('test-bidState-data-isArray', Array.isArray(data));
+    //console.log('test-bidState-data', data);
+    //console.log('test-bidState-data-length', data.length);
+    //console.log('test-bidState-data-isArray', Array.isArray(data));
   },
 }));
 
@@ -103,4 +103,9 @@ export const useModalSubmitData = create((set) => ({
 export const useModalUpdateData = create((set) => ({
   modalUpdateData: [],
   setModalUpdateData: (modalUpdateData) => set({ modalUpdateData }),
+}));
+
+export const useModalDeleteData = create((set) => ({
+  modalDeleteData: [],
+  setModalDeleteData: (modalDeleteData) => set({ modalDeleteData }),
 }));

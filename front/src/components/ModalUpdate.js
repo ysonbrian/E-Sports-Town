@@ -132,10 +132,13 @@ const ModalComponent = ({ onUpdateModal }) => {
     
     await submitUpdate(metadata);
     //onSellModal(true);
+    console.log("after-submit-update")
+    
     onUpdateModal(true);
     setOpen(false);
-    navigate('/');
-    window.location.reload(false);
+    //navigate('/');
+    //window.location.reload(false);
+    window.location.assign('http://localhost:3000');
   };
 
   const onCloseButton = () => {

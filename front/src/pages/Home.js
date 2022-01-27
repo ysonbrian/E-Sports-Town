@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import Team from "../components/Team";
-import Partner from "../components/Partner";
-import Motto from "../components/Motto";
-import Info from "../components/Info";
-import BestNft from "../components/BestNft";
-import Signature from "../components/Signature";
+import Team from "../components/HomeComponents/Team";
+import Partner from "../components/HomeComponents/Partner";
+import Motto from "../components/HomeComponents/Motto";
+import Info from "../components/HomeComponents/Info";
+import Signature from "../components/HomeComponents/Signature";
 
 const HomeContainer = styled.div`
   display: flex;
@@ -13,6 +12,7 @@ const HomeContainer = styled.div`
   height: 100%;
   width: 100%;
   color: white;
+  padding: 1rem;
 `;
 
 function Home() {
@@ -20,7 +20,6 @@ function Home() {
     <HomeContainer>
       <Motto />
       <Info />
-      <BestNft />
       <Signature />
       <Team />
       <Partner />

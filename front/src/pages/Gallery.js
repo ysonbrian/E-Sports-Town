@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import CardTemplate from '../components/CardTemplate';
-import styled from 'styled-components';
-import { useGallery } from '../utils/store';
-import { getGalleryList } from '../utils/data';
-import mainImage from '../mainImage.jpg';
+import React, { useEffect } from "react";
+import CardTemplate from "../components/CardTemplate";
+import styled from "styled-components";
+import { useGallery } from "../utils/store";
+import { getGalleryList } from "../utils/data";
+import back4 from "../back4.jpeg";
 
 const PageTitle = styled.h1`
   padding-top: 25px;
@@ -14,17 +14,16 @@ const PageTitle = styled.h1`
 
 const GalleryContainer = styled.div`
   height: 100%;
-  background-image: url(${mainImage});
-  background-size: cover;
+  background-image: url(${back4});
+  background-size: 100% 100%;
 `;
 
 const ListContainer = styled.div`
-  padding: 3rem;
   width: 100%;
   height: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  justify-items: center;
+  grid-gap: 10px;
 `;
 
 const ListItem = styled.div`

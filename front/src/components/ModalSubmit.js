@@ -116,11 +116,13 @@ const ModalComponent = ({ onSellModal }) => {
   };
 
   const onSellButton = async () => {
+    console.log("onSellButton-modalSubmitData", modalSubmitData);
     await submitSell(modalSubmitData);
     onSellModal(true);
     setOpen(false);
-    navigate('/');
-    window.location.reload(false);
+    //navigate('/');
+    //window.location.reload(false);
+    window.location.assign('http://localhost:3000');
   };
 
   const onCloseButton = () => {
