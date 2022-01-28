@@ -878,6 +878,22 @@ module.exports = {
             console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
           });
         res.send('Success');
+        // DB auction TokenOwner 변경
+        auctionData
+          .findOneAndDelete({ tokenId: tokenId })
+          .then((response) => {
+            console.log(
+              response,
+              '해당 토큰 Auction 데이터 삭제 성공!'
+            );
+          })
+          .catch((error) => {
+            console.log(
+              error,
+              '해당 토큰 Auction 데이터 삭제 실패!'
+            );
+          });
+        res.send('Success');
       }
       // 단일 토큰이 다중 비드한테 팔 때
       // 토큰이 다중지분이 아닐때
