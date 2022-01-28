@@ -23,6 +23,11 @@
 - Discord, Zoom, Github, Miro
 
 
+## 팀원소개
+![image](https://user-images.githubusercontent.com/89737377/151490025-5aa7ac67-1e89-4cbf-a98f-52eca0487179.png)
+
+
+
 
 ## 플로우 차트
 
