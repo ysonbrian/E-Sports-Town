@@ -115,6 +115,18 @@ export const useModalDeleteData = create((set) => ({
   setModalDeleteData: (modalDeleteData) => set({ modalDeleteData }),
 }));
 
+export const useComments = create((set) => ({
+  comments: [],
+  fetchComments: async (metadata) => {
+    console.log('fetchComments', metadata);
+    const data = await Axios.post(`${url}/comments/normal/fetch`, {
+      metadata,
+    });
+    console.log('comments data', data);
+    set({ comments: await data });
+  },
+}));
+
 export const useProfileImg = create((set) => ({
   profileImg: '',
   setProfileImg: (profileImg) => set({ profileImg }),
