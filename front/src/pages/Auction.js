@@ -95,6 +95,28 @@ const CommentListContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+const CommentsItemContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid;
+  border-radius: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-weight: 600;
+`;
+
+const CommentsItemAccount = styled.div`
+  font-weight: 800;
+`;
+
+const CommentsItemComment = styled.div``;
+const CommentsItemDate = styled.div`
+  color: #d7d7d7;
+`;
 /* (End)LeftSide */
 
 /* (Start)RightSide */
@@ -423,18 +445,39 @@ function Auction({ clickedItemList }) {
             {/* Comments */}
             <CommentContainer>
               <CommentListContainer>
-                {comments.data
-                  ? comments?.data?.map((data, index) => (
-                      <div key={index}>
-                        <div>{data.userAddress}</div>
-                        <div>{data.comment}</div>
-                      </div>
-                    ))
+                {comments?.data
+                  ? comments?.data?.map((data, index) => {
+                      const newUserAddress =
+                        data.userAddress.slice(0, 6) +
+                        '...' +
+                        data.userAddress.slice(-5);
+                      const date = data.created_at.split('T');
+                      let rDate = null;
+                      if (date) {
+                        const newDate = date[0]?.split('-');
+                        const newtime = date[1]?.split('.');
+                        const newtime2 = newtime[0]?.split(':');
+                        const result = [...newDate, ...newtime2];
+                        const result1 = result.slice(0, 3).join('-');
+                        rDate = result1;
+                      }
+                      return (
+                        <CommentsItemContainer key={index}>
+                          <CommentsItemAccount>
+                            {newUserAddress}
+                          </CommentsItemAccount>
+                          <CommentsItemComment>
+                            {data.comment}
+                          </CommentsItemComment>
+                          <CommentsItemDate>{rDate}</CommentsItemDate>
+                        </CommentsItemContainer>
+                      );
+                    })
                   : auctionComments?.map((data, index) => (
-                      <div key={index}>
+                      <CommentsItemContainer key={index}>
                         <div>{data.userAddress}</div>
                         <div>{data.comment}</div>
-                      </div>
+                      </CommentsItemContainer>
                     ))}
               </CommentListContainer>
               <Comment id={id} onClickComments={onClickComments} />
