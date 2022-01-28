@@ -17,7 +17,9 @@ const MultiAuctionData = require('../models/MultiAuctionData');
 router.get('/click', async (req, res) => {
   try {
     const data = await auctionData.find();
+    //const data = await normalData.find();
     if (data) {
+      console.log("click-find", data);
       res.json(data);
     } else {
       console.log('No data!');
@@ -61,9 +63,10 @@ router.post('/:id/bidding', async (req, res) => {
 router.get('/multiclick', async (req, res) => {
   try {
     const data = await MultiAuctionData.find();
+    //const data = await normalData.find();
     console.log('multiclick');
     if (data) {
-      //console.log(data);
+      console.log("multiclick-find", data);
       res.json(data);
     } else {
       console.log('No data!');

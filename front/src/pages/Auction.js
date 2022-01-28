@@ -4,6 +4,7 @@ import {
   useClickedItem,
   useSign,
   useClickedItemBidList,
+  useModalOwnerData,
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,6 +12,7 @@ import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
 import { useModalSubmitData } from '../utils/store';
 import ModalComponent from '../components/Modal';
 import ModalSubmit from '../components/ModalSubmit';
+import ModalOwner from '../components/ModalOwner';
 import Comment from '../components/Comment';
 import auct from '../auct.jpeg';
 
@@ -292,12 +294,20 @@ function Auction({ clickedItemList }) {
   const [bidMessage, setBidMessage] = useState();
 
   // modal
+  const [checkOwnerModal, setCheckOwnerModal] = useState(true);
   const [checkBidToModal, setCheckBidToModal] = useState(true);
   const [checkSellModal, setCheckSellModal] = useState(true);
   const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
     state.modalSubmitData,
     state.setModalSubmitData,
   ]);
+  const [modalOwnerData, setModalOwnerData] = useModalOwnerData((state) => [
+    state.modalOwnerData,
+    state.setModalOwnerData,
+  ]);
+  const onOwnerModal = () => {
+    setCheckOwnerModal((prev) => !prev);
+  };
   const onClickModal = (e) => {
     console.log(e);
     setCheckBidToModal((prev) => !prev);
@@ -307,10 +317,21 @@ function Auction({ clickedItemList }) {
     setCheckSellModal((prev) => !prev);
   };
   // modal
+  const onClickOwner = async () => {
+    onOwnerModal();
+    //const metadata = {
+    //  tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
+    //};
+    const metadata = [];
+    metadata.push(clickFetchList[0]?.tokenOwnerAddress);
+    console.log("onClickToSell-multi-metadata", metadata);
+    setModalOwnerData(metadata);
+  }
 
   const clickFetchList = clickedItemList.filter(
     (data) => data.tokenId === Number(id)
   );
+  console.log("clickFetchList-test", clickFetchList)
   const max = clickFetchList[0]?.biddingList?.reduce(function (prev, current) {
     return prev?.bidPrice > current?.bidPrice ? prev : current;
   }); //returns object
@@ -378,7 +399,9 @@ function Auction({ clickedItemList }) {
         <ModalComponent bidMessage={bidMessage} onClickModal={onClickModal} />
       ) : !checkSellModal ? (
         <ModalSubmit onSellModal={onSellModal} />
-      ) : null}
+      ) : !checkOwnerModal ? (
+        <ModalOwner onOwnerModal={onOwnerModal}/>
+      ) :!null}
       {/* <ModalComponent onClickModal={onClickModal} /> */}
       <PageTitle>Auction</PageTitle>
       <AuctionNFT>
@@ -415,7 +438,7 @@ function Auction({ clickedItemList }) {
                 <h2>
                   <i className="fab fa-btc"></i> {clickedItem?.price}
                 </h2>
-                <h2></h2>
+                <h2 onClick={onClickOwner}>소유자 보기</h2>
               </NamePriceContainerNFT>
               <DescriptionContainerNFT>
                 <h3>Description: {clickedItem?.description}</h3>
