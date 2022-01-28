@@ -315,7 +315,7 @@ module.exports = {
     const etherPrice = web3.utils.toWei(String(price), 'ether');
     let erc721Contract = new web3.eth.Contract(erc721Abi, process.env.nftCA);
 
-    let { multiAuctionAddressList } = await normalData.findOne({
+    let { multiAuctionAddressList } = await multiAuctionData.findOne({
       tokenId: tokenId,
     });
     console.log('multiAuctionAddressList', multiAuctionAddressList);
@@ -622,7 +622,7 @@ module.exports = {
                     bidAddressBalance +
                     Math.round(
                       (price / totalBidList) *
-                        multiAuctionAddressList[i].bidPrice
+                      multiAuctionAddressList[i].bidPrice
                     ),
                 };
                 users
@@ -844,39 +844,43 @@ module.exports = {
           .catch((error) => {
             console.log(error, '다중지분 에서 다중지분으로 토큰값 변경 실패');
           });
-        // normalData에 있는 multiAuctionAddressList 변경해주기
-
-        let filter2 = {
-          tokenId: tokenId,
-        };
-        let update2 = {
-          userAddress: maxOwnerAddress,
-          multiAuctionAddressList: bidAddressNPrice,
-          type: 'multi',
-        };
-
-        // DB MultiAuctionList 지우기
-        multiAuctionData
-          .findOneAndDelete({ tokenId: tokenId })
-          .then((response) => {
-            console.log(response, '해당 토큰 MultiAuction 데이터 삭제 성공!');
-          })
-          .catch((error) => {
-            console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
-          });
-        // DB auction TokenOwner 변경
-        auctionData
-          .findOneAndDelete({ tokenId: tokenId })
-          .then((response) => {
-            console.log(response, '해당 토큰 Auction 데이터 삭제 성공!');
-          })
-          .catch((error) => {
-            console.log(error, '해당 토큰 Auction 데이터 삭제 실패!');
-          });
-        res.send('Success');
       }
+      let filter2 = {
+        tokenId: tokenId,
+      };
+      let update2 = {
+        userAddress: maxOwnerAddress,
+        multiAuctionAddressList: bidAddressNPrice,
+        type: 'multi',
+      };
+      normalData
+        .findOneAndUpdate(filter2, update2)
+        .then((response) => console.log(response, 'NormalData 변경 성겅!'))
+        .catch((error) => console.log(error, 'NormalData 변경 실패!'));
+
+      // DB MultiAuctionList 지우기
+      multiAuctionData
+        .findOneAndDelete({ tokenId: tokenId })
+        .then((response) => {
+          console.log(response, '해당 토큰 MultiAuction 데이터 삭제 성공!');
+        })
+        .catch((error) => {
+          console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
+        });
+
+      // DB auction TokenOwner 변경
+      auctionData
+        .findOneAndDelete({ tokenId: tokenId })
+        .then((response) => {
+          console.log(response, '해당 토큰 Auction 데이터 삭제 성공!');
+        })
+        .catch((error) => {
+          console.log(error, '해당 토큰 Auction 데이터 삭제 실패!');
+        });
+      res.send('Success');
       // 단일 토큰이 다중 비드한테 팔 때
       // 토큰이 다중지분이 아닐때
+
     } else {
       console.log('Else!!!!!!!');
       console.log('중간체크 ', bidAddressLength);
