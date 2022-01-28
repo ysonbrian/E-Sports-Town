@@ -156,7 +156,7 @@ router.post('/:id/sell', async (req, res) => {
       req.body.metadata;
     let maxOwnerAddress;
     let maxOwnerBidPrice = { bidPrice: 0 };
-
+    let maxOwnerPrice = 0;
     // max값 빼내는 용도
     let tempbidAddressNPrice = bidAddressNPrice;
     console.log(tempbidAddressNPrice);
@@ -168,6 +168,7 @@ router.post('/:id/sell', async (req, res) => {
           console.log(cur.bidPrice);
           acc = cur.bidPrice;
           maxOwnerAddress = cur.multiAuctionAddress;
+          maxOwnerPrice = cur.bidPrice;
           return acc;
         }
       }, 0);
@@ -187,19 +188,19 @@ router.post('/:id/sell', async (req, res) => {
       multiAuctionList: multiAuctionList,
       multiAuctionBidList: multiAuctionBidList,
       maxOwnerAddress: maxOwnerAddress,
-      maxOwnerBidPrice: maxOwnerBidPrice,
+      maxOwnerPrice: maxOwnerPrice,
     };
-
+    console.log(metadata);
     setTimeout(() => {
       sellMultiNft(req, res, metadata);
-    }, 2000);
+    }, 1000);
   } else {
     // 단일 비드리스트 입력받을 시
     console.log('단일비드 시작!');
 
     setTimeout(() => {
       sellNft(req, res, req.body.metadata);
-    }, 2000);
+    }, 1000);
   }
 });
 
