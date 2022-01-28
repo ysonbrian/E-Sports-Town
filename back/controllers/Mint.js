@@ -868,6 +868,16 @@ module.exports = {
               'NormalData multiAuctionAddressList 데이터 변경 실패!'
             );
           });
+        // DB AuctionData 지우기
+        normalData
+          .findOneAndDelete({ tokenId: tokenId })
+          .then((response) => {
+            console.log(response, '해당 토큰 normalData 데이터 삭제 성공!');
+          })
+          .catch((error) => {
+            console.log(error, '해당 토큰 normalData 데이터 삭제 실패!');
+          });
+        res.send('Success');
         // DB MultiAuctionList 지우기
         multiAuctionData
           .findOneAndDelete({ tokenId: tokenId })

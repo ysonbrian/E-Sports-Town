@@ -162,32 +162,33 @@ router.post('/:id/sell', async (req, res) => {
         maxOwnerBidPrice = data.bidPrice;
       }
     });
-    let multiAuctionList = tempbidAddressNPrice.map(
-      (data) => data.multiAuctionAddress
-    );
-    let multiAuctionBidList = tempbidAddressNPrice.map((data) => data.bidPrice);
-    const metadata = {
-      tokenId: tokenId,
-      tokenOwnerAddress: tokenOwnerAddress,
-      bidAddressNPrice: bidAddressNPrice,
-      type: type,
-      price: price,
-      multiAuctionList: multiAuctionList,
-      multiAuctionBidList: multiAuctionBidList,
-      maxOwnerAddress: maxOwnerAddress,
-      maxOwnerBidPrice: maxOwnerBidPrice,
-    };
+    console.log(maxOwnerAddress);
+    //   let multiAuctionList = tempbidAddressNPrice.map(
+    //     (data) => data.multiAuctionAddress
+    //   );
+    //   let multiAuctionBidList = tempbidAddressNPrice.map((data) => data.bidPrice);
+    //   const metadata = {
+    //     tokenId: tokenId,
+    //     tokenOwnerAddress: tokenOwnerAddress,
+    //     bidAddressNPrice: bidAddressNPrice,
+    //     type: type,
+    //     price: price,
+    //     multiAuctionList: multiAuctionList,
+    //     multiAuctionBidList: multiAuctionBidList,
+    //     maxOwnerAddress: maxOwnerAddress,
+    //     maxOwnerBidPrice: maxOwnerBidPrice,
+    //   };
 
-    setTimeout(() => {
-      sellMultiNft(req, res, metadata);
-    }, 2000);
-  } else {
-    // 단일 비드리스트 입력받을 시
-    console.log('단일비드 시작!');
+    //   setTimeout(() => {
+    //     sellMultiNft(req, res, metadata);
+    //   }, 2000);
+    // } else {
+    //   // 단일 비드리스트 입력받을 시
+    //   console.log('단일비드 시작!');
 
-    setTimeout(() => {
-      sellNft(req, res, req.body.metadata);
-    }, 2000);
+    //   setTimeout(() => {
+    //     sellNft(req, res, req.body.metadata);
+    //   }, 2000);
   }
 });
 

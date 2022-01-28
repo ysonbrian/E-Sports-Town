@@ -84,23 +84,46 @@ const PreViewNFTInfo = styled.div`
   }
 `;
 const CommentContainer = styled.div`
-  flex: 6 0 0;
-  //border: solid greenyellow 2px;
+  flex: 10 0 0;
+  /* border: solid greenyellow 2px; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #001335;
+  background-color: #000000;
   height: 500px;
   width: 100%;
 `;
 const CommentListContainer = styled.div`
-  border: 1px solid white;
+  /* border: 1px solid white; */
   width: 100%;
   height: 100%;
   display: flex;
+  overflow: scroll;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const CommentsItemContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid;
+  border-radius: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-weight: 600;
+`;
+
+const CommentsItemAccount = styled.div`
+  font-weight: 800;
+`;
+
+const CommentsItemComment = styled.div``;
+const CommentsItemDate = styled.div`
+  color: #d7d7d7;
 `;
 /* (End)LeftSide */
 
@@ -486,9 +509,9 @@ function MultiAuction() {
     //};
     const metadata = [];
     metadata.push(clickFetchGroupList[0]?.tokenOwnerAddress);
-    console.log("onClickToSell-multi-metadata", metadata);
+    console.log('onClickToSell-multi-metadata', metadata);
     setModalOwnerData(metadata);
-  }
+  };
 
   //const onClickToSell = async () => {
   //  //onSellModal();
@@ -587,7 +610,7 @@ function MultiAuction() {
       {!checkBidToModal ? (
         <ModalComponent bidMessage={bidMessage} onClickModal={onClickModal} />
       ) : !checkOwnerModal ? (
-        <ModalOwner onOwnerModal={onOwnerModal}/>
+        <ModalOwner onOwnerModal={onOwnerModal} />
       ) : !checkSellModal ? (
         <ModalSubmit onSellModal={onSellModal} />
       ) : !checkUpdateModal ? (
