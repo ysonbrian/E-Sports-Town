@@ -308,21 +308,25 @@ module.exports = {
   sellNft: async (req, res, metadata) => {
     // Erc721 contract에 ERC20 컨트렉트 부른후 IERC를 이용하면 transferFrom시 approve 안되는 오류발생
     console.log(metadata);
-    const { tokenId, tokenOwnerAddress, bidAddress, price } = metadata;
+    const { tokenId, tokenOwnerAddress, bidAddress, price, bidPrice, type } =
+      metadata;
     const serverAccount = process.env.serverAddress;
     const privateKey = process.env.serverAddress_PK;
     // console.log(tokenId, tokenOwnerAddress, bidAddress, metadata.bidPrice);
-    const etherPrice = web3.utils.toWei(String(price), 'ether');
+    const etherPrice = web3.utils.toWei(String(bidPrice), 'ether');
     let erc721Contract = new web3.eth.Contract(erc721Abi, process.env.nftCA);
 
-    let { multiAuctionAddressList } = await multiAuctionData.findOne({
+    let multiAddressList = await multiAuctionData.findOne({
       tokenId: tokenId,
     });
-    console.log('multiAuctionAddressList', multiAuctionAddressList);
-    let beforeOwners = multiAuctionAddressList.map(
+
+    let normalDataList = await normalData.findOne({ tokenId: tokenId });
+    let auctionDataList = await auctionData.findOne({ tokenId: tokenId });
+
+    let beforeOwners = normalDataList.multiAuctionAddressList.map(
       (data) => data.multiAuctionAddress
     );
-    if (multiAuctionAddressList.length !== 0) {
+    if (normalDataList.multiAuctionAddressList.length !== 0) {
       await erc721Contract.methods
         .deleteOwners(beforeOwners, tokenId)
         .send({ from: serverAccount }, async (err, tx) => {
@@ -334,7 +338,7 @@ module.exports = {
         });
     }
     let nonce = await web3.eth.getTransactionCount(serverAccount, 'latest');
-    const sellContract = erc721Contract.methods
+    const sellContract = await erc721Contract.methods
       .sellNFT(bidAddress, tokenOwnerAddress, tokenId)
       .encodeABI();
     const tx = {
@@ -363,24 +367,36 @@ module.exports = {
         console.log('Promise failed:', err);
       });
 
-    if (multiAuctionAddressList.length !== 0) {
-      console.log('토큰이 다중지분 이며 개인이 혼자 구매할때!');
+    if (normalDataList.multiAuctionAddressList.length !== 0) {
+      // 다중 지분이 단일 지분으로 판매할때
+      console.log('다중 지분이 단일 지분으로 판매할때');
       let maxMultiOwner = { multiAuctionAddress: '', bidPrice: 0 };
       // 다중지분 비드 리스트
-      let multiBidList = multiAuctionAddressList.map((data) => data.bidPrice);
+      let multiBidList = normalDataList.multiAuctionAddressList.map(
+        (data) => data.bidPrice
+      );
       // 다중지분 리스트 어카운트
-      let multiBidAddress = multiAuctionAddressList.map(
+      let multiBidAddress = normalDataList.multiAuctionAddressList.map(
+        (data) => data.multiAuctionAddress
+      );
+      let allMultiAuctionList = normalDataList.multiAuctionAddressList.map(
         (data) => data.multiAuctionAddress
       );
       // maxOwner 결정
-      multiAuctionAddressList.forEach((data) => {
-        if (data.bidPrice > maxMultiOwner.bidPrice) {
-          maxMultiOwner.multiAuctionAddress = data.multiAuctionAddress;
-          maxMultiOwner.bidPrice = data.bidPrice;
-        }
-      });
+      let maxOwner; // 다중 지분중 가장 돈을 많이낸사람
+      let maxOwnerBid; // 다중 지분중 가장 높은 금액
+      let mOwner = normalDataList.multiAuctionAddressList
+        .map((data) => data)
+        .reduce((acc, cur) => {
+          if (acc < cur.bidPrice) {
+            acc = cur.bidPrice;
+            maxOwner = cur.multiAuctionAddress;
+            maxOwnerBid = cur.bidPrice;
+            return acc;
+          }
+        }, 0);
       // 다중지분 비드 리스트 총합
-      let totalBidList = multiAuctionAddressList
+      let totalBidList = normalDataList.multiAuctionAddressList
         .map((data) => data.bidPrice)
         .reduce((acc, cur) => acc + cur, 0);
 
@@ -388,7 +404,8 @@ module.exports = {
       // 서버에 보내는 이유는 총 금액을 먼저 받아야 분배해서 돌려줄수 있기 때문
 
       let contract = new web3.eth.Contract(erc20Abi, process.env.erc20CA);
-      // Multiaddress erc20 토큰 tokenOwnerAddress로 보내기
+      // 단일지분이 erc20 토큰을 서버 어카운트로 보낸다
+      console.log('BIDADDRESS', bidAddress);
       await contract.methods
         .transferFrom(bidAddress, serverAccount, etherPrice)
         .send({ from: serverAccount }, async (err, transactionHash) => {
@@ -399,38 +416,18 @@ module.exports = {
           }
         });
       // 새로 판매되는 금액 / 그전에 구매했던 총금액 * 각 계정이 비드했던금액
-      // 판매금액을 예전에 구매했던 가격에 비례해서 나눠주는 연산
-      for (let i = 0; i < multiAuctionAddressList.length; i++) {
-        let afterSumBid = (price / totalBidList) * multiBidList[i];
-        let contract = new web3.eth.Contract(erc20Abi, process.env.erc20CA);
-        // Multiaddress erc20 토큰 tokenOwnerAddress로 보내기
-        await contract.methods
-          .transfer(
-            multiAuctionAddressList[i].multiAuctionAddress,
-            web3.utils.toWei(String(afterSumBid), 'ether')
-          )
-          .send({ from: serverAccount }, async (err, tx) => {
-            if (!err) {
-              console.log(
-                'Server bid to MultiAccount success!',
-                multiAuctionAddressList[i].multiAuctionAddress
-              );
-            } else {
-              console.log(
-                'Server transfer erc20 token to MultiAccount failed!'
-              );
-            }
-          });
-      }
-      // 단일 지분 모든 거래 완료후 DB에 token값 바꾸기
+
+      // 단일비드 비드후 단일비드 값 변경
       let ercCA = new web3.eth.Contract(erc20Abi, process.env.erc20CA);
-      let bidAddressBalance1 = await ercCA.methods.balanceOf(bidAddress).call();
-      bidAddressBalance1 = bidAddressBalance1 / 1000000000000000000;
+      let bidAddressBalance10 = await ercCA.methods
+        .balanceOf(bidAddress)
+        .call();
+      bidAddressBalance10 = bidAddressBalance10 / 1000000000000000000;
       let filter1 = {
         userAddress: bidAddress,
       };
       let update1 = {
-        token: bidAddressBalance1,
+        token: bidAddressBalance10,
       };
       users
         .findOneAndUpdate(filter1, update1)
@@ -439,19 +436,45 @@ module.exports = {
         })
         .catch((error) => console.log(error, '단일지분 토큰값 변경 실패!'));
 
-      // 여기까지 다중 지분 소유자들이  단일 지분 비드를 받고 스마트컨트랙트는 완료
+      //기존 다중지분한테 서버가 돈보내기
+      for (let i = 0; i < normalDataList.multiAuctionAddressList.length; i++) {
+        let erc20Contract = new web3.eth.Contract(
+          erc20Abi,
+          process.env.erc20CA
+        );
+        let afterSumBid = Math.round((price / bidPrice) * multiBidList[i]);
+
+        await erc20Contract.methods
+          .transfer(
+            normalDataList.multiAuctionAddressList[i].multiAuctionAddress,
+            web3.utils.toWei(String(afterSumBid), 'ether')
+          )
+          .send({ from: serverAccount }, async (err, transactionHash) => {
+            if (!err) {
+              console.log('SingleAddress bid to Server success!', bidAddress);
+            } else {
+              console.log(
+                'SingleAddress transfer erc20 token to Server failed!'
+              );
+            }
+          });
+      }
+      // 여기까지 다중 비드를 한사람들이 다중지분 주인이 된후 DB 업데이트
       // DB 수정
-      for (let i = 0; i < multiAuctionAddressList.length; i++) {
+      for (let i = 0; i < normalDataList.multiAuctionAddressList.length; i++) {
         let erc20Contract = new web3.eth.Contract(
           erc20Abi,
           process.env.erc20CA
         );
         let bidAddressBalance = await erc20Contract.methods
-          .balanceOf(multiAuctionAddressList[i].multiAuctionAddress)
+          .balanceOf(
+            normalDataList.multiAuctionAddressList[i].multiAuctionAddress
+          )
           .call();
         bidAddressBalance = bidAddressBalance / 1000000000000000000;
         let filter = {
-          userAddress: multiAuctionAddressList[i].multiAuctionAddress,
+          userAddress:
+            normalDataList.multiAuctionAddressList[i].multiAuctionAddress,
         };
         let update = {
           token: bidAddressBalance,
@@ -461,52 +484,61 @@ module.exports = {
           .then((response) => {
             console.log(
               response,
-              '다중지분 에서 단일지분으로 변경후 다중지분 토큰값 변경 성공'
+              '단일지분에서 다중지분으로 변경후 다중지분 토큰값 변경 성공'
             );
           })
           .catch((error) => {
             console.log(
               error,
-              '다중지분 에서 단일지분으로 변경후 다중지분 토큰값 변경 실패'
+              '단일지분에서 다중지분으로 변경후 다중지분 토큰값 변경 실패'
             );
-          });
-        // normalData에 있는 multiAuctionAddressList 변경해주기
-
-        let filter2 = {
-          tokenId: tokenId,
-        };
-        let update2 = {
-          userAddress: bidAddress,
-          multiAuctionAddressList: [],
-          type: 'normal',
-        };
-        normalData
-          .findOneAndUpdate(filter2, update2)
-          .then((response) => {
-            console.log(
-              response,
-              'NormalData multiAuctionAddressList 데이터 변경 성공!'
-            );
-          })
-          .catch((error) => {
-            console.log(
-              error,
-              'NormalData multiAuctionAddressList 데이터 변경 실패!'
-            );
-          });
-        // DB MultiAuctionList 지우기
-        auctionData
-          .findOneAndDelete({ tokenId: tokenId })
-          .then((response) => {
-            console.log(response, '해당 토큰 MultiAuction 데이터 삭제 성공!');
-          })
-          .catch((error) => {
-            console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
           });
       }
+      // normalData에 있는 multiAuctionAddressList 변경해주기
+
+      let filter2 = {
+        tokenId: tokenId,
+      };
+      let update2 = {
+        userAddress: bidAddress,
+        multiAuctionAddressList: [],
+        type: 'normal',
+      };
+      normalData
+        .findOneAndUpdate(filter2, update2)
+        .then((response) => {
+          console.log(
+            response,
+            'NormalData multiAuctionAddressList 데이터 변경 성공!'
+          );
+        })
+        .catch((error) => {
+          console.log(
+            error,
+            'NormalData multiAuctionAddressList 데이터 변경 실패!'
+          );
+        });
+      // DB MultiAuctionList 지우기
+      multiAuctionData
+        .findOneAndDelete({ tokenId: tokenId })
+        .then((response) => {
+          console.log(response, '해당 토큰 MultiAuction 데이터 삭제 성공!');
+        })
+        .catch((error) => {
+          console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
+        });
+      // DB NormalAuctionList 지우기
+      auctionData
+        .findOneAndDelete({ tokenId: tokenId })
+        .then((response) => {
+          console.log(response, '해당 토큰 MultiAuction 데이터 삭제 성공!');
+        })
+        .catch((error) => {
+          console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
+        });
       res.send('Success');
     } else {
-      // 토큰 주인이 단일 지분일때
+      // 토큰 주인이 단일 지분이며 단일비드 인겨우
       let newErc20Contract = new web3.eth.Contract(
         erc20Abi,
         process.env.erc20CA
@@ -516,154 +548,66 @@ module.exports = {
         .send({ from: serverAccount }, async (err, transactionHash) => {
           if (!err) {
             console.log('Transfer Token completed');
-            if (multiAuctionAddressList.length === 0) {
-              /////////////////////////////////////////////////////////////////////////////
-              // 단일 지분 일경우
-              let bidAddressBalance = await newErc20Contract.methods
-                .balanceOf(bidAddress)
-                .call();
-              bidAddressBalance = bidAddressBalance / 1000000000000000000;
-              let tokenOwnerAddressBalance = await newErc20Contract.methods
-                .balanceOf(tokenOwnerAddress)
-                .call();
-              tokenOwnerAddressBalance =
-                tokenOwnerAddressBalance / 1000000000000000000;
-              console.log('balance1', bidAddressBalance);
-              console.log('balance2', tokenOwnerAddressBalance);
-              users
-                .findOneAndUpdate(
-                  { userAddress: bidAddress },
-                  { token: bidAddressBalance }
-                )
-                .then((response) => {
-                  console.log(response, 'bidAddress 성공!');
-                })
-                .catch((err) => console.log('bidAddress 실패!'));
-              users
-                .findOneAndUpdate(
-                  { userAddress: tokenOwnerAddress },
-                  { token: tokenOwnerAddressBalance }
-                )
-                .then((response) => {
-                  console.log(response, 'tokenOwnerAddress 성공!');
-                })
-                .catch((err) => console.log('tokenOwnerAddress 실패!'));
-              // 단일토큰 주인 변경
-              const filter = { tokenId: tokenId };
-              const update = { userAddress: bidAddress, type: 'normal' };
-              normalData
-                .findOneAndUpdate(filter, update)
-                .then((response) => {
-                  console.log('updated!: ', response);
-                })
-                .catch((err) =>
-                  console.log(err, 'NFT 어카운트 주소 이전 실패!')
-                );
-              // 단일 비드 리스트 삭제
-              auctionData
-                .findOneAndDelete({ tokenId: tokenId })
-                .then((response) => {
-                  console.log('비드 데이터 삭제 성공!');
-                })
-                .catch((err) => console.log(err, '삭제 실패!'));
-            } else {
-              /////////////////////////////////////////////////////////////////////////////
-              // 다중 지분 일경우
-              let maxOwner = { userAddress: '', bidPrice: 0 };
-              let multiAddressList = multiAuctionAddressList.map(
-                (data) => data.userAddress
-              );
-              let multiBidList = multiAuctionAddressList.map(
-                (data) => data.bidPrice
-              );
-              let etherMultiBidLsit = multiAuctionAddressList.map((data) =>
-                web3.utils.toWei(String(data), 'ether')
-              );
-              maxOwner = multiAuctionAddressList.map((data) => {
-                // 멀티유저중 가장 비드를 많이한 유저
-                if (data.bidPrice > maxOwner.bidPrice) maxOwner = data;
-              });
-              let totalBidList = multiAuctionAddressList
-                .map((data) => data.bidPrice)
-                .reduce((acc, cur) => acc + cur, 0);
 
-              //다중 지분 삭제
-              let erc721Contract = new web3.eth.Contract(
-                erc721Abi,
-                process.env.nftCA
-              );
-              erc721Contract.methods
-                .deleteOwners(multiAddressList, etherMultiBidLsit, tokenId)
-                .send({ from: serverAccount }, async (err, tx) => {
-                  if (!err) {
-                    console.log('MultiSigUsers deleted sucessfully!');
-                  } else {
-                    console.log('MultiSig delete failed!');
-                  }
-                });
-              // DB로 다중토큰 유저들 토큰 변경
-              // 새로 판매되는 금액 / 그전에 구매했던 총금액 * 각 계정이 비드했던금액
-              for (let i = 0; i < multiAuctionAddressList.length; i++) {
-                let erc721Contract = new web3.eth.Contract(
-                  erc721Abi,
-                  process.env.nftCA
-                );
-                let bidAddressBalance = await erc721Contract.methods
-                  .balanceOf(multiAuctionAddressList[i].userAddress)
-                  .call();
-                bidAddressBalance = bidAddressBalance / 1000000000000000000;
-                let userBidPrice = multiAuctionAddressList[i].bidPrice;
-                let updateBidPrice;
-                let filter = {
-                  userAddress: multiAuctionAddressList[i].userAddress,
-                };
-                let update = {
-                  token:
-                    bidAddressBalance +
-                    Math.round(
-                      (price / totalBidList) *
-                      multiAuctionAddressList[i].bidPrice
-                    ),
-                };
-                users
-                  .findOneAndUpdate(filter, update)
-                  .then((response) => {
-                    console.log(
-                      response,
-                      '다중지분에서 단일 지분으로 변경후 다중지분 유저의 토큰값 변경 성공!'
-                    );
-                  })
-                  .catch((error) => {
-                    console.log(
-                      error,
-                      '다중지분에서 단일 지분으로 변경후 다중지분 유저의 토큰값 변경 실패!'
-                    );
-                  });
-              }
-
-              // DB로 다중토큰(multiAuctionAddressList) 데이터 빈배열로 변경
-              const filter2 = { tokenId: tokenId };
-              const update2 = {
-                multiAuctionAddressList: [],
-                type: 'normal',
-              };
-              normalData
-                .findOneAndUpdate(filter2, update2)
-                .then((response) => {
-                  console.log("'다중토큰을 단일토큰으로 변경 성공!");
-                })
-                .catch((error) =>
-                  console.log(
-                    error,
-                    '다중토큰을 단일토큰으로 변경했지만 multiAuctionAddressList 데이터는 변경실패!'
-                  )
-                );
-            }
-            res.send('Success!');
+            /////////////////////////////////////////////////////////////////////////////
+            // 단일 지분 일경우
+            let bidAddressBalance = await newErc20Contract.methods
+              .balanceOf(bidAddress)
+              .call();
+            bidAddressBalance = bidAddressBalance / 1000000000000000000;
+            let tokenOwnerAddressBalance = await newErc20Contract.methods
+              .balanceOf(tokenOwnerAddress)
+              .call();
+            tokenOwnerAddressBalance =
+              tokenOwnerAddressBalance / 1000000000000000000;
+            console.log('balance1', bidAddressBalance);
+            console.log('balance2', tokenOwnerAddressBalance);
+            users
+              .findOneAndUpdate(
+                { userAddress: bidAddress },
+                { token: bidAddressBalance }
+              )
+              .then((response) => {
+                console.log(response, 'bidAddress 성공!');
+              })
+              .catch((err) => console.log('bidAddress 실패!'));
+            users
+              .findOneAndUpdate(
+                { userAddress: tokenOwnerAddress },
+                { token: tokenOwnerAddressBalance }
+              )
+              .then((response) => {
+                console.log(response, 'tokenOwnerAddress 성공!');
+              })
+              .catch((err) => console.log('tokenOwnerAddress 실패!'));
+            // 단일토큰 주인 변경
+            const filter = { tokenId: tokenId };
+            const update = { userAddress: bidAddress, type: 'normal' };
+            normalData
+              .findOneAndUpdate(filter, update)
+              .then((response) => {
+                console.log('updated!: ', response);
+              })
+              .catch((err) => console.log(err, 'NFT 어카운트 주소 이전 실패!'));
+            // 단일 비드 리스트 삭제
+            auctionData
+              .findOneAndDelete({ tokenId: tokenId })
+              .then((response) => {
+                console.log('비드 데이터 삭제 성공!');
+              })
+              .catch((err) => console.log(err, '삭제 실패!'));
+            // 멀티 비드 리스트 삭제
+            multiAuctionData
+              .findOneAndDelete({ tokenId: tokenId })
+              .then((response) => {
+                console.log('비드 데이터 삭제 성공!');
+              })
+              .catch((err) => console.log(err, '삭제 실패!'));
           } else {
-            console.log(err);
+            console.log(err, '단일지분 단일지분으로 판매 실패~!');
           }
         });
+      res.send('Success');
     }
   },
   sellMultiNft: async (req, res, metadata) => {
@@ -677,7 +621,7 @@ module.exports = {
       multiAuctionList,
       multiAuctionBidList,
       maxOwnerAddress,
-      maxOwnerBidPrice,
+      maxOwnerPrice,
     } = metadata;
     console.log('HAHAHAH', metadata);
 
@@ -686,12 +630,17 @@ module.exports = {
     const bidAddressLength = bidAddressNPrice.length;
     const totalBidList = bidAddressNPrice.map((el) => el.bidPrice);
     // multiAuctionBidList로 받은 유저의 비드를 이더로 변경 하여 리스트로 리턴
-    const etherBid = multiAuctionBidList.map((el) =>
-      web3.utils.toWei(String(el), 'ether')
-    );
+
     let { multiAuctionAddressList } = await normalData.findOne({
       tokenId: tokenId,
     });
+
+    let multiAuctionBidData = await multiAuctionData.findOne({
+      tokenId: tokenId,
+    });
+    const etherBid = multiAuctionBidData.multiAuctionAddressList.map((el) =>
+      web3.utils.toWei(String(el.bidPrice), 'ether')
+    );
     console.log('multiAuctionAddressList', multiAuctionAddressList);
 
     console.log('etherBid', etherBid);
@@ -761,9 +710,12 @@ module.exports = {
       .catch((err) => {
         console.log('Promise failed:', err);
       });
-    //다중지분 토큰 주인이 판매할때
-    if (multiAuctionAddressList.length !== 0) {
-      console.log('다중지분 토큰 주인이 판매할때!');
+    //다중지분 토큰 주인이 다중비드에게 판매할때!
+    if (
+      multiAuctionBidData.multiAuctionAddressList.length !== 0 &&
+      multiAuctionAddressList.length !== 0
+    ) {
+      console.log('다중지분 토큰 주인이 다중비드에게 판매할때!');
 
       // 멀티 비드 리스트
       let multiBidList = multiAuctionAddressList.map((data) => data.bidPrice);
@@ -775,16 +727,25 @@ module.exports = {
 
       // 다중 옥션 유저들이 비드한 값을 먼저 서버 어카운트로 보낸다
       // 서버에 보내는 이유는 총 금액을 먼저 받아야 분배해서 돌려줄수 있기 때문
-      for (let i = 0; i < bidAddressLength; i++) {
+      for (
+        let i = 0;
+        i < multiAuctionBidData.multiAuctionAddressList.length;
+        i++
+      ) {
         let contract = new web3.eth.Contract(erc20Abi, process.env.erc20CA);
         // Multiaddress erc20 토큰 tokenOwnerAddress로 보내기
         await contract.methods
-          .transferFrom(multiAuctionList[i], serverAccount, etherBid[i])
+          .transferFrom(
+            multiAuctionBidData.multiAuctionAddressList[i].multiAuctionAddress,
+            serverAccount,
+            etherBid[i]
+          )
           .send({ from: serverAccount }, async (err, transactionHash) => {
             if (!err) {
               console.log(
                 'MultiAddress bid to Server success!',
-                multiAuctionList[i]
+                multiAuctionBidData.multiAuctionAddressList[i]
+                  .multiAuctionAddress
               );
             } else {
               console.log(
@@ -797,6 +758,10 @@ module.exports = {
         // 새로 판매되는 금액 / 그전에 구매했던 총금액 * 각 계정이 비드했던금액
         // 판매금액을 예전에 구매했던 가격에 비례해서 나눠주는 연산
         let afterSumBid = (price / totalBidList) * multiBidList[i];
+        console.log(
+          '그전주인한테 돈주기! ',
+          web3.utils.toWei(String(afterSumBid), 'ether')
+        );
         let contract = new web3.eth.Contract(erc20Abi, process.env.erc20CA);
         // Multiaddress erc20 토큰 tokenOwnerAddress로 보내기
         await contract.methods
@@ -818,6 +783,42 @@ module.exports = {
           });
       } // 여기까지 다중 지분 소유자들이 다중 지분 비드를 받고 스마트컨트랙트는 완료
       // DB 수정
+      // 새로운 다중 지분으로 바뀐 다중지분 유저들의 토큰 DB 변경
+      for (
+        let i = 0;
+        i < multiAuctionBidData.multiAuctionAddressList.length;
+        i++
+      ) {
+        let erc20Contract = new web3.eth.Contract(
+          erc20Abi,
+          process.env.erc20CA
+        );
+        let bidAddressBalance = await erc20Contract.methods
+          .balanceOf(
+            multiAuctionBidData.multiAuctionAddressList[i].multiAuctionAddress
+          )
+          .call();
+        bidAddressBalance = bidAddressBalance / 1000000000000000000;
+        let filter = {
+          userAddress:
+            multiAuctionBidData.multiAuctionAddressList[i].multiAuctionAddress,
+        };
+        let update = {
+          token: bidAddressBalance,
+        };
+        users
+          .findOneAndUpdate(filter, update)
+          .then((response) => {
+            console.log(
+              response,
+              '다중지분 에서 다중지분으로 토큰값 변경 성공'
+            );
+          })
+          .catch((error) => {
+            console.log(error, '다중지분 에서 다중지분으로 토큰값 변경 실패');
+          });
+      }
+      //기존 다중지분 유저들의 토큰값 변경
       for (let i = 0; i < multiAuctionAddressList.length; i++) {
         let erc20Contract = new web3.eth.Contract(
           erc20Abi,
@@ -845,6 +846,8 @@ module.exports = {
             console.log(error, '다중지분 에서 다중지분으로 토큰값 변경 실패');
           });
       }
+      // normalData에 있는 multiAuctionAddressList 변경해주기
+
       let filter2 = {
         tokenId: tokenId,
       };
@@ -855,7 +858,7 @@ module.exports = {
       };
       normalData
         .findOneAndUpdate(filter2, update2)
-        .then((response) => console.log(response, 'NormalData 변경 성겅!'))
+        .then((response) => console.log(response, 'NormalData 변경 성공!'))
         .catch((error) => console.log(error, 'NormalData 변경 실패!'));
 
       // DB MultiAuctionList 지우기
@@ -880,46 +883,45 @@ module.exports = {
       res.send('Success');
       // 단일 토큰이 다중 비드한테 팔 때
       // 토큰이 다중지분이 아닐때
-
     } else {
+      console.log('단일 지분이 다중비드에게 판매하는경우');
       console.log('Else!!!!!!!');
       console.log('중간체크 ', bidAddressLength);
       // 단일지분이 낸 총금액을 기존에 다중 지분 유저에게 분배
       // bidAddressLength = multiauction 에서 비드한 주소 리스트 길이
       // multiAuctionList = multiauction 에서 비드한 주소 리스트
-      for (let i = 0; i < bidAddressLength; i++) {
-        let erc721Contract = new web3.eth.Contract(
-          erc721Abi,
-          process.env.nftCA
-        );
-        let bidAddressBalance = await erc721Contract.methods
-          .balanceOf(multiAuctionList[i])
-          .call();
-        bidAddressBalance = bidAddressBalance / 1000000000000000000;
-        let afterSumBid = Math.round(
-          (price / totalBidList[i]) * multiAuctionBidList[i]
-        );
-        console.log('CHECK! ', price, totalBidList[i], multiAuctionBidList[i]);
+      let multiBidList = multiAuctionBidData.multiAuctionAddressList.map(
+        (data) => data.bidPrice
+      );
+      let multiAddressList = multiAuctionBidData.multiAuctionAddressList.map(
+        (data) => data.multiAuctionAddress
+      );
+      for (let i = 0; i < multiBidList.length; i++) {
+        // 토큰가격 * 단일지분이 비드했던 가격 /
+        let afterSumBid = Math.round((price / price) * multiBidList[i]);
+
+        console.log('CHECK! ', price, price, multiBidList[i]);
         console.log('afterSumBid ', afterSumBid);
         console.log('hahaha', web3.utils.toWei(String(afterSumBid), 'ether'));
         let contract = new web3.eth.Contract(erc20Abi, process.env.erc20CA);
-        console.log('for문!', multiAuctionList[i]);
+        console.log('for문!', multiBidList[i]);
         // Multiaddress erc20 토큰 tokenOwnerAddress로 보내기
-        contract.methods
+        await contract.methods
           .transferFrom(
-            multiAuctionList[i],
+            multiAddressList[i],
             tokenOwnerAddress,
-            web3.utils.toWei(String(multiAuctionBidList[i]), 'ether')
+            web3.utils.toWei(String(multiBidList[i]), 'ether')
           )
           .send({ from: serverAccount }, async (err, transactionHash) => {
             if (!err) {
               console.log(
-                'MultiAddress bid to Server success!',
-                multiAuctionList[i]
+                'MultiAddress bid to Single before owner success!',
+                multiAddressList[i],
+                tokenOwnerAddress
               );
             } else {
               console.log(
-                'MultiAddress transfer erc20 token to Server failed!'
+                'MultiAddress transfer erc20 token to Single before owner failed!'
               );
             }
           });
@@ -934,7 +936,7 @@ module.exports = {
         userAddress: tokenOwnerAddress,
       };
       let update3 = {
-        price: tokenOwnerBalance,
+        token: tokenOwnerBalance,
       };
       users
         .findOneAndUpdate(filter3, update3)
@@ -944,8 +946,9 @@ module.exports = {
         .catch((error) => {
           console.log(error, '판매한 유저 업데이트 실패');
         });
-      // DB 멀티한 비드유저 업데이트
-      for (let i = 0; i < bidAddressLength; i++) {
+
+      // DB 멀티비드 유저 업데이트
+      for (let i = 0; i < multiBidList.length; i++) {
         let erc20Contract = new web3.eth.Contract(
           erc20Abi,
           process.env.erc20CA
@@ -959,7 +962,7 @@ module.exports = {
           userAddress: multiAuctionList[i],
         };
         let update = {
-          price: bidAddressBalance,
+          token: bidAddressBalance,
         };
         users
           .findOneAndUpdate(filter, update)
@@ -1010,6 +1013,17 @@ module.exports = {
         .catch((error) => {
           console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
         });
+
+      // DB AuctionData 지우기
+      auctionData
+        .findOneAndDelete({ tokenId: tokenId })
+        .then((response) => {
+          console.log(response, '해당 토큰 AuctionData 데이터 삭제 성공!');
+        })
+        .catch((error) => {
+          console.log(error, '해당 토큰 AuctionData 데이터 삭제 실패!');
+        });
+
       res.send('Success');
     }
   },
