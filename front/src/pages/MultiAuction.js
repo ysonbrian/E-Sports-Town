@@ -89,7 +89,7 @@ const CommentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #001335;
+  background-color: #000000;
   height: 500px;
   width: 100%;
 `;
@@ -101,6 +101,28 @@ const CommentListContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const CommentsItemContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid;
+  border-radius: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-weight: 600;
+`;
+
+const CommentsItemAccount = styled.div`
+  font-weight: 800;
+`;
+
+const CommentsItemComment = styled.div``;
+const CommentsItemDate = styled.div`
+  color: #d7d7d7;
 `;
 /* (End)LeftSide */
 
@@ -485,9 +507,9 @@ function MultiAuction() {
     //};
     const metadata = [];
     metadata.push(clickFetchGroupList[0]?.tokenOwnerAddress);
-    console.log("onClickToSell-multi-metadata", metadata);
+    console.log('onClickToSell-multi-metadata', metadata);
     setModalOwnerData(metadata);
-  }
+  };
 
   //const onClickToSell = async () => {
   //  //onSellModal();
@@ -625,17 +647,17 @@ function MultiAuction() {
             <CommentListContainer>
               {comments.data
                 ? comments?.data?.map((data, index) => (
-                  <div key={index}>
-                    <div>{data.userAddress}</div>
-                    <div>{data.comment}</div>
-                  </div>
-                ))
+                    <div key={index}>
+                      <div>{data.userAddress}</div>
+                      <div>{data.comment}</div>
+                    </div>
+                  ))
                 : auctionComments?.map((data, index) => (
-                  <div key={index}>
-                    <div>{data.userAddress}</div>
-                    <div>{data.comment}</div>
-                  </div>
-                ))}
+                    <div key={index}>
+                      <div>{data.userAddress}</div>
+                      <div>{data.comment}</div>
+                    </div>
+                  ))}
             </CommentListContainer>
             <Comment id={id} onClickComments={onClickComments} />
           </CommentContainer>

@@ -854,20 +854,7 @@ module.exports = {
           multiAuctionAddressList: bidAddressNPrice,
           type: 'multi',
         };
-        normalData
-          .findOneAndUpdate(filter2, update2)
-          .then((response) => {
-            console.log(
-              response,
-              'NormalData multiAuctionAddressList 데이터 변경 성공!'
-            );
-          })
-          .catch((error) => {
-            console.log(
-              error,
-              'NormalData multiAuctionAddressList 데이터 변경 실패!'
-            );
-          });
+
         // DB MultiAuctionList 지우기
         multiAuctionData
           .findOneAndDelete({ tokenId: tokenId })
@@ -877,21 +864,14 @@ module.exports = {
           .catch((error) => {
             console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
           });
-        res.send('Success');
         // DB auction TokenOwner 변경
         auctionData
           .findOneAndDelete({ tokenId: tokenId })
           .then((response) => {
-            console.log(
-              response,
-              '해당 토큰 Auction 데이터 삭제 성공!'
-            );
+            console.log(response, '해당 토큰 Auction 데이터 삭제 성공!');
           })
           .catch((error) => {
-            console.log(
-              error,
-              '해당 토큰 Auction 데이터 삭제 실패!'
-            );
+            console.log(error, '해당 토큰 Auction 데이터 삭제 실패!');
           });
         res.send('Success');
       }
@@ -1001,6 +981,7 @@ module.exports = {
         multiAuctionAddressList: bidAddressNPrice,
         type: 'multi',
       };
+      // 단일 옥션비드리스트 삭제
       normalData
         .findOneAndUpdate(filter2, update2)
         .then((response) => {

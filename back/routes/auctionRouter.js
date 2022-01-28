@@ -19,7 +19,7 @@ router.get('/click', async (req, res) => {
     const data = await auctionData.find();
     //const data = await normalData.find();
     if (data) {
-      console.log("click-find", data);
+      console.log('click-find', data);
       res.json(data);
     } else {
       console.log('No data!');
@@ -66,7 +66,7 @@ router.get('/multiclick', async (req, res) => {
     //const data = await normalData.find();
     console.log('multiclick');
     if (data) {
-      console.log("multiclick-find", data);
+      console.log('multiclick-find', data);
       res.json(data);
     } else {
       console.log('No data!');
@@ -159,12 +159,21 @@ router.post('/:id/sell', async (req, res) => {
 
     // max값 빼내는 용도
     let tempbidAddressNPrice = bidAddressNPrice;
-    tempbidAddressNPrice.forEach((data) => {
-      if (data.bidPrice > maxOwnerBidPrice.bidPrice) {
-        maxOwnerAddress = data.multiAuctionAddress;
-        maxOwnerBidPrice = data.bidPrice;
-      }
-    });
+    console.log(tempbidAddressNPrice);
+
+    let mOwner = tempbidAddressNPrice
+      .map((data) => data)
+      .reduce((acc, cur) => {
+        if (acc < cur.bidPrice) {
+          console.log(cur.bidPrice);
+          acc = cur.bidPrice;
+          maxOwnerAddress = cur.multiAuctionAddress;
+          return acc;
+        }
+      }, 0);
+
+    console.log('hahah', maxOwnerAddress);
+    console.log(maxOwnerBidPrice);
     let multiAuctionList = tempbidAddressNPrice.map(
       (data) => data.multiAuctionAddress
     );
