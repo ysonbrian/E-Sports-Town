@@ -4,6 +4,7 @@ import {
   useClickedItem,
   useSign,
   useClickedItemBidList,
+  useComments,
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -39,15 +40,16 @@ const AuctionNFT = styled.div`
 /* (Start)LeftSide */
 const ImgNFT = styled.div`
   flex: 1 0 0;
-  //border: solid yellow 2px;
+  /* border: solid yellow 2px; */
   display: flex;
   flex-direction: column;
   margin: 1rem;
+  height: 800px;
   align-items: center;
 `;
 const NftPreviewImg = styled.div`
   flex: 4 0 0;
-  //border: solid red 2px;
+  /* border: solid red 2px; */
   width: 300px;
   height: 300px;
   img {
@@ -57,7 +59,7 @@ const NftPreviewImg = styled.div`
 `;
 const ImgDescription = styled.div`
   flex: 1 0 0;
-  //border: solid brown 2px;
+  /* border: solid brown 2px; */
   padding: 1rem;
   display: flex;
   flex-direction: row;
@@ -74,20 +76,21 @@ const ImgDescription = styled.div`
   }
 `;
 const CommentContainer = styled.div`
-  flex: 6 0 0;
-  //border: solid greenyellow 2px;
+  flex: 10 0 0;
+  /* border: solid greenyellow 2px; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #001335;
+  background-color: #000000;
   height: 500px;
   width: 100%;
 `;
 const CommentListContainer = styled.div`
-  border: 1px solid white;
+  /* border: 1px solid white; */
   width: 100%;
   height: 100%;
   display: flex;
+  overflow: scroll;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -229,7 +232,7 @@ const BidHeaderFour = styled.div`
 const BidListItemContainer = styled.div`
   margin: 0.5rem;
   padding: 0.5rem;
-  background-color: #3d2c8d;
+  background-color: #323232;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -288,10 +291,20 @@ function Auction({ clickedItemList }) {
   const [sign, setSign] = useSign((state) => [state.sign, state.setSign]);
 
   const { fetchClickedItem } = useClickedItemBidList();
+  // const comments
+  const comments = useComments((state) => state.comments);
+  const { fetchComments } = useComments();
+  const [auctionComments, setAuctionComments] = useState([]);
 
   const [clickedBidList, setClickedBidList] = useState();
   const [bid, setBid] = useState();
   const [bidMessage, setBidMessage] = useState();
+
+  // comment
+  // const [comments, setComments] = useComments((state) => [
+  //   state.comments,
+  //   state.setComments,
+  // ]);
 
   // modal
   const [checkBidToModal, setCheckBidToModal] = useState(true);
@@ -370,10 +383,17 @@ function Auction({ clickedItemList }) {
 
   console.log('clicked!', clickedItem.user, 'user!', user.userAddress);
 
+  const onClickComments = (data) => {
+    // console.log(data);
+    setAuctionComments([data, ...auctionComments]);
+    console.log('auction!', auctionComments);
+  };
+
   useEffect(() => {
     fetchClickedItem();
+    fetchComments(id);
   }, []);
-
+  console.log('AHAHAHH', comments);
   return (
     <>
       <TotalPage>
@@ -400,10 +420,24 @@ function Auction({ clickedItemList }) {
                 metadata
               </a>
             </ImgDescription>
+            {/* Comments */}
             <CommentContainer>
               <CommentListContainer>
-                <Comment />
+                {comments.data
+                  ? comments?.data?.map((data, index) => (
+                      <div key={index}>
+                        <div>{data.userAddress}</div>
+                        <div>{data.comment}</div>
+                      </div>
+                    ))
+                  : auctionComments?.map((data, index) => (
+                      <div key={index}>
+                        <div>{data.userAddress}</div>
+                        <div>{data.comment}</div>
+                      </div>
+                    ))}
               </CommentListContainer>
+              <Comment id={id} onClickComments={onClickComments} />
             </CommentContainer>
           </ImgNFT>
           <ProfileNFT>

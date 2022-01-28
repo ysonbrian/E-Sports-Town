@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { BiArrowBack } from 'react-icons/bi';
 import axios from 'axios';
-// import { writingContent } from '../../utils/data';
-import { useStore, useMyToken } from '../utils/store';
+import { submitComment } from '../utils/data';
+import { useStore, useComments } from '../utils/store';
 // import { useData } from '../../utils/store';
 // import { useLoading } from '../../utils/store';
 
@@ -13,9 +13,7 @@ const CreateContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100%;
-  //padding: 10px;
-  //margin: 20px;
+  height: 55px;
   width: 100%;
 `;
 const CreateTitleInput = styled.input`
@@ -29,8 +27,8 @@ const CreateTitleInput = styled.input`
 
 const CreateTextArea = styled.textarea`
   width: 100%;
-  height: 200px;
-  padding: 10px;
+  height: 100%;
+  padding: 15px;
   font-size: 20px;
   border: none;
   outline: none;
@@ -78,7 +76,7 @@ const CreateSubmitButton = styled.button`
   text-align: center;
   color: #f4f4f4;
   border: none;
-  background-color: #05b388;
+  background-color: #ff1e56;
   font-weight: bold;
   cursor: pointer;
   padding: 0px 1.25rem;
@@ -88,51 +86,63 @@ const CreateSubmitButton = styled.button`
   }
 `;
 
-const Comment = () => {
+const Comment = ({ id, onClickComments }) => {
   let navigate = useNavigate();
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
+  const [comments, setComments] = useState('');
 
   // const [isLoading, setIsLoading] = useLoading((state) => [
   //   state.isLoading,
   //   state.setIsLoading,
   // ]);
 
-  const onSubmitWriting = (e) => {
+  const onSubmitWriting = async (e) => {
     // setIsLoading(true);
     e.preventDefault();
-    let data = {
-      userId: user.username,
-      title: e.target[0].value,
-      content: e.target[1].value,
-      date: new Date().toLocaleString(),
-      address: user.address,
+    const data = {
+      id: id,
+      userAddress: user.userAddress,
+      comment: e.target[0].value,
     };
-    console.log(data);
+    const auctionData = {
+      id: id,
+      userAddress: user.userAddress,
+    };
+    setComments('');
+    onClickComments(auctionData);
+    const result = await submitComment(data);
+    window.location.assign('http://localhost:3000/gallery');
 
     // writingContent(data);
-    navigate('/');
-    window.location.reload(false);
+    // navigate('/');
+    // window.location.reload(false);
   };
+  const onChangeText = (e) => {
+    setComments(e.target.value);
+  };
+
   return (
     <CreateContainer>
       <form onSubmit={(e) => onSubmitWriting(e)}>
         {/* <CreateTitleInput type="text" placeholder="제목" /> */}
         {/*<br />*/}
-        <CreateTextArea
-          placeholder="당신의 이야기를 적어보세요..."
-          rows="80"
-          cols="80"
-        />
+
         {/*<br />*/}
 
         <CreateButtonContainer>
-          <CreateBackButton>
+          {/* <CreateBackButton>
             <Link to="/">
               <BiArrowBack />
               <p>나가기</p>
             </Link>
-          </CreateBackButton>
-
+          </CreateBackButton> */}
+          <CreateTextArea
+            placeholder="대화를 시작하세요!"
+            rows="10"
+            cols="100"
+            onChange={(e) => onChangeText(e)}
+            value={comments}
+          />
           <CreateSubmitButton>글작성</CreateSubmitButton>
         </CreateButtonContainer>
       </form>

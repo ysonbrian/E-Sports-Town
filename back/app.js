@@ -12,6 +12,7 @@ const createNftRouter = require('./routes/createNftRouter');
 const accountRouter = require('./routes/accountRouter');
 const galleryRouter = require('./routes/galleryRouter');
 const mypageRouter = require('./routes/mypageRouter');
+const commentsRouter = require('./routes/commentsRouter');
 
 require('dotenv').config();
 const PORT = process.env.PORT || 1234;
@@ -35,6 +36,7 @@ app.use('/mint', createNftRouter);
 app.use('/account', accountRouter);
 app.use('/gallery', galleryRouter);
 app.use('/mypage', mypageRouter);
+app.use('/comments', commentsRouter);
 
 app.get('/', (req, res) => {
   res.json({ message: `Server is running on port ${PORT}` });
