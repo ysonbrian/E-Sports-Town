@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import members from "../../members.png";
 
+
 const TeamContainer = styled.div`
   display: flex;
   align-items: center;
@@ -25,8 +26,8 @@ const TeamImg = styled.div`
   justify-content: center;
 
   img {
-    width: 60%;
-    height: 60%;
+    width: 200%;
+    height: 200%;
   }
 `;
 
