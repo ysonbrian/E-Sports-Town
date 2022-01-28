@@ -32,3 +32,5 @@
 ## 플로우 차트
 
 ![image](https://user-images.githubusercontent.com/89737377/151485305-97942509-320f-41d5-aaf0-200b46189684.png)
+![image](https://user-images.githubusercontent.com/89737377/151490294-9d8a7847-6b58-4b49-982a-b8438c2cd4f4.png)
+
