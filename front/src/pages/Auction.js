@@ -5,6 +5,7 @@ import {
   useSign,
   useClickedItemBidList,
   useComments,
+  useModalOwnerData,
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -12,6 +13,7 @@ import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
 import { useModalSubmitData } from '../utils/store';
 import ModalComponent from '../components/Modal';
 import ModalSubmit from '../components/ModalSubmit';
+import ModalOwner from '../components/ModalOwner';
 import Comment from '../components/Comment';
 import auct from '../auct.jpeg';
 
@@ -29,8 +31,6 @@ const PageTitle = styled.h1`
   color: white;
   display: flex;
   justify-content: center;
-  //font-size: 5rem;
-  color: white;
 `;
 const AuctionNFT = styled.div`
   flex: 2 0 0;
@@ -40,7 +40,6 @@ const AuctionNFT = styled.div`
 /* (Start)LeftSide */
 const ImgNFT = styled.div`
   flex: 1 0 0;
-  /* border: solid yellow 2px; */
   display: flex;
   flex-direction: column;
   margin: 1rem;
@@ -49,7 +48,6 @@ const ImgNFT = styled.div`
 `;
 const NftPreviewImg = styled.div`
   flex: 4 0 0;
-  /* border: solid red 2px; */
   width: 300px;
   height: 300px;
   img {
@@ -59,7 +57,6 @@ const NftPreviewImg = styled.div`
 `;
 const ImgDescription = styled.div`
   flex: 1 0 0;
-  /* border: solid brown 2px; */
   padding: 1rem;
   display: flex;
   flex-direction: row;
@@ -77,7 +74,6 @@ const ImgDescription = styled.div`
 `;
 const CommentContainer = styled.div`
   flex: 10 0 0;
-  /* border: solid greenyellow 2px; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -86,7 +82,6 @@ const CommentContainer = styled.div`
   width: 100%;
 `;
 const CommentListContainer = styled.div`
-  /* border: 1px solid white; */
   width: 100%;
   height: 100%;
   display: flex;
@@ -122,14 +117,12 @@ const CommentsItemDate = styled.div`
 /* (Start)RightSide */
 const ProfileNFT = styled.div`
   flex: 2 0 0;
-  //border: solid green 2px;
   display: flex;
   flex-direction: column;
   margin: 1rem;
 `;
 const InfoNFT = styled.div`
   flex: 2 0 0;
-  //border: solid greenyellow 2px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -161,7 +154,6 @@ const DescriptionContainerNFT = styled.div`
 `;
 const BidRltContainer = styled.div`
   flex: 1 0 0;
-  //border: solid brown 2px;
   padding: 1rem;
   display: flex;
   flex-direction: row;
@@ -329,12 +321,20 @@ function Auction({ clickedItemList }) {
   // ]);
 
   // modal
+  const [checkOwnerModal, setCheckOwnerModal] = useState(true);
   const [checkBidToModal, setCheckBidToModal] = useState(true);
   const [checkSellModal, setCheckSellModal] = useState(true);
   const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
     state.modalSubmitData,
     state.setModalSubmitData,
   ]);
+  const [modalOwnerData, setModalOwnerData] = useModalOwnerData((state) => [
+    state.modalOwnerData,
+    state.setModalOwnerData,
+  ]);
+  const onOwnerModal = () => {
+    setCheckOwnerModal((prev) => !prev);
+  };
   const onClickModal = (e) => {
     console.log(e);
     setCheckBidToModal((prev) => !prev);
@@ -344,10 +344,21 @@ function Auction({ clickedItemList }) {
     setCheckSellModal((prev) => !prev);
   };
   // modal
+  const onClickOwner = async () => {
+    onOwnerModal();
+    //const metadata = {
+    //  tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
+    //};
+    const metadata = [];
+    metadata.push(clickFetchList[0]?.tokenOwnerAddress);
+    console.log("onClickToSell-multi-metadata", metadata);
+    setModalOwnerData(metadata);
+  }
 
   const clickFetchList = clickedItemList.filter(
     (data) => data.tokenId === Number(id)
   );
+  console.log("clickFetchList-test", clickFetchList)
   const max = clickFetchList[0]?.biddingList?.reduce(function (prev, current) {
     return prev?.bidPrice > current?.bidPrice ? prev : current;
   }); //returns object
@@ -417,185 +428,184 @@ function Auction({ clickedItemList }) {
   }, []);
   console.log('AHAHAHH', comments);
   return (
-    <>
-      <TotalPage>
-        {!checkBidToModal ? (
-          <ModalComponent bidMessage={bidMessage} onClickModal={onClickModal} />
-        ) : !checkSellModal ? (
-          <ModalSubmit onSellModal={onSellModal} />
-        ) : null}
-        {/* <ModalComponent onClickModal={onClickModal} /> */}
-        <PageTitle>Auction</PageTitle>
-        <AuctionNFT>
-          <ImgNFT>
-            <NftPreviewImg>
-              <img src={clickedItem?.imgURI} alt="preview-img" />
-            </NftPreviewImg>
-            <ImgDescription>
-              {/*<h2>{clickedItem?.description}</h2>*/}
-              <a href={clickedItem?.imgURI} target="_blank" rel="noreferrer">
-                <i className="fas fa-layer-group"></i>
-                ipfs
-              </a>
-              <a href={clickedItem?.tokenURI} target="_blank" rel="noreferrer">
-                <i className="fas fa-server"></i>
-                metadata
-              </a>
-            </ImgDescription>
-            {/* Comments */}
-            <CommentContainer>
-              <CommentListContainer>
-                {comments?.data
-                  ? comments?.data?.map((data, index) => {
-                      const newUserAddress =
-                        data.userAddress.slice(0, 6) +
-                        '...' +
-                        data.userAddress.slice(-5);
-                      const date = data.created_at.split('T');
-                      let rDate = null;
-                      if (date) {
-                        const newDate = date[0]?.split('-');
-                        const newtime = date[1]?.split('.');
-                        const newtime2 = newtime[0]?.split(':');
-                        const result = [...newDate, ...newtime2];
-                        const result1 = result.slice(0, 3).join('-');
-                        rDate = result1;
-                      }
-                      return (
-                        <CommentsItemContainer key={index}>
-                          <CommentsItemAccount>
-                            {newUserAddress}
-                          </CommentsItemAccount>
-                          <CommentsItemComment>
-                            {data.comment}
-                          </CommentsItemComment>
-                          <CommentsItemDate>{rDate}</CommentsItemDate>
-                        </CommentsItemContainer>
-                      );
-                    })
-                  : auctionComments?.map((data, index) => (
-                      <CommentsItemContainer key={index}>
-                        <div>{data.userAddress}</div>
-                        <div>{data.comment}</div>
-                      </CommentsItemContainer>
-                    ))}
-              </CommentListContainer>
-              <Comment id={id} onClickComments={onClickComments} />
-            </CommentContainer>
-          </ImgNFT>
-          <ProfileNFT>
-            <InfoNFT>
-              <CreatedInfo>
-                <span>상품등록 시간: </span>
-                <span>{clickedItem?.created_at}</span>
-              </CreatedInfo>
-              <NameIPFSMetadata>
-                <NamePriceContainerNFT>
-                  <h2>Name: {clickedItem?.name}</h2>
-                  <h2>
-                    <i className="fab fa-btc"></i> {clickedItem?.price}
-                  </h2>
-                  <h2></h2>
-                </NamePriceContainerNFT>
-                <DescriptionContainerNFT>
-                  <h3>Description: {clickedItem?.description}</h3>
-                </DescriptionContainerNFT>
-              </NameIPFSMetadata>
-            </InfoNFT>
-            <BidRltContainer>
-              <WinningCurrent>
-                {true ? (
-                  <WinnerTitle>현재 최고가</WinnerTitle>
-                ) : (
-                  <WinnerTitle>Current bid</WinnerTitle>
-                )}
+    <TotalPage>
+      {!checkBidToModal ? (
+        <ModalComponent bidMessage={bidMessage} onClickModal={onClickModal} />
+      ) : !checkSellModal ? (
+        <ModalSubmit onSellModal={onSellModal} />
+      ) : !checkOwnerModal ? (
+        <ModalOwner onOwnerModal={onOwnerModal} />
+      ) : !null}
+      {/* <ModalComponent onClickModal={onClickModal} /> */}
+      <PageTitle>Auction</PageTitle>
+      <AuctionNFT>
+        <ImgNFT>
+          <NftPreviewImg>
+            <img src={clickedItem?.imgURI} alt="preview-img" />
+          </NftPreviewImg>
+          <ImgDescription>
+            {/*<h2>{clickedItem?.description}</h2>*/}
+            <a href={clickedItem?.imgURI} target="_blank" rel="noreferrer">
+              <i className="fas fa-layer-group"></i>
+              ipfs
+            </a>
+            <a href={clickedItem?.tokenURI} target="_blank" rel="noreferrer">
+              <i className="fas fa-server"></i>
+              metadata
+            </a>
+          </ImgDescription>
+          <CommentContainer>
+            <CommentListContainer>
+              {comments?.data
+                ? comments?.data?.map((data, index) => {
+                  const newUserAddress =
+                    data.userAddress.slice(0, 6) +
+                    '...' +
+                    data.userAddress.slice(-5);
+                  const date = data.created_at.split('T');
+                  let rDate = null;
+                  if (date) {
+                    const newDate = date[0]?.split('-');
+                    const newtime = date[1]?.split('.');
+                    const newtime2 = newtime[0]?.split(':');
+                    const result = [...newDate, ...newtime2];
+                    const result1 = result.slice(0, 3).join('-');
+                    rDate = result1;
+                  }
+                  return (
+                    <CommentsItemContainer key={index}>
+                      <CommentsItemAccount>
+                        {newUserAddress}
+                      </CommentsItemAccount>
+                      <CommentsItemComment>
+                        {data.comment}
+                      </CommentsItemComment>
+                      <CommentsItemDate>{rDate}</CommentsItemDate>
+                    </CommentsItemContainer>
+                  );
+                })
+                : auctionComments?.map((data, index) => (
+                  <CommentsItemContainer key={index}>
+                    <div>{data.userAddress}</div>
+                    <div>{data.comment}</div>
+                  </CommentsItemContainer>
+                ))}
+            </CommentListContainer>
+            <Comment id={id} onClickComments={onClickComments} />
+          </CommentContainer>
+        </ImgNFT>
+        <ProfileNFT>
+          <InfoNFT>
+            <CreatedInfo>
+              <span>상품등록 시간: </span>
+              <span>{clickedItem?.created_at}</span>
+            </CreatedInfo>
+            <NameIPFSMetadata>
+              <NamePriceContainerNFT>
+                <h2>Name: {clickedItem?.name}</h2>
+                <h2>
+                  <i className="fab fa-btc"></i> {clickedItem?.price}
+                </h2>
+                <h2 onClick={onClickOwner}>소유자 보기</h2>
+              </NamePriceContainerNFT>
+              <DescriptionContainerNFT>
+                <h3>Description: {clickedItem?.description}</h3>
+              </DescriptionContainerNFT>
+            </NameIPFSMetadata>
+          </InfoNFT>
+          <BidRltContainer>
+            <WinningCurrent>
+              {true ? (
+                <WinnerTitle>현재 최고가</WinnerTitle>
+              ) : (
+                <WinnerTitle>Current bid</WinnerTitle>
+              )}
+              <WinningCurrent_Price>
+                <h3>
+                  <i className="fas fa-bars"></i>
+                  {max?.bidPrice ? max?.bidPrice : "제시 금액이 없습니다."}
+                </h3>
+              </WinningCurrent_Price>
+            </WinningCurrent>
+            <WinnerEnd>
+              {true ? (
+                <WinnerTitle>최고가 제시 유저</WinnerTitle>
+              ) : (
+                <WinnerTitle>Ends in</WinnerTitle>
+              )}
+              {true ? (
                 <WinningCurrent_Price>
                   <h3>
-                    <i className="fas fa-bars"></i>
-                    {max?.bidPrice ? max?.bidPrice : '제시 금액이 없습니다.'}
+                    {max?.bidAddress
+                      ? maxBidAddress
+                      : '최고가를 기록 해보세요!'}
                   </h3>
                 </WinningCurrent_Price>
-              </WinningCurrent>
-              <WinnerEnd>
-                {true ? (
-                  <WinnerTitle>최고가 제시 유저</WinnerTitle>
-                ) : (
-                  <WinnerTitle>Ends in</WinnerTitle>
-                )}
-                {true ? (
-                  <WinningCurrent_Price>
-                    <h3>
-                      {max?.bidAddress
-                        ? maxBidAddress
-                        : '최고가를 기록 해보세요!'}
-                    </h3>
-                  </WinningCurrent_Price>
-                ) : (
-                  <WinningCurrent_Price>2h 21m 50s</WinningCurrent_Price>
-                )}
-              </WinnerEnd>
-            </BidRltContainer>
-            {clickedItem.user !== user.userAddress ? (
-              <BiddingContainer>
-                <label>원하는 가격을 제시 하세요!</label>
-                <BiddingInput>
-                  <input
-                    type="text"
-                    placeholder="ETH"
-                    value={bid}
-                    onChange={(e) => onChangeBid(e)}
-                  ></input>
-                  <button onClick={onClickBidding}>Bid</button>
-                </BiddingInput>
-              </BiddingContainer>
-            ) : (
-              <BiddingContainer>본인의 NFT 입니다.</BiddingContainer>
-            )}
-            <BidListContainer>
-              <BidListHeaderContainer>
-                <BidHeaderOne>비드 유저</BidHeaderOne>
-                <BidHeaderTwo>비드 날짜</BidHeaderTwo>
-                <BidHeaderThree>비드 금액</BidHeaderThree>
-                <BidHeaderFour>비고</BidHeaderFour>
-              </BidListHeaderContainer>
-              {clickFetchList[0]?.biddingList?.map((el) => {
-                let rDate = null;
-                if (el?.created_at) {
-                  let date = el?.created_at.split('T');
+              ) : (
+                <WinningCurrent_Price>2h 21m 50s</WinningCurrent_Price>
+              )}
+            </WinnerEnd>
+          </BidRltContainer>
+          {clickedItem.user !== user.userAddress ? (
+            <BiddingContainer>
+              <label>원하는 가격을 제시 하세요!</label>
+              <BiddingInput>
+                <input
+                  type="text"
+                  placeholder="ETH"
+                  value={bid}
+                  onChange={(e) => onChangeBid(e)}
+                ></input>
+                <button onClick={onClickBidding}>Bid</button>
+              </BiddingInput>
+            </BiddingContainer>
+          ) : (
+            <BiddingContainer>본인의 NFT 입니다.</BiddingContainer>
+          )}
+          <BidListContainer>
+            <BidListHeaderContainer>
+              <BidHeaderOne>비드 유저</BidHeaderOne>
+              <BidHeaderTwo>비드 날짜</BidHeaderTwo>
+              <BidHeaderThree>비드 금액</BidHeaderThree>
+              <BidHeaderFour>비고</BidHeaderFour>
+            </BidListHeaderContainer>
+            {clickFetchList[0]?.biddingList?.map((el) => {
+              let rDate = null;
+              if (el?.created_at) {
+                let date = el?.created_at.split('T');
 
-                  let newDate = date[0]?.split('-');
-                  let newtime = date[1]?.split('.');
-                  let newtime2 = newtime[0]?.split(':');
-                  let result = [...newDate, ...newtime2];
-                  let result1 = result.slice(0, 3).join('-');
-                  rDate = result1 + ' ' + newtime2.join(':');
-                }
-                const newUserAddress =
-                  el?.bidAddress?.slice(0, 6) +
-                  '...' +
-                  el?.bidAddress?.slice(-5);
+                let newDate = date[0]?.split('-');
+                let newtime = date[1]?.split('.');
+                let newtime2 = newtime[0]?.split(':');
+                let result = [...newDate, ...newtime2];
+                let result1 = result.slice(0, 3).join('-');
+                rDate = result1 + ' ' + newtime2.join(':');
+              }
+              const newUserAddress =
+                el?.bidAddress?.slice(0, 6) +
+                '...' +
+                el?.bidAddress?.slice(-5);
 
-                return (
-                  <BidListItemContainer key={el?._id}>
-                    <BidItemName>{newUserAddress}</BidItemName>
-                    <BidItemCreated>{rDate}</BidItemCreated>
-                    <BidItemPrice>{el?.bidPrice}</BidItemPrice>
-                    {clickFetchList[0]?.tokenOwnerAddress ===
+              return (
+                <BidListItemContainer key={el?._id}>
+                  <BidItemName>{newUserAddress}</BidItemName>
+                  <BidItemCreated>{rDate}</BidItemCreated>
+                  <BidItemPrice>{el?.bidPrice}</BidItemPrice>
+                  {clickFetchList[0]?.tokenOwnerAddress ===
                     user.userAddress ? (
-                      <BidItemSellButton onClick={() => onClickToSell(el)}>
-                        판매
-                      </BidItemSellButton>
-                    ) : (
-                      <BidItemlabel>입찰 완료</BidItemlabel>
-                    )}
-                  </BidListItemContainer>
-                );
-              })}
-            </BidListContainer>
-          </ProfileNFT>
-        </AuctionNFT>
-      </TotalPage>
-    </>
+                    <BidItemSellButton onClick={() => onClickToSell(el)}>
+                      판매
+                    </BidItemSellButton>
+                  ) : (
+                    <BidItemlabel>입찰 완료</BidItemlabel>
+                  )}
+                </BidListItemContainer>
+              );
+            })}
+          </BidListContainer>
+        </ProfileNFT>
+      </AuctionNFT>
+    </TotalPage>
   );
 }
 
