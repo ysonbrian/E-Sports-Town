@@ -76,7 +76,7 @@ export const useClickedItemGroupList = create((set) => ({
   clickedItemGroupList: [],
   fetchClickedItemGroup: async () => {
     const { data } = await Axios.get(`${url}/auction/multiclick`);
-    //console.log(data)
+    console.log("useClickedItemGroupList-store",data)
     set({ clickedItemGroupList: await data });
   },
 }));

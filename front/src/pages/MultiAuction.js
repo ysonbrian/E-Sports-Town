@@ -8,6 +8,7 @@ import {
   useModalSubmitData,
   useModalUpdateData,
   useModalDeleteData,
+  useComments,
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -54,6 +55,7 @@ const PreViewNFT = styled.div`
   display: flex;
   flex-direction: column;
   margin: 1rem;
+  height: 800px;
   align-items: center;
 `;
 const PreViewNFTImg = styled.div`
@@ -67,7 +69,6 @@ const PreViewNFTImg = styled.div`
 `;
 const PreViewNFTInfo = styled.div`
   flex: 1 0 0;
-  //border: solid brown 2px;
   padding: 1rem;
   display: flex;
   flex-direction: row;
@@ -84,8 +85,7 @@ const PreViewNFTInfo = styled.div`
   }
 `;
 const CommentContainer = styled.div`
-  flex: 10 0 0;
-  /* border: solid greenyellow 2px; */
+  flex: 6 0 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -94,7 +94,6 @@ const CommentContainer = styled.div`
   width: 100%;
 `;
 const CommentListContainer = styled.div`
-  /* border: 1px solid white; */
   width: 100%;
   height: 100%;
   display: flex;
@@ -136,7 +135,6 @@ const MultiAuctionInfo = styled.div`
 `;
 const NFTInfo = styled.div`
   flex: 2 0 0;
-  //border: solid greenyellow 2px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -577,16 +575,6 @@ function MultiAuction() {
     setBid(e.target.value);
   };
 
-  useEffect(() => {
-    fetchClickedItemGroup();
-    const currentAddress = window.web3.currentProvider.selectedAddress;
-    const metadata = {
-      tokenId: id,
-      currentAddress: currentAddress,
-    };
-    fetchBidState(metadata);
-  }, []);
-
   const [bid, setBid] = useState();
   const onClickMultiBidding = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
@@ -604,6 +592,27 @@ function MultiAuction() {
     //window.location.reload(false);
     setBid('');
   };
+
+  const comments = useComments((state) => state.comments);
+  const { fetchComments } = useComments();
+  const [auctionComments, setAuctionComments] = useState([]);
+
+  const onClickComments = (data) => {
+    // console.log(data);
+    setAuctionComments([data, ...auctionComments]);
+    console.log('auction!', auctionComments);
+  };
+
+  useEffect(() => {
+    fetchClickedItemGroup();
+    const currentAddress = window.web3.currentProvider.selectedAddress;
+    const metadata = {
+      tokenId: id,
+      currentAddress: currentAddress,
+    };
+    fetchBidState(metadata);
+    fetchComments(id);
+  }, []);
 
   return (
     <TotalPage>
@@ -636,8 +645,21 @@ function MultiAuction() {
           </PreViewNFTInfo>
           <CommentContainer>
             <CommentListContainer>
-              <Comment />
+              {comments.data
+                ? comments?.data?.map((data, index) => (
+                    <div key={index}>
+                      <div>{data.userAddress}</div>
+                      <div>{data.comment}</div>
+                    </div>
+                  ))
+                : auctionComments?.map((data, index) => (
+                    <div key={index}>
+                      <div>{data.userAddress}</div>
+                      <div>{data.comment}</div>
+                    </div>
+                  ))}
             </CommentListContainer>
+            <Comment id={id} onClickComments={onClickComments} />
           </CommentContainer>
         </PreViewNFT>
         <MultiAuctionInfo>
