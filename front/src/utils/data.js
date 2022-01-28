@@ -33,7 +33,7 @@ export const submitBid = async (metadata) => {
 };
 
 export const submitMultiBid = async (metadata) => {
-  console.log("metadata", metadata);
+  console.log('metadata', metadata);
   const { data } = await Axios.post(
     `${API_URL}/auction/${metadata.tokenId}/MultiBidding`,
     {
@@ -53,7 +53,7 @@ export const submitSell = async (metadata) => {
 };
 
 export const submitUpdate = async (metadata) => {
-  console.log("submitUpdate", metadata);
+  console.log('submitUpdate', metadata);
   const { data } = await Axios.post(
     `${API_URL}/auction/${metadata.userbidInfo.tokenId}/update`,
     //`${API_URL}/auction/Update`,
@@ -62,9 +62,14 @@ export const submitUpdate = async (metadata) => {
 };
 
 export const submitDelete = async (metadata) => {
-  console.log("submitDelete", metadata);
+  console.log('submitDelete', metadata);
   const { data } = await Axios.post(
     `${API_URL}/auction/${metadata.tokenId}/delete`,
     { metadata }
   );
+};
+
+export const submitComment = async (metadata) => {
+  console.log(metadata);
+  const { data } = await Axios.post(`${API_URL}/comments/normal`, { metadata });
 };

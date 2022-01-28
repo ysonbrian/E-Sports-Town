@@ -81,12 +81,13 @@ export const useClickedItemGroupList = create((set) => ({
   },
 }));
 
-
 export const useBidState = create((set) => ({
   bidState: [],
   fetchBidState: async (metadata) => {
-    const { data } = await Axios.post(`${url}/auction/:id/AlreadyBid`, {metadata,});
-    console.log("fetchBidState-data", data)
+    const { data } = await Axios.post(`${url}/auction/:id/AlreadyBid`, {
+      metadata,
+    });
+    console.log('fetchBidState-data', data);
     set({ bidState: await data });
     //console.log('test-bidState-data', data);
     //console.log('test-bidState-data-length', data.length);
@@ -114,8 +115,19 @@ export const useModalDeleteData = create((set) => ({
   setModalDeleteData: (modalDeleteData) => set({ modalDeleteData }),
 }));
 
+export const useComments = create((set) => ({
+  comments: [],
+  fetchComments: async (metadata) => {
+    console.log('fetchComments', metadata);
+    const data = await Axios.post(`${url}/comments/normal/fetch`, {
+      metadata,
+    });
+    console.log('comments data', data);
+    set({ comments: await data });
+  },
+}));
 
 export const useProfileImg = create((set) => ({
   profileImg: '',
-  setProfileImg: (profileImg) => set({profileImg}),
+  setProfileImg: (profileImg) => set({ profileImg }),
 }));
