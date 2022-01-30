@@ -97,7 +97,15 @@ export const useBidState = create((set) => ({
 
 export const useModalOwnerData = create((set) => ({
   modalOwnerData: [],
-  setModalOwnerData: (modalOwnerData) => set({ modalOwnerData }),
+  //setModalOwnerData: (modalOwnerData) => set({ modalOwnerData }),
+  fetchOwnerData: async (metadata) => {
+    console.log('fetchOwnerData-metadata', metadata);
+    const { data } = await Axios.post(`${url}/auction/:id/ownerlist`, {
+      metadata,
+    });
+    console.log('fetchOwnerData-serverReturn-data', data);
+    set({ modalOwnerData: await data });
+  },
 }));
 
 export const useModalSubmitData = create((set) => ({

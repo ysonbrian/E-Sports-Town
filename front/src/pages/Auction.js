@@ -328,10 +328,7 @@ function Auction({ clickedItemList }) {
     state.modalSubmitData,
     state.setModalSubmitData,
   ]);
-  const [modalOwnerData, setModalOwnerData] = useModalOwnerData((state) => [
-    state.modalOwnerData,
-    state.setModalOwnerData,
-  ]);
+  const { fetchOwnerData } = useModalOwnerData();
   const onOwnerModal = () => {
     setCheckOwnerModal((prev) => !prev);
   };
@@ -346,13 +343,6 @@ function Auction({ clickedItemList }) {
   // modal
   const onClickOwner = async () => {
     onOwnerModal();
-    //const metadata = {
-    //  tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
-    //};
-    const metadata = [];
-    metadata.push(clickFetchList[0]?.tokenOwnerAddress);
-    console.log("onClickToSell-multi-metadata", metadata);
-    setModalOwnerData(metadata);
   }
 
   const clickFetchList = clickedItemList.filter(
@@ -425,6 +415,10 @@ function Auction({ clickedItemList }) {
   useEffect(() => {
     fetchClickedItem();
     fetchComments(id);
+    const metadata = {
+      tokenId: id,
+    };
+    fetchOwnerData(metadata);
   }, []);
   console.log('AHAHAHH', comments);
   return (
