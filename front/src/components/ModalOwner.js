@@ -2,7 +2,6 @@ import React from 'react';
 import { useState } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import { submitOwner } from '../utils/data';
 import user from '../usericon4owner.png'
 import users from '../usersicon4owner.png'
 import { useModalOwnerData } from '../utils/store';
@@ -78,9 +77,9 @@ const ModalButton = styled.button`
 
 const ModalComponent = ({ onOwnerModal }) => {
   const [open, setOpen] = useState(true);
-  const [modalOwnerData, setModalOwnerData] = useModalOwnerData((state) => [
+  const [modalOwnerData, fetchOwnerData] = useModalOwnerData((state) => [
     state.modalOwnerData,
-    state.setModalOwnerData,
+    state.fetchOwnerData,
   ]);
 
   const customStyles = {
@@ -99,8 +98,13 @@ const ModalComponent = ({ onOwnerModal }) => {
     setOpen(false);
   };
 
-  console.log("ModalOwner-modalOwnerData", modalOwnerData);
-  console.log("ModalOwner-modalOwnerData-length", modalOwnerData?.length);
+  console.log("modalOwner-modalOwnerData", modalOwnerData)
+  console.log("modalOwner-modalOwnerData-userAddress", modalOwnerData[0].userAddress)
+  console.log("modalOwner-modalOwnerData-multiAuctionAddressList", modalOwnerData[0].multiAuctionAddressList)
+  console.log("modalOwner-modalOwnerData-multiAuctionAddressList-length", modalOwnerData[0].multiAuctionAddressList.length)
+
+  const singleOwnerAddress = modalOwnerData[0].userAddress.slice(0, 6) + "..." + modalOwnerData[0].userAddress.slice(-5);
+
   return (
     <div>
       <Modal
@@ -114,7 +118,7 @@ const ModalComponent = ({ onOwnerModal }) => {
             <ModalHeader>소유자</ModalHeader>
           </ModalHeaderContainer>
           <ModalImageContainer>
-            {modalOwnerData.length <= 1 ? (
+            {modalOwnerData[0].multiAuctionAddressList.length === 0 ? (
               <ModalImage src={user} />
             ) : (
               <ModalImage src={users} />
@@ -122,14 +126,19 @@ const ModalComponent = ({ onOwnerModal }) => {
           </ModalImageContainer>
           <ModalInfoContainer>
             <ModalInfo>
-              {modalOwnerData.map((el) => {
-                const maxBidAddress = el?.slice(0, 6) + "..." + el?.slice(-5);
-                return (
-                  <>
-                    <h3>{maxBidAddress}</h3>
-                  </>
-                )
-              })}
+              {modalOwnerData[0].multiAuctionAddressList.length === 0 ? (
+                <h3>{singleOwnerAddress}</h3>
+              ) :
+                modalOwnerData[0].multiAuctionAddressList.map((el) => {
+                  const multiOwnerAddress = el?.multiAuctionAddress.slice(0, 6) + "..." + el?.multiAuctionAddress.slice(-5);
+                  return (
+                    <>
+                      <h3>{multiOwnerAddress}</h3>
+                    </>
+                  )
+                })
+              }
+
             </ModalInfo>
           </ModalInfoContainer>
           <ModalButtonContainer>

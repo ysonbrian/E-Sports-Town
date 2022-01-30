@@ -8,7 +8,7 @@ import {
   useModalSubmitData,
   useModalUpdateData,
   useModalDeleteData,
-  useComments,
+  //useComments,
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -461,10 +461,8 @@ function MultiAuction() {
   const [checkSellModal, setCheckSellModal] = useState(true);
   const [checkUpdateModal, setCheckUpdateModal] = useState(true);
   const [checkDeleteModal, setCheckDeleteModal] = useState(true);
-  const [modalOwnerData, setModalOwnerData] = useModalOwnerData((state) => [
-    state.modalOwnerData,
-    state.setModalOwnerData,
-  ]);
+  const { fetchOwnerData } = useModalOwnerData();
+
   const [modalSubmitData, setModalSubmitData] = useModalSubmitData((state) => [
     state.modalSubmitData,
     state.setModalSubmitData,
@@ -502,29 +500,7 @@ function MultiAuction() {
 
   const onClickOwner = async () => {
     onOwnerModal();
-    //const metadata = {
-    //  tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
-    //};
-    const metadata = [];
-    metadata.push(clickFetchGroupList[0]?.tokenOwnerAddress);
-    console.log('onClickToSell-multi-metadata', metadata);
-    setModalOwnerData(metadata);
   };
-
-  //const onClickToSell = async () => {
-  //  //onSellModal();
-  //  // console.log(clickFetchList);
-  //  const metadata = {
-  //    tokenId: id,
-  //    tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
-  //    bidAddressNPrice: clickFetchGroupList[0]?.multiAuctionAddressList,
-  //    //bidPrice: e.bidPrice,
-  //    type: "multi",
-  //  };
-  //  console.log("onClickToSell-multi-metadata", metadata);
-  //  //setModalSubmitData(metadata);
-  //  await submitSell(metadata);
-  //};
 
   const onClickToSell = async () => {
     onSellModal();
@@ -593,15 +569,15 @@ function MultiAuction() {
     setBid('');
   };
 
-  const comments = useComments((state) => state.comments);
-  const { fetchComments } = useComments();
-  const [auctionComments, setAuctionComments] = useState([]);
+  //const comments = useComments((state) => state.comments);
+  //const { fetchComments } = useComments();
+  //const [auctionComments, setAuctionComments] = useState([]);
 
-  const onClickComments = (data) => {
-    // console.log(data);
-    setAuctionComments([data, ...auctionComments]);
-    console.log('auction!', auctionComments);
-  };
+  //const onClickComments = (data) => {
+  //  // console.log(data);
+  //  setAuctionComments([data, ...auctionComments]);
+  //  console.log('auction!', auctionComments);
+  //};
 
   useEffect(() => {
     fetchClickedItemGroup();
@@ -611,7 +587,8 @@ function MultiAuction() {
       currentAddress: currentAddress,
     };
     fetchBidState(metadata);
-    fetchComments(id);
+    fetchOwnerData(metadata);
+    //fetchComments(id);
   }, []);
 
   return (
@@ -645,7 +622,7 @@ function MultiAuction() {
           </PreViewNFTInfo>
           <CommentContainer>
             <CommentListContainer>
-              {comments.data
+              {/*comments.data
                 ? comments?.data?.map((data, index) => (
                     <div key={index}>
                       <div>{data.userAddress}</div>
@@ -657,9 +634,10 @@ function MultiAuction() {
                       <div>{data.userAddress}</div>
                       <div>{data.comment}</div>
                     </div>
-                  ))}
+                ))*/}
             </CommentListContainer>
-            <Comment id={id} onClickComments={onClickComments} />
+            {/*<Comment id={id} onClickComments={onClickComments}/>*/}
+            <Comment />
           </CommentContainer>
         </PreViewNFT>
         <MultiAuctionInfo>

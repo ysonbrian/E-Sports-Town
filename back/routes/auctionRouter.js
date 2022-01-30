@@ -275,4 +275,16 @@ router.post('/:id/delete', async (req, res) => {
   }
 });
 
+
+router.post('/:id/ownerlist', async (req, res) => {
+  const { tokenId, currentAddress } = req.body.metadata;
+  try {
+    const data = await normalData.find({ tokenId: tokenId });
+    console.log("ownerlist-data", data)
+    res.json(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = router;
