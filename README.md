@@ -64,6 +64,6 @@
 
 ---
 
-## E-SPORTS TOWN 프로젝트 서비스 종합 구현 영상 주소
+## E-SPORTS TOWN 프로젝트 서비스 종합 소개 영상주소
 https://www.youtube.com/watch?v=28yoeoe7kmE
 
