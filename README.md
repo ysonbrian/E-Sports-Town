@@ -34,3 +34,11 @@
 ![image](https://user-images.githubusercontent.com/89737377/151485305-97942509-320f-41d5-aaf0-200b46189684.png)
 ![image](https://user-images.githubusercontent.com/89737377/151490294-9d8a7847-6b58-4b49-982a-b8438c2cd4f4.png)
 
+
+
+## 프로젝트 서비스 구현 [GIF]
+- Web3Modal-Login
+
+![Web3Modal-Login](https://user-images.githubusercontent.com/89737377/151683727-617af8f6-2ff3-4ba1-b4f8-53e752801413.gif)
+
+
