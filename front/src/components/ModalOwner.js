@@ -2,8 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import user from '../usericon4owner.png'
-import users from '../usersicon4owner.png'
+import user from '../images/usericon4owner.png';
+import users from '../images/usersicon4owner.png';
 import { useModalOwnerData } from '../utils/store';
 
 const ModalAllContainer = styled.div`
@@ -98,12 +98,24 @@ const ModalComponent = ({ onOwnerModal }) => {
     setOpen(false);
   };
 
-  console.log("modalOwner-modalOwnerData", modalOwnerData)
-  console.log("modalOwner-modalOwnerData-userAddress", modalOwnerData[0].userAddress)
-  console.log("modalOwner-modalOwnerData-multiAuctionAddressList", modalOwnerData[0].multiAuctionAddressList)
-  console.log("modalOwner-modalOwnerData-multiAuctionAddressList-length", modalOwnerData[0].multiAuctionAddressList.length)
+  console.log('modalOwner-modalOwnerData', modalOwnerData);
+  console.log(
+    'modalOwner-modalOwnerData-userAddress',
+    modalOwnerData[0].userAddress
+  );
+  console.log(
+    'modalOwner-modalOwnerData-multiAuctionAddressList',
+    modalOwnerData[0].multiAuctionAddressList
+  );
+  console.log(
+    'modalOwner-modalOwnerData-multiAuctionAddressList-length',
+    modalOwnerData[0].multiAuctionAddressList.length
+  );
 
-  const singleOwnerAddress = modalOwnerData[0].userAddress.slice(0, 6) + "..." + modalOwnerData[0].userAddress.slice(-5);
+  const singleOwnerAddress =
+    modalOwnerData[0].userAddress.slice(0, 6) +
+    '...' +
+    modalOwnerData[0].userAddress.slice(-5);
 
   return (
     <div>
@@ -128,17 +140,19 @@ const ModalComponent = ({ onOwnerModal }) => {
             <ModalInfo>
               {modalOwnerData[0].multiAuctionAddressList.length === 0 ? (
                 <h3>{singleOwnerAddress}</h3>
-              ) :
+              ) : (
                 modalOwnerData[0].multiAuctionAddressList.map((el) => {
-                  const multiOwnerAddress = el?.multiAuctionAddress.slice(0, 6) + "..." + el?.multiAuctionAddress.slice(-5);
+                  const multiOwnerAddress =
+                    el?.multiAuctionAddress.slice(0, 6) +
+                    '...' +
+                    el?.multiAuctionAddress.slice(-5);
                   return (
                     <>
                       <h3>{multiOwnerAddress}</h3>
                     </>
-                  )
+                  );
                 })
-              }
-
+              )}
             </ModalInfo>
           </ModalInfoContainer>
           <ModalButtonContainer>

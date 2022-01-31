@@ -15,7 +15,7 @@ import ModalComponent from '../components/Modal';
 import ModalSubmit from '../components/ModalSubmit';
 import ModalOwner from '../components/ModalOwner';
 import Comment from '../components/Comment';
-import auct from '../auct.jpeg';
+import auct from '../images/auct.jpeg';
 
 const TotalPage = styled.div`
   height: 100%;
@@ -343,12 +343,12 @@ function Auction({ clickedItemList }) {
   // modal
   const onClickOwner = async () => {
     onOwnerModal();
-  }
+  };
 
   const clickFetchList = clickedItemList.filter(
     (data) => data.tokenId === Number(id)
   );
-  console.log("clickFetchList-test", clickFetchList)
+  console.log('clickFetchList-test', clickFetchList);
   const max = clickFetchList[0]?.biddingList?.reduce(function (prev, current) {
     return prev?.bidPrice > current?.bidPrice ? prev : current;
   }); //returns object
@@ -429,7 +429,9 @@ function Auction({ clickedItemList }) {
         <ModalSubmit onSellModal={onSellModal} />
       ) : !checkOwnerModal ? (
         <ModalOwner onOwnerModal={onOwnerModal} />
-      ) : !null}
+      ) : (
+        !null
+      )}
       {/* <ModalComponent onClickModal={onClickModal} /> */}
       <PageTitle>Auction</PageTitle>
       <AuctionNFT>
@@ -452,38 +454,38 @@ function Auction({ clickedItemList }) {
             <CommentListContainer>
               {comments?.data
                 ? comments?.data?.map((data, index) => {
-                  const newUserAddress =
-                    data.userAddress.slice(0, 6) +
-                    '...' +
-                    data.userAddress.slice(-5);
-                  const date = data.created_at.split('T');
-                  let rDate = null;
-                  if (date) {
-                    const newDate = date[0]?.split('-');
-                    const newtime = date[1]?.split('.');
-                    const newtime2 = newtime[0]?.split(':');
-                    const result = [...newDate, ...newtime2];
-                    const result1 = result.slice(0, 3).join('-');
-                    rDate = result1;
-                  }
-                  return (
-                    <CommentsItemContainer key={index}>
-                      <CommentsItemAccount>
-                        {newUserAddress}
-                      </CommentsItemAccount>
-                      <CommentsItemComment>
-                        {data.comment}
-                      </CommentsItemComment>
-                      <CommentsItemDate>{rDate}</CommentsItemDate>
-                    </CommentsItemContainer>
-                  );
-                })
+                    const newUserAddress =
+                      data.userAddress.slice(0, 6) +
+                      '...' +
+                      data.userAddress.slice(-5);
+                    const date = data.created_at.split('T');
+                    let rDate = null;
+                    if (date) {
+                      const newDate = date[0]?.split('-');
+                      const newtime = date[1]?.split('.');
+                      const newtime2 = newtime[0]?.split(':');
+                      const result = [...newDate, ...newtime2];
+                      const result1 = result.slice(0, 3).join('-');
+                      rDate = result1;
+                    }
+                    return (
+                      <CommentsItemContainer key={index}>
+                        <CommentsItemAccount>
+                          {newUserAddress}
+                        </CommentsItemAccount>
+                        <CommentsItemComment>
+                          {data.comment}
+                        </CommentsItemComment>
+                        <CommentsItemDate>{rDate}</CommentsItemDate>
+                      </CommentsItemContainer>
+                    );
+                  })
                 : auctionComments?.map((data, index) => (
-                  <CommentsItemContainer key={index}>
-                    <div>{data.userAddress}</div>
-                    <div>{data.comment}</div>
-                  </CommentsItemContainer>
-                ))}
+                    <CommentsItemContainer key={index}>
+                      <div>{data.userAddress}</div>
+                      <div>{data.comment}</div>
+                    </CommentsItemContainer>
+                  ))}
             </CommentListContainer>
             <Comment id={id} onClickComments={onClickComments} />
           </CommentContainer>
@@ -517,7 +519,7 @@ function Auction({ clickedItemList }) {
               <WinningCurrent_Price>
                 <h3>
                   <i className="fas fa-bars"></i>
-                  {max?.bidPrice ? max?.bidPrice : "제시 금액이 없습니다."}
+                  {max?.bidPrice ? max?.bidPrice : '제시 금액이 없습니다.'}
                 </h3>
               </WinningCurrent_Price>
             </WinningCurrent>
@@ -576,17 +578,14 @@ function Auction({ clickedItemList }) {
                 rDate = result1 + ' ' + newtime2.join(':');
               }
               const newUserAddress =
-                el?.bidAddress?.slice(0, 6) +
-                '...' +
-                el?.bidAddress?.slice(-5);
+                el?.bidAddress?.slice(0, 6) + '...' + el?.bidAddress?.slice(-5);
 
               return (
                 <BidListItemContainer key={el?._id}>
                   <BidItemName>{newUserAddress}</BidItemName>
                   <BidItemCreated>{rDate}</BidItemCreated>
                   <BidItemPrice>{el?.bidPrice}</BidItemPrice>
-                  {clickFetchList[0]?.tokenOwnerAddress ===
-                    user.userAddress ? (
+                  {clickFetchList[0]?.tokenOwnerAddress === user.userAddress ? (
                     <BidItemSellButton onClick={() => onClickToSell(el)}>
                       판매
                     </BidItemSellButton>

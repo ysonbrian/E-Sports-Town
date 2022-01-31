@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import styled from 'styled-components';
 //import { submitSell } from '../utils/data';
 import { submitDelete } from '../utils/data';
-import deleteicon from '../icon-delete.png'
+import deleteicon from '../images/icon-delete.png';
 
 import { useModalDeleteData } from '../utils/store';
 
@@ -127,11 +127,11 @@ const ModalComponent = ({ onDeleteModal }) => {
     //const metadata = {
     //  userbidInfo: modalDeleteData,
     //}
-    
+
     await submitDelete(modalDeleteData);
     //onSellModal(true);
-    console.log("after-submit-Delete")
-    
+    console.log('after-submit-Delete');
+
     onDeleteModal(true);
     setOpen(false);
     //navigate('/');
@@ -157,13 +157,14 @@ const ModalComponent = ({ onDeleteModal }) => {
           <ModalHeaderContainer>
             <ModalHeader>삭제</ModalHeader>
           </ModalHeaderContainer>
-          <ModalImageContainer>
-          </ModalImageContainer>
+          <ModalImageContainer></ModalImageContainer>
           <ModalInfoContainer>
             <ModalInfo>참가금액을 삭제 하시겠습니까?</ModalInfo>
           </ModalInfoContainer>
           <ModalButtonContainer>
-            <ModalConfirmButton onClick={onDeleteButton}>삭제</ModalConfirmButton>
+            <ModalConfirmButton onClick={onDeleteButton}>
+              삭제
+            </ModalConfirmButton>
             <ModalCancelButton onClick={onCloseButton}>취소</ModalCancelButton>
           </ModalButtonContainer>
         </ModalAllContainer>

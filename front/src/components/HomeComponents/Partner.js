@@ -1,11 +1,11 @@
-import React from "react";
-import nexon from "../../nexon.jpeg";
-import kakao from "../../kakao.png";
-import hangame from "../../hangame.jpeg";
-import codestates from "../../codestates.png";
-import ncsoft from "../../ncsoft.png";
-import battle from "../../battle.png";
-import styled from "styled-components";
+import React from 'react';
+import nexon from '../../images/nexon.jpeg';
+import kakao from '../../images/kakao.png';
+import hangame from '../../images/hangame.jpeg';
+import codestates from '../../images/codestates.png';
+import ncsoft from '../../images/ncsoft.png';
+import battle from '../../images/battle.png';
+import styled from 'styled-components';
 
 const PartnerContainer = styled.div`
   display: flex;
@@ -68,9 +68,7 @@ function Partner() {
             <img src={hangame} />
           </PartnerImg>
           <PartnerInfo>
-            <div>
-              'E-SPORTS TOWN' 블록체인 선두기업들과 협력하고 있습니다.
-            </div>
+            <div>'E-SPORTS TOWN' 블록체인 선두기업들과 협력하고 있습니다.</div>
             <div>
               함께 건강한 블록체인 생태계를 만들어갈 분들은 언제나 환영입니다.
             </div>

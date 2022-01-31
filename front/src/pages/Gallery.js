@@ -3,7 +3,7 @@ import CardTemplate from '../components/CardTemplate';
 import styled from 'styled-components';
 import { useGallery } from '../utils/store';
 import { getGalleryList } from '../utils/data';
-import back4 from '../back4.jpeg';
+import back4 from '../images/back4.jpeg';
 
 const GalleryContainer = styled.div`
   height: 100%;

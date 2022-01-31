@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useStore, useMypage, useMyToken, useWeb3, useProfileImg } from "../utils/store";
-import back2 from "../back2.png";
-import CardMyPage from "../components/CardMyPage";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import {
+  useStore,
+  useMypage,
+  useMyToken,
+  useWeb3,
+  useProfileImg,
+} from '../utils/store';
+import back2 from '../images/back2.png';
+import CardMyPage from '../components/CardMyPage';
 
 const PageTitle = styled.h1`
   padding-top: 25px;
@@ -18,7 +24,7 @@ const Profile_container = styled.div`
   flex-direction: column;
   background-image: url(${back2});
   color: white;
-  
+
   background-size: cover;
 `;
 
@@ -104,15 +110,18 @@ const Coin = styled.div`
   margin: 10px;
 `;
 
-const UserName = styled.div``
+const UserName = styled.div``;
 
 function Mypage() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const myPage = useMypage((state) => state.mypage);
   const myToken = useMyToken((state) => state.myToken);
-  const [files, setFiles] = useState("");
-  const [imgSrc, setImgSrc] = useState("");
-  const [profileImg, setProfileImg] = useProfileImg((state) => [state.profileImg, state.setProfileImg]);
+  const [files, setFiles] = useState('');
+  const [imgSrc, setImgSrc] = useState('');
+  const [profileImg, setProfileImg] = useProfileImg((state) => [
+    state.profileImg,
+    state.setProfileImg,
+  ]);
   // const [web3, setWeb3] = useWeb3((state) => [state.web3, state.setWeb3]);
   const { fetchMyPage } = useMypage();
   useEffect(() => {
@@ -133,9 +142,9 @@ function Mypage() {
     };
   };
 
-  console.log("imgSrc", imgSrc);
-  console.log("profileImg", profileImg);
-  console.log("myPage", myPage);
+  console.log('imgSrc', imgSrc);
+  console.log('profileImg', profileImg);
+  console.log('myPage', myPage);
   return (
     <Profile_container>
       <PageTitle>Mypage</PageTitle>
@@ -149,7 +158,7 @@ function Mypage() {
         <label htmlFor="upload">
           <ImgContainer>
             <ProfilePreview>
-              {profileImg && <img src={profileImg} alt="preview-img"/>}
+              {profileImg && <img src={profileImg} alt="preview-img" />}
               {/*imgSrc && <img src={imgSrc} alt="preview-img"/>*/}
             </ProfilePreview>
             {/*<i className="far fa-user"></i>*/}
