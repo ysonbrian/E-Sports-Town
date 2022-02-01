@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import CardTemplate from '../components/CardTemplate';
+import CardVote from '../components/CardVote';
 import styled from 'styled-components';
-import { useGallery } from '../utils/store';
+import { usePolling } from '../utils/store';
+import { getCurrentUser } from '../utils/auth';
 import back4 from '../images/back4.jpeg';
 
-const GalleryContainer = styled.div`
+const PollingContainer = styled.div`
   height: 100%;
   background-image: url(${back4});
   background-size: 100% 100%;
@@ -32,24 +33,28 @@ const ListItem = styled.div`
   margin: 1rem;
   padding: 1rem;
 `;
-// TODO
-// 갤러리에 다중지분인 NFT 상품이 투표가 완료되어 판매가 가능한경우 나오도록 normalData 에 속성값 하나 추가 해줘야함
-function Gallery() {
-  const gallery = useGallery((state) => state.gallery);
-  const { fetchData } = useGallery();
-  useEffect(() => {
-    fetchData();
-  }, []);
 
+function Polling() {
+  const votes = usePolling((state) => state.votes);
+  const { fetchVotes } = usePolling();
+  useEffect(() => {
+    const fetchAll = async () => {
+      const user = await getCurrentUser();
+      if (user) {
+        await fetchVotes(user?.userAddress);
+      }
+    };
+    fetchAll();
+  }, []);
   return (
-    <GalleryContainer>
-      <PageTitle>Gallery</PageTitle>
+    <PollingContainer>
+      <PageTitle>Polling</PageTitle>
       <ListContainer>
-        {gallery &&
-          gallery?.map((el) => {
+        {votes &&
+          votes?.map((el) => {
             return (
               <ListItem key={el?._id}>
-                <CardTemplate
+                <CardVote
                   id={el?._id}
                   tokenId={el?.tokenId}
                   imgURI={el?.imgURI}
@@ -57,6 +62,7 @@ function Gallery() {
                   user={el?.userAddress}
                   name={el?.name}
                   description={el?.description}
+                  multiAuctionAddressList={el?.multiAuctionAddressList}
                   price={el?.price}
                   created_at={el?.created_at}
                 />
@@ -64,8 +70,8 @@ function Gallery() {
             );
           })}
       </ListContainer>
-    </GalleryContainer>
+    </PollingContainer>
   );
 }
 
-export default Gallery;
+export default Polling;

@@ -13,7 +13,7 @@ const accountRouter = require('./routes/accountRouter');
 const galleryRouter = require('./routes/galleryRouter');
 const mypageRouter = require('./routes/mypageRouter');
 const commentsRouter = require('./routes/commentsRouter');
-
+const voteRouter = require('./routes/voteRouter');
 require('dotenv').config();
 const PORT = process.env.PORT || 1234;
 
@@ -37,7 +37,7 @@ app.use('/account', accountRouter);
 app.use('/gallery', galleryRouter);
 app.use('/mypage', mypageRouter);
 app.use('/comments', commentsRouter);
-
+app.use('/vote', voteRouter);
 app.get('/', (req, res) => {
   res.json({ message: `Server is running on port ${PORT}` });
 });

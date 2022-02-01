@@ -110,8 +110,6 @@ const Coin = styled.div`
   margin: 10px;
 `;
 
-const UserName = styled.div``;
-
 function Mypage() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const myPage = useMypage((state) => state.mypage);
@@ -122,7 +120,6 @@ function Mypage() {
     state.profileImg,
     state.setProfileImg,
   ]);
-  // const [web3, setWeb3] = useWeb3((state) => [state.web3, state.setWeb3]);
   const { fetchMyPage } = useMypage();
   useEffect(() => {
     console.log(user);
@@ -135,10 +132,8 @@ function Mypage() {
     let fileReader = new FileReader();
     let file = event.target.files[0];
     fileReader.readAsDataURL(file);
-    // fileReader.readAsText(e.target.files[0], 'UTF');
     fileReader.onload = (e) => {
       setProfileImg(e.target.result);
-      //setImgSrc(e.target.result);
     };
   };
 

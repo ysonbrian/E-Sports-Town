@@ -15,6 +15,7 @@ const NormalDataSchema = mongoose.Schema(
       new mongoose.Schema({
         multiAuctionAddress: String,
         bidPrice: Number,
+        isVoted: { type: Boolean, default: false },
         created_at: { type: Date, default: Date.now },
       }),
     ],

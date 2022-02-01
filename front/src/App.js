@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import Gallery from './pages/Gallery';
 import Minting from './pages/Minting';
 import Mypage from './pages/Mypage';
+import Vote from './pages/Vote';
 import Modal from 'react-modal';
 import {
   useStore,
@@ -24,9 +25,7 @@ import Auction from './pages/Auction';
 import MultiAuction from './pages/MultiAuction';
 import styled from 'styled-components';
 import Footer from './components/Footer';
-
-const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
+import Polling from './pages/Polling';
 
 function App() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
@@ -111,6 +110,7 @@ function App() {
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/minting" element={<Minting />} />
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/polling" element={<Polling />} />
         <Route
           path="/auction/:id"
           element={<Auction clickedItemList={clickedItemList} />}
@@ -118,6 +118,10 @@ function App() {
         <Route
           path="/multiauction/:id"
           element={<MultiAuction clickedItemList={clickedItemList} />}
+        />
+        <Route
+          path="/polling/:id"
+          element={<Vote clickedItemList={clickedItemList} />}
         />
       </Routes>
       <Footer />

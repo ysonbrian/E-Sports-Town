@@ -105,6 +105,10 @@ const HeaderProfile = styled.img`
   border-radius: 15px;
 `;
 
+const VoteWrapper = styled.div`
+  margin-right: 40px;
+`;
+
 function Header() {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const [profileImg, setProfileImg] = useProfileImg((state) => [
@@ -141,7 +145,6 @@ function Header() {
   const newUserAddress =
     user?.userAddress?.slice(0, 6) + '...' + user?.userAddress?.slice(-5);
 
-  console.log('profileImg', profileImg);
   return (
     <HeaderContainer>
       <Logo>
@@ -155,10 +158,12 @@ function Header() {
         <HeaderIsLogin>
           {user?.userAddress ? (
             <>
+              <Link to="/polling">
+                <VoteWrapper>Polling</VoteWrapper>
+              </Link>
               <Link to="/" className="Logout" onClick={disconnectWallet}>
                 <FiLogOut size="30" />
               </Link>
-
               <Link to="/mypage">
                 <HeaderMypage>
                   {profileImg ? (

@@ -45,6 +45,20 @@ export const useGallery = create((set) => ({
   },
 }));
 
+export const usePolling = create((set) => ({
+  votes: [],
+  fetchVotes: async (userAddress) => {
+    const res = await fetch(`${url}/vote`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userAddress }),
+    });
+    set({ votes: await res.json() });
+  },
+}));
+
 export const useMypage = create((set) => ({
   mypage: [],
   fetchMyPage: async (user) => {
@@ -76,7 +90,7 @@ export const useClickedItemGroupList = create((set) => ({
   clickedItemGroupList: [],
   fetchClickedItemGroup: async () => {
     const { data } = await Axios.get(`${url}/auction/multiclick`);
-    console.log("useClickedItemGroupList-store",data)
+    console.log('useClickedItemGroupList-store', data);
     set({ clickedItemGroupList: await data });
   },
 }));
