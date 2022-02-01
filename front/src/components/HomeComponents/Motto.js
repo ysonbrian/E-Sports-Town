@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import back from "../../back.png";
-import game1 from "../../home.gif";
-import logo_text from "../../logo_text.png";
+import React from 'react';
+import styled from 'styled-components';
+import back from '../../images/back.png';
+import game1 from '../../images/home.gif';
+import logo_text from '../../images/logo_text.png';
 
 const Mottos = styled.div`
   display: flex;
@@ -44,7 +44,7 @@ const MottoImg2 = styled.div`
     //border: dotted 2px whitesmoke;
     width: 100%;
     height: 100%;
-    transform:scale(1.8);
+    transform: scale(1.8);
     padding-bottom: 1.5rem;
   }
   position: absolute;

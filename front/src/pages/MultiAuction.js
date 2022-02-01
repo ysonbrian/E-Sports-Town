@@ -26,7 +26,7 @@ import ModalSubmit from '../components/ModalSubmit';
 import ModalUpdate from '../components/ModalUpdate';
 import ModalDelete from '../components/ModalDelete';
 import Comment from '../components/Comment';
-import auct from '../auct.jpeg';
+import auct from '../images/auct.jpeg';
 
 //background-image: url(${mainImage});
 const TotalPage = styled.div`

@@ -4,7 +4,7 @@ import { create } from 'ipfs-http-client';
 import { useStore } from '../utils/store';
 import { submitNFT } from '../utils/data';
 import styled from 'styled-components';
-import back3 from '../back3.png';
+import back3 from '../images/back3.png';
 
 const NftContainer = styled.div`
   //padding: 0 100px 100px 100px;

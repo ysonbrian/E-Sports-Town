@@ -1,7 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import members from "../../members.png";
-
+import React from 'react';
+import styled from 'styled-components';
+import members from '../../images/members.png';
 
 const TeamContainer = styled.div`
   display: flex;

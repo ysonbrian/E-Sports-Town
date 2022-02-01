@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import styled from 'styled-components';
 //import { submitSell } from '../utils/data';
 import { submitUpdate } from '../utils/data';
-import modify from '../modify.png'
+import modify from '../images/modify.png';
 
 import { useModalUpdateData } from '../utils/store';
 
@@ -49,8 +49,7 @@ const ModalInfoContainer = styled.div`
   padding: 10px;
   margin-bottom: 10px;
 `;
-const ModalChangeEth = styled.input`
-`
+const ModalChangeEth = styled.input``;
 const ModalInfo = styled.span`
   font-weight: 600;
 `;
@@ -127,13 +126,13 @@ const ModalComponent = ({ onUpdateModal }) => {
     //await submitSell(modalSubmitData);
     const metadata = {
       userbidInfo: modalUpdateData,
-      updatedbid: bid
-    }
-    
+      updatedbid: bid,
+    };
+
     await submitUpdate(metadata);
     //onSellModal(true);
-    console.log("after-submit-update")
-    
+    console.log('after-submit-update');
+
     onUpdateModal(true);
     setOpen(false);
     //navigate('/');
@@ -163,8 +162,7 @@ const ModalComponent = ({ onUpdateModal }) => {
           <ModalHeaderContainer>
             <ModalHeader>수정</ModalHeader>
           </ModalHeaderContainer>
-          <ModalImageContainer>
-          </ModalImageContainer>
+          <ModalImageContainer></ModalImageContainer>
           <ModalInfoContainer>
             <ModalChangeEth
               type="text"
@@ -175,7 +173,9 @@ const ModalComponent = ({ onUpdateModal }) => {
             <ModalInfo>참가금액을 수정 하시겠습니까?</ModalInfo>
           </ModalInfoContainer>
           <ModalButtonContainer>
-            <ModalConfirmButton onClick={() => onUpdateButton(bid)}>수정</ModalConfirmButton>
+            <ModalConfirmButton onClick={() => onUpdateButton(bid)}>
+              수정
+            </ModalConfirmButton>
             <ModalCancelButton onClick={onCloseButton}>취소</ModalCancelButton>
           </ModalButtonContainer>
         </ModalAllContainer>

@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import icon1 from "../../Signature-icon1.png";
-import icon2 from "../../Signature-icon2.png";
-import icon3 from "../../Signature-icon3.png";
-import cardback from "../../cardback.png";
+import React from 'react';
+import styled from 'styled-components';
+import icon1 from '../../images/Signature-icon1.png';
+import icon2 from '../../images/Signature-icon2.png';
+import icon3 from '../../images/Signature-icon3.png';
+import cardback from '../../images/cardback.png';
 
 const BackSignature = styled.div`
   background-image: url(${cardback});
@@ -72,28 +72,31 @@ function Signature() {
               <br></br>
               경매에 참여하여 원하는 금액에 NFT를 구매하세요!
               <br></br>
-              페이커, 임요한  등 세계적인 선수들의 빛나는 순간을 영원한 나의 것으로 소유할 수 있습니다.
+              페이커, 임요한 등 세계적인 선수들의 빛나는 순간을 영원한 나의
+              것으로 소유할 수 있습니다.
             </Text>
           </Card>
           <Card>
             <img src={icon2} />
-            <ContentTitle>NFT 공동소유</ContentTitle>{" "}
+            <ContentTitle>NFT 공동소유</ContentTitle>{' '}
             <Text>
               DAO 형태로 다수의 유저들이 NFT를 공동 소유 및 판매할 수 있습니다.
               <br></br>
               <br></br>
-              공동구매(Multi-Auction)을 통해 모두가 NFT를 소유하는 세계를 지향합니다.
+              공동구매(Multi-Auction)을 통해 모두가 NFT를 소유하는 세계를
+              지향합니다.
             </Text>
           </Card>
 
           <Card>
-            <img src={icon3} />{" "}
-            <ContentTitle>자유로운 커뮤니케이션</ContentTitle>{" "}
+            <img src={icon3} />{' '}
+            <ContentTitle>자유로운 커뮤니케이션</ContentTitle>{' '}
             <Text>
               NFT 거래시,
               <br></br>
-              의사결정을 나눌 수 있는 채팅(커뮤티케이션) 공간을 DAO형태로 제공함으로
-              유저들 간 불필요한 에너지 소비를 예방하며 건강한 사용자 경험을 제공합니다.
+              의사결정을 나눌 수 있는 채팅(커뮤티케이션) 공간을 DAO형태로
+              제공함으로 유저들 간 불필요한 에너지 소비를 예방하며 건강한 사용자
+              경험을 제공합니다.
               <br></br>
               <br></br>
               구매/판매자 간의 직접적인 소통을 통해 원활한 거래가 이뤄집니다.
