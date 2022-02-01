@@ -5,7 +5,7 @@ const NormalData = require('../models/NormalData');
 
 router.get('/', async (req, res) => {
   try {
-    const result = await NormalData.find();
+    const result = await NormalData.find({ type: 'normal' });
     if (!result) {
       return res.send({ data: null });
     }

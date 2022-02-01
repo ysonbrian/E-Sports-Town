@@ -8,7 +8,6 @@ import {
   useModalSubmitData,
   useModalUpdateData,
   useModalDeleteData,
-  //useComments,
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-//import { submitSell } from '../utils/data';
 import { submitUpdate } from '../utils/data';
 import modify from '../images/modify.png';
 
