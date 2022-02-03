@@ -19,7 +19,6 @@ router.get('/click', async (req, res) => {
     const data = await auctionData.find();
     //const data = await normalData.find();
     if (data) {
-      console.log('click-find', data);
       res.json(data);
     } else {
       console.log('No data!');
@@ -64,9 +63,7 @@ router.get('/multiclick', async (req, res) => {
   try {
     const data = await MultiAuctionData.find();
     //const data = await normalData.find();
-    console.log('multiclick');
     if (data) {
-      console.log('multiclick-find', data);
       res.json(data);
     } else {
       console.log('No data!');
@@ -275,12 +272,10 @@ router.post('/:id/delete', async (req, res) => {
   }
 });
 
-
 router.post('/:id/ownerlist', async (req, res) => {
   const { tokenId, currentAddress } = req.body.metadata;
   try {
     const data = await normalData.find({ tokenId: tokenId });
-    console.log("ownerlist-data", data)
     res.json(data);
   } catch (error) {
     console.log(error);

@@ -92,12 +92,21 @@ const ModalVote = ({ setCheckVoteModal }) => {
     },
   };
 
-  const onVoteButton = async () => {
+  const onAgreeButton = async () => {
     console.log('Success', modalSubmitData);
-    await submitVote(modalSubmitData);
-    // setCheckVoteModal(true);
-    // setOpen(false);
-    // window.location.assign('http://localhost:3000');
+    const option = true;
+    await submitVote(modalSubmitData, option);
+    setCheckVoteModal(true);
+    setOpen(false);
+    window.location.assign('http://localhost:3000');
+  };
+  const onDisagreeButton = async () => {
+    console.log('Success', modalSubmitData);
+    const option = false;
+    await submitVote(modalSubmitData, option);
+    setCheckVoteModal(true);
+    setOpen(false);
+    window.location.assign('http://localhost:3000');
   };
 
   const onCloseButton = () => {
@@ -124,7 +133,8 @@ const ModalVote = ({ setCheckVoteModal }) => {
             <ModalInfo>투표 하시겠어요?</ModalInfo>
           </ModalInfoContainer>
           <ModalButtonContainer>
-            <ModalButton onClick={onVoteButton}>투표</ModalButton>
+            <ModalButton onClick={onAgreeButton}>찬성</ModalButton>
+            <ModalButton onClick={onDisagreeButton}>반대</ModalButton>
             <ModalButton onClick={onCloseButton}>취소</ModalButton>
           </ModalButtonContainer>
         </ModalAllContainer>

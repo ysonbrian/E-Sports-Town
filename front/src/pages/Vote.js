@@ -9,8 +9,8 @@ import {
 } from '../utils/store';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { submitBid, getClickedItemBidList, submitSell } from '../utils/data';
-import { useModalSubmitData } from '../utils/store';
+import { submitState } from '../utils/data';
+import { useModalSubmitData, useVoteState } from '../utils/store';
 import ModalOwner from '../components/ModalOwner';
 import ModalVote from '../components/ModalVote';
 import Comment from '../components/Comment';
@@ -310,6 +310,34 @@ const BidItemlabel = styled.div`
   padding-right: 20px;
 `;
 
+const VoteButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+`;
+
+const VoteButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 40px;
+  border-radius: 6px;
+  text-align: center;
+  color: #f4f4f4;
+  border: none;
+  background-color: #fe7e6d;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0px 1.25rem;
+  margin-right: 10px;
+  letter-spacing: 2px;
+  :hover {
+    opacity: 0.7;
+  }
+`;
+
 function Vote({ clickedItemList }) {
   const [user, setUser] = useStore((state) => [state.user, state.setUser]);
   const id = useStore((state) => state.id);
@@ -317,10 +345,14 @@ function Vote({ clickedItemList }) {
   const [checkOwnerModal, setCheckOwnerModal] = useState(true);
 
   const { fetchClickedItem } = useClickedItemBidList();
-  // const comments
+  //  comments
   const comments = useComments((state) => state.comments);
   const { fetchComments } = useComments();
   const [auctionComments, setAuctionComments] = useState([]);
+
+  // votes
+  const voteState = useVoteState((state) => state.voteState);
+  const { fetchVoteState } = useVoteState();
 
   const [bid, setBid] = useState();
   const [bidMessage, setBidMessage] = useState();
@@ -361,17 +393,23 @@ function Vote({ clickedItemList }) {
 
   const onClickToVote = (e) => {
     setCheckVoteModal(false);
+    const data = clickedItem.multiAuctionAddressList.map(
+      (el) => el.multiAuctionAddress
+    );
     const metadata = {
       tokenId: id,
       tokenOwnerAddress: clickedItem.user,
       tokenPrice: clickedItem.price,
       voteAddress: e.multiAuctionAddress,
       voterPrice: e.bidPrice,
+      multiAuctionAddressList: data,
+      multiAuctionAddressListLength: clickedItem.multiAuctionAddressList.length,
       type: 'multi',
     };
-    console.log('nana', metadata);
     setModalSubmitData(metadata);
   };
+  console.log('nana', clickedItem);
+
   const totalVoted = clickedItem?.multiAuctionAddressList?.reduce(
     (acc, cur) => {
       if (cur.isVoted === true) {
@@ -393,6 +431,44 @@ function Vote({ clickedItemList }) {
     setCheckOwnerModal((prev) => !prev);
   };
 
+  const onClickVote = (state) => {
+    // console.log(state);
+    let data;
+    const addressList = clickedItem.multiAuctionAddressList.map(
+      (el) => el.multiAuctionAddress
+    );
+    const addressPrice = clickedItem.multiAuctionAddressList.map(
+      (el) => el.bidPrice
+    );
+    if (state === 'Initial') {
+      data = {
+        tokenId: clickedItem.tokenId,
+        reqState: 'Initial',
+        multiAuctionAddressList: addressList,
+        multiAuctionAddressListPrice: addressPrice,
+        multiAuctionAddressListLength: addressList.length,
+      };
+    } else if (state === 'Ended') {
+      data = {
+        tokenId: clickedItem.tokenId,
+        reqState: 'Ended',
+        multiAuctionAddressList: addressList,
+        multiAuctionAddressListPrice: addressPrice,
+        multiAuctionAddressListLength: addressList.length,
+      };
+    } else {
+      data = {
+        tokenId: clickedItem.tokenId,
+        reqState: 'Started',
+        multiAuctionAddressList: addressList,
+        multiAuctionAddressListPrice: addressPrice,
+        multiAuctionAddressListLength: addressList.length,
+      };
+    }
+    submitState(data);
+    window.location.assign('http://localhost:3000/polling');
+  };
+
   useEffect(() => {
     fetchClickedItem();
     fetchComments(id);
@@ -400,8 +476,10 @@ function Vote({ clickedItemList }) {
       tokenId: id,
     };
     fetchOwnerData(metadata);
+    fetchVoteState(metadata);
   }, []);
 
+  console.log('currentState = ', voteState[0]?.state);
   return (
     <TotalPage>
       {!checkVoteModal ? (
@@ -492,7 +570,42 @@ function Vote({ clickedItemList }) {
               <WinningCurrent_Price>
                 <h3>
                   <GiVote />
-                  판매 허가 투표 진행중
+                  {voteState[0]?.state === 'Initial' ? (
+                    <>
+                      <span>투표 진행여부를 확인하세요!</span>
+                      <VoteButtonContainer>
+                        <VoteButton
+                          onClick={() => onClickVote(voteState[0].state)}
+                        >
+                          투표 진행
+                        </VoteButton>
+                      </VoteButtonContainer>
+                    </>
+                  ) : voteState[0]?.state === 'Created' ? (
+                    <>
+                      <span>투표가 진행 중입니다.</span>
+                    </>
+                  ) : voteState[0]?.state === 'Ended' ? (
+                    <>
+                      <span>투표를 통과하지 못했습니다</span>
+                      <VoteButtonContainer>
+                        <VoteButton
+                          onClick={() => onClickVote(voteState[0].state)}
+                        >
+                          투표 재시작
+                        </VoteButton>
+                      </VoteButtonContainer>
+                    </>
+                  ) : (
+                    <>
+                      <span>투표가 통과하지 못했습니다</span>
+                      <VoteButton
+                        onClick={() => onClickVote(voteState[0].state)}
+                      >
+                        투표 재시작
+                      </VoteButton>
+                    </>
+                  )}
                 </h3>
               </WinningCurrent_Price>
             </WinningCurrent>
@@ -519,14 +632,20 @@ function Vote({ clickedItemList }) {
                 <BidListItemContainer key={el?._id}>
                   <BidItemName>{newUserAddress}</BidItemName>
                   <BidItemPrice>{el?.bidPrice}</BidItemPrice>
-                  {el?.isVoted === false &&
-                  user.userAddress === el?.multiAuctionAddress ? (
+                  {el?.isVoted === true ? (
+                    <BidItemlabel>투표 완료</BidItemlabel>
+                  ) : el?.isVoted === false &&
+                    user.userAddress === el?.multiAuctionAddress &&
+                    voteState[0]?.state === 'Created' ? (
                     <BidItemSellButton onClick={() => onClickToVote(el)}>
                       투표
                     </BidItemSellButton>
                   ) : el?.isVoted === true &&
-                    user.userAddress === el?.multiAuctionAddress ? (
+                    user.userAddress === el?.multiAuctionAddress &&
+                    voteState[0]?.state === 'Created' ? (
                     <BidItemlabel>투표 완료</BidItemlabel>
+                  ) : voteState[0]?.state !== 'Created' ? (
+                    <div>투표를 진행해주세요</div>
                   ) : (
                     <BidItemlabel>투표 미완료</BidItemlabel>
                   )}

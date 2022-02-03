@@ -59,6 +59,20 @@ export const usePolling = create((set) => ({
   },
 }));
 
+export const useVoteState = create((set) => ({
+  voteState: [],
+  fetchVoteState: async (metadata) => {
+    const res = await fetch(`${url}/vote/${metadata.tokenId}/votestate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ metadata }),
+    });
+    set({ voteState: await res.json() });
+  },
+}));
+
 export const useMypage = create((set) => ({
   mypage: [],
   fetchMyPage: async (user) => {
@@ -90,7 +104,7 @@ export const useClickedItemGroupList = create((set) => ({
   clickedItemGroupList: [],
   fetchClickedItemGroup: async () => {
     const { data } = await Axios.get(`${url}/auction/multiclick`);
-    console.log('useClickedItemGroupList-store', data);
+    // console.log('useClickedItemGroupList-store', data);
     set({ clickedItemGroupList: await data });
   },
 }));
@@ -101,7 +115,7 @@ export const useBidState = create((set) => ({
     const { data } = await Axios.post(`${url}/auction/:id/AlreadyBid`, {
       metadata,
     });
-    console.log('fetchBidState-data', data);
+    // console.log('fetchBidState-data', data);
     set({ bidState: await data });
     //console.log('test-bidState-data', data);
     //console.log('test-bidState-data-length', data.length);
@@ -113,11 +127,11 @@ export const useModalOwnerData = create((set) => ({
   modalOwnerData: [],
   //setModalOwnerData: (modalOwnerData) => set({ modalOwnerData }),
   fetchOwnerData: async (metadata) => {
-    console.log('fetchOwnerData-metadata', metadata);
+    // console.log('fetchOwnerData-metadata', metadata);
     const { data } = await Axios.post(`${url}/auction/:id/ownerlist`, {
       metadata,
     });
-    console.log('fetchOwnerData-serverReturn-data', data);
+    // console.log('fetchOwnerData-serverReturn-data', data);
     set({ modalOwnerData: await data });
   },
 }));
@@ -140,11 +154,11 @@ export const useModalDeleteData = create((set) => ({
 export const useComments = create((set) => ({
   comments: [],
   fetchComments: async (metadata) => {
-    console.log('fetchComments', metadata);
+    // console.log('fetchComments', metadata);
     const data = await Axios.post(`${url}/comments/normal/fetch`, {
       metadata,
     });
-    console.log('comments data', data);
+    // console.log('comments data', data);
     set({ comments: await data });
   },
 }));

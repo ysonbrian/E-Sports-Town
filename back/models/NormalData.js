@@ -11,6 +11,7 @@ const NormalDataSchema = mongoose.Schema(
     tokenId: String,
     imgURI: String,
     type: String,
+    votedFinished: { type: Boolean, default: true },
     multiAuctionAddressList: [
       new mongoose.Schema({
         multiAuctionAddress: String,

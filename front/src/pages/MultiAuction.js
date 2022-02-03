@@ -509,7 +509,7 @@ function MultiAuction() {
       tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
       bidAddressNPrice: clickFetchGroupList[0]?.multiAuctionAddressList,
       //bidPrice: e.bidPrice,
-      price: clickedItem.price,
+      price: clickedItem?.price,
       type: 'multi',
     };
     console.log('onClickToSell-multi-metadata', metadata);
@@ -522,7 +522,7 @@ function MultiAuction() {
     console.log('onClickUpdate', e);
     const metadata = {
       tokenId: id,
-      tokenOwnerAddress: clickFetchGroupList[0].tokenOwnerAddress,
+      tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
       bidAddress: e.multiAuctionAddress,
       bidPrice: e.bidPrice,
     };
@@ -536,7 +536,7 @@ function MultiAuction() {
     console.log('onClickDelete', e);
     const metadata = {
       tokenId: id,
-      tokenOwnerAddress: clickFetchGroupList[0].tokenOwnerAddress,
+      tokenOwnerAddress: clickFetchGroupList[0]?.tokenOwnerAddress,
       bidAddress: e.multiAuctionAddress,
       bidPrice: e.bidPrice,
     };
@@ -550,7 +550,7 @@ function MultiAuction() {
     setBid(e.target.value);
   };
 
-  const [bid, setBid] = useState();
+  const [bid, setBid] = useState('');
   const onClickMultiBidding = async () => {
     const currentAddress = window.web3.currentProvider.selectedAddress;
     const metadata = {
@@ -691,14 +691,14 @@ function MultiAuction() {
               )}
             </MaxBidder>
           </MultiAuctionRltContainer>
-          {clickedItem.user !== user.userAddress ? (
+          {clickedItem?.user !== user?.userAddress ? (
             <BiddingContainer>
-              {bidState.length === 0 ? (
+              {bidState?.length === 0 ? (
                 <label>원하는 가격을 입력하세요!</label>
               ) : (
                 <label>이미 참가한 상태입니다!</label>
               )}
-              {bidState.length === 0 ? (
+              {bidState?.length === 0 ? (
                 <BiddingInput>
                   <input
                     type="text"

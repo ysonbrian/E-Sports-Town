@@ -7,10 +7,10 @@ import styled from 'styled-components';
 import back3 from '../images/back3.png';
 
 const NftContainer = styled.div`
-  //padding: 0 100px 100px 100px;
+  /* padding: 0 100px 100px 100px; */
   background-image: url(${back3});
   background-size: 100% 100%;
-  //background-repeat: no-repeat;
+  /* background-repeat: no-repeat; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,7 +36,7 @@ const NftEnrollContainer = styled.div`
   width: 80%;
   height: 40%;
   background-color: rgba(255, 255, 255, 0.2);
-  //padding-bottom: 1rem;
+  /* padding-bottom: 1rem; */
   padding: 1rem;
   position: relative;
 `;
