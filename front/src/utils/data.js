@@ -74,10 +74,21 @@ export const submitComment = async (metadata) => {
   const { data } = await Axios.post(`${API_URL}/comments/normal`, { metadata });
 };
 
-export const submitVote = async (metadata) => {
+export const submitVote = async (metadata, option) => {
+  metadata.choice = option;
   console.log(metadata);
   const { data } = await Axios.post(
     `${API_URL}/vote/${metadata.tokenId}/voting`,
+    {
+      metadata,
+    }
+  );
+};
+
+export const submitState = async (metadata) => {
+  console.log(metadata);
+  const { data } = await Axios.post(
+    `${API_URL}/vote/${metadata.tokenId}/votestatechange`,
     {
       metadata,
     }

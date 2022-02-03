@@ -5,7 +5,7 @@ const NormalData = require('../models/NormalData');
 
 router.get('/', async (req, res) => {
   try {
-    const result = await NormalData.find({ type: 'normal' });
+    const result = await NormalData.find({ votedFinished: true });
     if (!result) {
       return res.send({ data: null });
     }

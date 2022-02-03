@@ -4,6 +4,7 @@ const users = require('../models/Users');
 const normalData = require('../models/NormalData');
 const auctionData = require('../models/AuctionData');
 const multiAuctionData = require('../models/MultiAuctionData');
+const voteState = require('../models/VoteState');
 
 const erc20Abi = require('../contracts/abi/Erc20Abi');
 const erc721Abi = require('../contracts/abi/Erc721Abi');
@@ -183,7 +184,7 @@ module.exports = {
       'latest'
     );
     // let response = contract.methods.approve(spenderAccount, amount).encodeABI();
-    let response = contract.methods
+    let response = await contract.methods
       .approve(spenderAccount, web3.utils.toWei(amount, 'ether'))
       .send({ from: data.currentAddress }, async (err, transactionHash) => {
         if (err) {
@@ -503,6 +504,7 @@ module.exports = {
         userAddress: bidAddress,
         multiAuctionAddressList: [],
         type: 'normal',
+        votedFinished: true,
       };
       normalData
         .findOneAndUpdate(filter2, update2)
@@ -535,6 +537,16 @@ module.exports = {
         })
         .catch((error) => {
           console.log(error, '해당 토큰 MultiAuction 데이터 삭제 실패!');
+        });
+
+      //투표 데이터 삭제
+      voteState
+        .findOneAndDelete({ tokenId: tokenId })
+        .then((response) => {
+          console.log('투표 데이터 삭제 성공!');
+        })
+        .catch((err) => {
+          console.log(err, '투표 데이터 삭제 실패!');
         });
       res.send('Success');
     } else {
@@ -582,7 +594,11 @@ module.exports = {
               .catch((err) => console.log('tokenOwnerAddress 실패!'));
             // 단일토큰 주인 변경
             const filter = { tokenId: tokenId };
-            const update = { userAddress: bidAddress, type: 'normal' };
+            const update = {
+              userAddress: bidAddress,
+              type: 'normal',
+              votedFinished: true,
+            };
             normalData
               .findOneAndUpdate(filter, update)
               .then((response) => {
@@ -603,6 +619,16 @@ module.exports = {
                 console.log('비드 데이터 삭제 성공!');
               })
               .catch((err) => console.log(err, '삭제 실패!'));
+
+            // 투표 데이터 삭제
+            voteState
+              .findOneAndDelete({ tokenId: tokenId })
+              .then((response) => {
+                console.log('투표 데이터 삭제 성공!');
+              })
+              .catch((err) => {
+                console.log(err, '투표 데이터 삭제 실패!');
+              });
           } else {
             console.log(err, '단일지분 단일지분으로 판매 실패~!');
           }
@@ -854,6 +880,7 @@ module.exports = {
       let update2 = {
         userAddress: maxOwnerAddress,
         multiAuctionAddressList: bidAddressNPrice,
+        votedFinished: false,
         type: 'multi',
       };
       normalData
@@ -880,6 +907,13 @@ module.exports = {
         .catch((error) => {
           console.log(error, '해당 토큰 Auction 데이터 삭제 실패!');
         });
+      const data = {
+        tokenId: tokenId,
+        state: 'Initial',
+      };
+      const vote = await new voteState(data);
+      await vote.save();
+
       res.send('Success');
       // 단일 토큰이 다중 비드한테 팔 때
       // 토큰이 다중지분이 아닐때
@@ -986,6 +1020,7 @@ module.exports = {
       let update2 = {
         userAddress: maxOwnerAddress,
         multiAuctionAddressList: bidAddressNPrice,
+        votedFinished: false,
         type: 'multi',
       };
       // 단일 옥션비드리스트 삭제
@@ -1023,6 +1058,12 @@ module.exports = {
         .catch((error) => {
           console.log(error, '해당 토큰 AuctionData 데이터 삭제 실패!');
         });
+      const data = {
+        tokenId: tokenId,
+        state: 'Initial',
+      };
+      const vote = await new voteState(data);
+      await vote.save();
 
       res.send('Success');
     }
