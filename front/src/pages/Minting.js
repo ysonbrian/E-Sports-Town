@@ -160,6 +160,7 @@ function Minting() {
   });
 
   const onHandleChange = (event) => {
+    console.log('AHA');
     event.preventDefault();
     setFiles(event.target.files[0]);
     let fileReader = new FileReader();
