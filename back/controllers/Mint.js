@@ -1,5 +1,6 @@
 const Web3 = require('web3');
-const web3 = new Web3('HTTP://127.0.0.1:7545');
+//const web3 = new Web3('HTTP://127.0.0.1:7545');
+const web3 = new Web3('https://ropsten.infura.io/v3/436b0f56d4ab4eafbd26f3b86e1113be');
 const users = require('../models/Users');
 const normalData = require('../models/NormalData');
 const auctionData = require('../models/AuctionData');
