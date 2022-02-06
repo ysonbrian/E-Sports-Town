@@ -22,17 +22,21 @@ router.post('/', async (req, res) => {
     price: price,
   };
   console.log(data);
+  try {
+    mintNft(req, res, data);
 
-  mintNft(req, res, data);
+    setTimeout(() => {
+      // mint20Token(req, res, req.body.metadata.userAddress);
+      sendToken(req, res, req.body.metadata.userAddress);
+      return 'success';
+    }, 1000);
+    setTimeout(() => {
+      setApproveForAll(req, res, data);
+    }, 3000);
+  } catch (error) {
+    console.log(error)
+  }
 
-  setTimeout(() => {
-    // mint20Token(req, res, req.body.metadata.userAddress);
-    sendToken(req, res, req.body.metadata.userAddress);
-    return 'success';
-  }, 1000);
-  setTimeout(() => {
-    setApproveForAll(req, res, data);
-  }, 3000);
 });
 
 module.exports = router;
