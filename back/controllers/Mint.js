@@ -1,6 +1,8 @@
 const Web3 = require('web3');
 //const web3 = new Web3('HTTP://127.0.0.1:7545');
-const web3 = new Web3('https://ropsten.infura.io/v3/436b0f56d4ab4eafbd26f3b86e1113be');
+const web3 = new Web3(
+  'https://ropsten.infura.io/v3/436b0f56d4ab4eafbd26f3b86e1113be'
+);
 const users = require('../models/Users');
 const normalData = require('../models/NormalData');
 const auctionData = require('../models/AuctionData');
@@ -134,6 +136,7 @@ module.exports = {
       gas: 5000000,
       data: contractData,
     };
+
     const signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
     signPromise.then((signedTx) => {
       web3.eth.sendSignedTransaction(
@@ -184,7 +187,16 @@ module.exports = {
       data.currentAddress,
       'latest'
     );
-    // let response = contract.methods.approve(spenderAccount, amount).encodeABI();
+    // let response = contract.methods.approve(spenderAccount, amount).encodeABI();'
+    //  const tx = {
+    //       from: spenderAccount,
+    //       to: process.env.erc20CA,
+    //       nonce: nonce,
+    //       gasPrice: '5000000000'
+    //     };
+    //      tx.gas = await web3.eth.estimateGas(tx);
+    //     send({ from: data.currentAddress, nonce, gas  }
+
     let response = await contract.methods
       .approve(spenderAccount, web3.utils.toWei(amount, 'ether'))
       .send({ from: data.currentAddress }, async (err, transactionHash) => {
